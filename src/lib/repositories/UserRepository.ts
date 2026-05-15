@@ -23,9 +23,27 @@ export class UserRepository extends TenantAwareRepository<User> {
 
   async findById(id: string | ObjectId): Promise<User | null> {
     const { ObjectId } = await import('mongodb');
-    const queryId = typeof id === 'string' ? new ObjectId(id) : id;
-    const query: SafeFilter<User> = { _id: queryId as any } as SafeFilter<User>;
+    let queryId: any = id;
+    
+    // 🛡️ Bulletproof conversion: only attempt ObjectId if it matches the format
+    if (typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id)) {
+      try {
+        queryId = new ObjectId(id);
+      } catch {
+        queryId = id;
+      }
+    }
+
+    const query: SafeFilter<User> = { _id: queryId } as SafeFilter<User>;
     const raw = await this.findOne(query);
+    
+    // 🔄 Fallback: some legacy or custom users might have string IDs
+    if (!raw && typeof id === 'string') {
+      const stringQuery: SafeFilter<User> = { _id: id as any } as SafeFilter<User>;
+      const stringRaw = await this.findOne(stringQuery);
+      return stringRaw ? IndustrialNormalizer.normalizeUser(stringRaw) : null;
+    }
+
     return raw ? IndustrialNormalizer.normalizeUser(raw) : null;
   }
 
