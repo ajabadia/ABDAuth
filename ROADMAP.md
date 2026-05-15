@@ -11,6 +11,7 @@
 - [/] **Route Sanitization**: Implement middleware-based access control for the dashboard.
 - [ ] **Role Enforcement**: Restrict dashboard operations based on user roles (Admin vs. Operator).
 - [ ] **Audit Logging**: Immutable logging for all sensitive identity operations.
+- [ ] **Telemetry Decentralization**: Migrate security logs to the `ABDElevators-Logs` database for centralized monitoring.
 - [ ] **Session Governance**: Implement secure session rotation and CSRF protection.
 
 ## 🚀 Phase 3: Cross-Project Integration [PENDING]
@@ -19,4 +20,4 @@
 - [ ] **Deployment**: Final production rollout on Vercel/Industrial Infrastructure.
 
 ---
-*Last Updated: 05/14/2026*
+*Last Updated: 05/15/2026*

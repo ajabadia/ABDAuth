@@ -34,17 +34,22 @@ ABDAuth is the certified identity provider (IdP) designed to manage authenticati
 - **Auth**: Auth.js v5 (Beta)
 - **Database**: MongoDB
 - **Styling**: Tailwind CSS v4 + Uncodixfy UI Standard
-- **i18n**: next-intl (Cookie-based, no prefixes)
+- **i18n**: next-intl (Locale-prefixed routing with industrial switcher)
+- **UI Architecture**: Premium Cyber-Industrial Entry Portal + Aseptic Dashboard.
 
 ## 🔐 Security Standards
 
 - **JWT Claims**: `sub`, `email`, `role`, `tenantId`, `mfa_verified`.
 - **Encryption**: AES-256-GCM for sensitive data.
+- **Audit**: Verified via `abd-audit.ps1` (6-phase compliance).
+
 ## 📖 Documentation
 
-- [**Technical Architecture**](../docs/ARCHITECTURE.md): Core design and component standards.
-- [**API Reference**](../docs/API_REFERENCE.md): SSO Federation and Governance endpoints.
-- [**Lessons Learned**](../docs/LESSONS_LEARNED.md): Industrial audit remediation log.
+- [**Industrial UI Specification**](./docs/INDUSTRIAL_UI.md): Theme standards and unified settings control.
+- [**Federated Handshake**](./docs/FEDERATED_HANDSHAKE.md): Token exchange and satellite integration.
+- [**Technical Architecture**](./docs/ARCHITECTURE.md): Core design and component standards.
+- [**API Reference**](./docs/API_REFERENCE.md): SSO Federation and Governance endpoints.
+- [**Lessons Learned**](./docs/LESSONS_LEARNED.md): Industrial audit remediation log.
 
 ---
 © 2026 ABD Industrial Ecosystem
