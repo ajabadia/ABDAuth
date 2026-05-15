@@ -4,6 +4,20 @@
     "industrial_ecosystem": "ABD Industrial Ecosystem © 2026",
     "soc2_monitoring": "SOC2_TYPE_II_MONITORING"
   },
+  "landing": {
+    "hero_title": "ABD Industrial Identity Gateway",
+    "hero_subtitle": "La columna vertebral de identidad para el ecosistema ABD. Seguridad federada, aislamiento multitenant y auditoría inmutable.",
+    "cta_login": "Acceso Industrial",
+    "cta_dashboard": "Ir al Dashboard",
+    "features": {
+      "federated": "Identidad Federada",
+      "federated_desc": "Protocolo SSO industrial para todos tus satélites.",
+      "isolation": "Aislamiento Total",
+      "isolation_desc": "Arquitectura Multitenant con bases de datos segregadas.",
+      "security": "Seguridad SOC2",
+      "security_desc": "Monitoreo en tiempo real y registros de auditoría inmutables."
+    }
+  },
   "login": {
     "subtitle": "Gestor de Identidad Industrial",
     "email_label": "Identity_Principal (Email)",
