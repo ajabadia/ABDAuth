@@ -1,0 +1,80 @@
+{
+  "common": {
+    "brand": "ABDAuth",
+    "industrial_ecosystem": "ABD Industrial Ecosystem © 2026",
+    "soc2_monitoring": "SOC2_TYPE_II_MONITORING"
+  },
+  "login": {
+    "subtitle": "Industrial Identity Gateway",
+    "email_label": "Identity_Principal (Email)",
+    "email_placeholder": "user@example.com",
+    "password_label": "Auth_Secret (Password)",
+    "password_placeholder": "••••••••",
+    "button": "Authenticate System",
+    "error_invalid": "Unauthorized credentials",
+    "error_generic": "Critical connection failure",
+    "shield_badge": "SOC2 Type II Certified",
+    "demo_title": "Lab Credentials",
+    "demo_user": "ajabadia@gmail.com",
+    "demo_pass": "11111111",
+    "footer_text": "Certified Identity System v1.0"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "subtitle": "Industrial Identity Management",
+    "status_online": "System_Online",
+    "logout": "Sign Out",
+    "common": {
+      "industrial_ecosystem": "ABD Industrial Ecosystem © 2026",
+      "soc2_monitoring": "SOC2_TYPE_II_MONITORING"
+    },
+    "menu": {
+      "overview": "Overview",
+      "users": "Users",
+      "tenants": "Tenants",
+      "audit": "Audit",
+      "settings": "Settings"
+    },
+    "jwt": {
+      "title": "Industrial Identity Token",
+      "v1_certified": "v1.0_certified",
+      "standard_protocol": "Standard_Credentials",
+      "sub": "Subject (ID)",
+      "email": "Principal_Email",
+      "role": "System_Role",
+      "org": "Org_Context",
+      "mfa_status": "MFA_Status",
+      "protocol": "Auth_Protocol"
+    },
+    "users": {
+      "title": "User Management",
+      "subtitle": "Global identity administration",
+      "new_user": "New User",
+      "search_placeholder": "Search identity...",
+      "table": {
+        "identity": "Identity",
+        "role": "Role",
+        "tenant": "Tenant",
+        "status": "Status",
+        "last_access": "Last Access"
+      }
+    },
+    "tenants": {
+      "title": "Tenant Management",
+      "subtitle": "Isolated ecosystem administration",
+      "new_tenant": "New Tenant",
+      "industry": "Industry",
+      "database": "Database"
+    },
+    "audit": {
+      "title": "Audit Log",
+      "subtitle": "Immutable security monitoring",
+      "table": {
+        "timestamp": "Timestamp",
+        "event": "Event",
+        "actor": "Actor",
+        "status": "Result"
+      }
+    }
+  }
+}

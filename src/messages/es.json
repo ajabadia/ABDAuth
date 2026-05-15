@@ -1,0 +1,80 @@
+{
+  "common": {
+    "brand": "ABDAuth",
+    "industrial_ecosystem": "ABD Industrial Ecosystem © 2026",
+    "soc2_monitoring": "SOC2_TYPE_II_MONITORING"
+  },
+  "login": {
+    "subtitle": "Gestor de Identidad Industrial",
+    "email_label": "Identity_Principal (Email)",
+    "email_placeholder": "usuario@ejemplo.com",
+    "password_label": "Auth_Secret (Contraseña)",
+    "password_placeholder": "••••••••",
+    "button": "Autenticar Sistema",
+    "error_invalid": "Credenciales no autorizadas",
+    "error_generic": "Error crítico de conexión",
+    "shield_badge": "Certificado SOC2 Tipo II",
+    "demo_title": "Credenciales de Laboratorio",
+    "demo_user": "ajabadia@gmail.com",
+    "demo_pass": "11111111",
+    "footer_text": "Sistema de Identidad Certificado v1.0"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido",
+    "subtitle": "Gestión de Identidad Industrial",
+    "status_online": "Sistema_En_Línea",
+    "logout": "Cerrar Sesión",
+    "common": {
+      "industrial_ecosystem": "ABD Industrial Ecosystem © 2026",
+      "soc2_monitoring": "SOC2_TYPE_II_MONITORING"
+    },
+    "menu": {
+      "overview": "Resumen",
+      "users": "Usuarios",
+      "tenants": "Tenants",
+      "audit": "Auditoría",
+      "settings": "Ajustes"
+    },
+    "jwt": {
+      "title": "Token de Identidad Industrial",
+      "v1_certified": "v1.0_certificado",
+      "standard_protocol": "Standard_Credentials",
+      "sub": "Sujeto (ID)",
+      "email": "Email_Principal",
+      "role": "Rol_Sistema",
+      "org": "Contexto_Org",
+      "mfa_status": "Estado_MFA",
+      "protocol": "Protocolo_Auth"
+    },
+    "users": {
+      "title": "Gestión de Usuarios",
+      "subtitle": "Administración de identidades globales",
+      "new_user": "Nuevo Usuario",
+      "search_placeholder": "Buscar identidad...",
+      "table": {
+        "identity": "Identidad",
+        "role": "Rol",
+        "tenant": "Tenant",
+        "status": "Estado",
+        "last_access": "Último Acceso"
+      }
+    },
+    "tenants": {
+      "title": "Gestión de Tenants",
+      "subtitle": "Administración de ecosistemas aislados",
+      "new_tenant": "Nuevo Tenant",
+      "industry": "Industria",
+      "database": "Base de Datos"
+    },
+    "audit": {
+      "title": "Registro de Auditoría",
+      "subtitle": "Monitorización de seguridad inmutable",
+      "table": {
+        "timestamp": "Marca de Tiempo",
+        "event": "Evento",
+        "actor": "Actor",
+        "status": "Resultado"
+      }
+    }
+  }
+}
