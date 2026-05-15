@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
 import { auth } from '@/auth';
 import { ApplicationSchema } from '@/lib/schemas/auth';
-import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
 
 /**
@@ -34,7 +33,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     
     // Auto-generate credentials if not provided (Industrial Standard)
-    if (!body.clientId) body.clientId = uuidv4();
+    if (!body.clientId) body.clientId = crypto.randomUUID();
     if (!body.clientSecret) body.clientSecret = crypto.randomBytes(32).toString('hex');
     
     const validated = ApplicationSchema.parse({
