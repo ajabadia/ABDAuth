@@ -25,7 +25,7 @@ export class UserRepository extends TenantAwareRepository<User> {
     const { ObjectId } = await import('mongodb');
     let queryId: any = id;
     
-    // 🛡️ Bulletproof conversion: only attempt ObjectId if it matches the format
+    // 🛡️ Bulletproof conversion
     if (typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id)) {
       try {
         queryId = new ObjectId(id);
@@ -37,14 +37,20 @@ export class UserRepository extends TenantAwareRepository<User> {
     const query: SafeFilter<User> = { _id: queryId } as SafeFilter<User>;
     const raw = await this.findOne(query);
     
-    // 🔄 Fallback: some legacy or custom users might have string IDs
-    if (!raw && typeof id === 'string') {
-      const stringQuery: SafeFilter<User> = { _id: id as any } as SafeFilter<User>;
-      const stringRaw = await this.findOne(stringQuery);
-      return stringRaw ? IndustrialNormalizer.normalizeUser(stringRaw) : null;
+    if (raw) return IndustrialNormalizer.normalizeUser(raw);
+
+    // 🔄 Fallback 1: Search by string ID (if it wasn't a valid ObjectId)
+    if (typeof id === 'string') {
+      const stringRaw = await this.findOne({ _id: id as any } as SafeFilter<User>);
+      if (stringRaw) return IndustrialNormalizer.normalizeUser(stringRaw);
+
+      // 🔄 Fallback 2: Search by email (extreme robustness)
+      // Sometimes session.user.id might contain the email or a different identifier
+      const emailRaw = await this.findOne({ email: id.toLowerCase() } as unknown as SafeFilter<User>);
+      if (emailRaw) return IndustrialNormalizer.normalizeUser(emailRaw);
     }
 
-    return raw ? IndustrialNormalizer.normalizeUser(raw) : null;
+    return null;
   }
 
   async findByTenantId(tenantId: string): Promise<User[]> {
