@@ -42,6 +42,16 @@ async function check() {
       console.log(`- Name: ${a.name} | ClientID: ${a.clientId} | Active: ${a.active}`);
     });
 
+    const codes = await db.collection('FederatedCodes').find({}).sort({ expiresAt: -1 }).limit(5).toArray();
+    console.log(`\n--- LAST 5 FEDERATED CODES IN ${dbName} ---`);
+    if (codes.length === 0) {
+      console.log('⚠️ No codes found.');
+    } else {
+      codes.forEach(c => {
+        console.log(`- Code: ${c.code.substring(0, 8)}... | UserID: ${c.userId} | Used: ${c.used} | Expires: ${c.expiresAt}`);
+      });
+    }
+
   } catch (err) {
     console.error('❌ Error:', err);
   } finally {
