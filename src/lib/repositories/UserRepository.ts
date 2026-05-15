@@ -22,7 +22,9 @@ export class UserRepository extends TenantAwareRepository<User> {
   }
 
   async findById(id: string | ObjectId): Promise<User | null> {
-    const query: SafeFilter<User> = { _id: id } as SafeFilter<User>;
+    const { ObjectId } = await import('mongodb');
+    const queryId = typeof id === 'string' ? new ObjectId(id) : id;
+    const query: SafeFilter<User> = { _id: queryId as any } as SafeFilter<User>;
     const raw = await this.findOne(query);
     return raw ? IndustrialNormalizer.normalizeUser(raw) : null;
   }
