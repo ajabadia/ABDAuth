@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     await federatedCodeRepository.markAsUsed(authCode._id);
 
     // 4. Fetch User Info
-    const user = await userRepository.findOne({ _id: authCode.userId } as any);
+    const user = await userRepository.findById(authCode.userId);
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
@@ -59,8 +59,7 @@ export async function POST(req: Request) {
       }
     });
 
-  } catch (error) {
-    console.error('FEDERATED_TOKEN_ERROR:', error);
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

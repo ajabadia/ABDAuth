@@ -1,6 +1,5 @@
-import { BaseRepository } from './BaseRepository';
+import { BaseRepository, type SafeFilter } from './BaseRepository';
 import type { Application } from '@/lib/schemas/auth';
-import { AppError } from '../errors';
 
 /**
  * 🛰️ ApplicationRepository
@@ -15,7 +14,7 @@ class ApplicationRepository extends BaseRepository<Application> {
    * 🔍 Find application by Client ID
    */
   async findByClientId(clientId: string): Promise<Application | null> {
-    return await this.findOne({ clientId } as any);
+    return await this.findOne({ clientId } as SafeFilter<Application>);
   }
 
   /**

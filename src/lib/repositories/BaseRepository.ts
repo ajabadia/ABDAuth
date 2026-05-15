@@ -30,7 +30,7 @@ export abstract class BaseRepository<T extends Document> {
       if (!uri) {
         if (process.env.NEXT_PHASE === 'phase-production-build') {
           // Silent mock during build
-          return {} as any;
+          return {} as unknown as Collection<T>;
         }
         throw new AppError('MONGODB_URI is not defined in environment');
       }

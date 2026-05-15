@@ -5,15 +5,12 @@ import { applicationRepository } from '../lib/repositories/ApplicationRepository
  * Registers ABDQuiz as an official federated application.
  */
 async function seedSatellite() {
-  console.log('🛰️ Seeding Satellite: ABDQuiz...');
-
   const existing = await applicationRepository.findByClientId('abdquiz-industrial-client-id');
   if (existing) {
-    console.log('✅ ABDQuiz already registered.');
     process.exit(0);
   }
 
-  const appId = await applicationRepository.create({
+  await applicationRepository.create({
     name: 'ABDQuiz Federated',
     description: 'Official industrial audit and quiz satellite.',
     clientId: 'abdquiz-industrial-client-id',
@@ -26,11 +23,9 @@ async function seedSatellite() {
     createdAt: new Date(),
   });
 
-  console.log('🚀 ABDQuiz registered successfully with ID:', appId);
   process.exit(0);
 }
 
-seedSatellite().catch(err => {
-  console.error('❌ Seeding failed:', err);
+seedSatellite().catch(_err => {
   process.exit(1);
 });

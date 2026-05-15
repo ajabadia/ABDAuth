@@ -1,4 +1,5 @@
-import { BaseRepository } from './BaseRepository';
+import { BaseRepository, type SafeFilter } from './BaseRepository';
+import { type ObjectId } from 'mongodb';
 import { z } from 'zod';
 
 /**
@@ -25,10 +26,10 @@ class FederatedCodeRepository extends BaseRepository<FederatedCode> {
   }
 
   async findByCode(code: string): Promise<FederatedCode | null> {
-    return await this.findOne({ code, used: false } as any);
+    return await this.findOne({ code, used: false } as SafeFilter<FederatedCode>);
   }
 
-  async markAsUsed(id: any): Promise<void> {
+  async markAsUsed(id: string | ObjectId): Promise<void> {
     await this.update(id, { used: true });
   }
 }

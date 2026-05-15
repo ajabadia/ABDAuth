@@ -16,7 +16,7 @@ function getClientPromise(): Promise<MongoClient> {
   if (!uri) {
     if (process.env.NEXT_PHASE === 'phase-production-build') {
       // Mock promise during build to prevent crash
-      return Promise.resolve({} as any);
+      return Promise.resolve({} as unknown as MongoClient);
     }
     throw new Error('Please add your Mongo URI to .env.local');
   }

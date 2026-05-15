@@ -18,7 +18,7 @@ export async function GET() {
   try {
     const applications = await applicationRepository.list();
     return NextResponse.json(applications);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to fetch applications' }, { status: 500 });
   }
 }
@@ -43,8 +43,7 @@ export async function POST(req: Request) {
 
     const id = await applicationRepository.create(validated);
     return NextResponse.json({ id, ...validated }, { status: 201 });
-  } catch (error) {
-    console.error('API_APPLICATION_POST_ERROR:', error);
+  } catch {
     return NextResponse.json({ error: 'Validation failed or database error' }, { status: 400 });
   }
 }
