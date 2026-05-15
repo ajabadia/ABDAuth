@@ -1,23 +1,20 @@
 import { getTranslations } from "next-intl/server";
 import { ApplicationManagementContainer } from "@/components/admin/applications/ApplicationManagementContainer";
+import { applicationRepository } from "@/lib/repositories/ApplicationRepository";
 import type { IndustrialApplicationDisplay } from "@/components/admin/applications/types";
 
 export default async function ApplicationsPage() {
   const t = await getTranslations('dashboard.applications');
   
-  // 🛰️ Mock data for initial UI (until API is ready)
-  const initialApplications: IndustrialApplicationDisplay[] = [
-    {
-      _id: "app_1",
-      name: "ABDQuiz Federated",
-      description: "Official audit and quiz platform satellite.",
-      clientId: "8f7e2d1a-4c3b-9a8b-7d6e-5f4a3b2c1d0e",
-      clientSecret: "********************************",
-      redirectUris: ["https://quiz.abd.com/api/auth/callback/abdauth"],
-      active: true,
-      createdAt: new Date(),
-    }
-  ];
+  const apps = await applicationRepository.list();
+  
+  // Serialize for client consumption
+  const initialApplications: IndustrialApplicationDisplay[] = apps.map(app => ({
+    ...app,
+    _id: app._id?.toString() || '',
+    createdAt: app.createdAt instanceof Date ? app.createdAt : new Date(app.createdAt || Date.now()),
+    updatedAt: app.updatedAt ? (app.updatedAt instanceof Date ? app.updatedAt : new Date(app.updatedAt)) : undefined,
+  }));
 
   const translations = {
     title: t('title'),
