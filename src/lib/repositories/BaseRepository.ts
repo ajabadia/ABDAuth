@@ -17,7 +17,9 @@ export abstract class BaseRepository<T extends Document> {
   private collectionName: string;
 
   constructor(collectionName: string, dbType: 'AUTH' | 'DATA' = 'AUTH') {
-    this.dbName = dbType === 'AUTH' ? (process.env.MONGODB_AUTH_DB || 'ABD-Auth') : (process.env.MONGODB_DATA_DB || 'ABD-Data');
+    this.dbName = dbType === 'AUTH' 
+      ? (process.env.MONGODB_AUTH_DB || 'ABDElevators-Auth') 
+      : (process.env.MONGODB_DATA_DB || 'ABDElevators');
     this.collectionName = collectionName;
   }
 

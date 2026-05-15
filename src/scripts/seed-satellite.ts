@@ -30,12 +30,7 @@ async function seedSatellite() {
     const clientId = 'abdquiz-industrial-client-id';
     const existing = await applicationRepository.findByClientId(clientId);
     
-    if (existing) {
-      console.log('✅ Satellite already registered:', existing.name);
-      process.exit(0);
-    }
-
-    const appId = await applicationRepository.create({
+    const satelliteData = {
       name: 'ABDQuiz Federated',
       description: 'Official industrial audit and quiz satellite.',
       clientId: clientId,
@@ -45,10 +40,20 @@ async function seedSatellite() {
         'https://quiz.abd.vercel.app/api/auth/federated/callback'
       ],
       active: true,
-      createdAt: new Date(),
-    });
+      updatedAt: new Date(),
+    };
 
-    console.log('🚀 Satellite registered successfully! ID:', appId);
+    if (existing) {
+      console.log('🔄 Satellite already registered. Updating to ensure ACTIVE status...');
+      await applicationRepository.update(existing._id, satelliteData);
+      console.log('✅ Satellite updated successfully!');
+    } else {
+      const appId = await applicationRepository.create({
+        ...satelliteData,
+        createdAt: new Date(),
+      });
+      console.log('🚀 Satellite registered successfully! ID:', appId);
+    }
     process.exit(0);
   } catch (err) {
     console.error('❌ SEEDING FAILED:', err);
