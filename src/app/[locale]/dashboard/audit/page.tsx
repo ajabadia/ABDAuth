@@ -17,12 +17,9 @@ export default async function AuditPage() {
   if (!session) redirect("/login");
 
   const user = session.user as unknown as IndustrialSession;
-  const isSuperAdmin = user.role === 'SUPER_ADMIN';
 
-  // 🔌 Fetching filtered logs
-  const logs = isSuperAdmin 
-    ? await auditRepository.list() 
-    : await auditRepository.findByTenant(user.tenantId);
+  // 🔌 Fetching filtered logs (Security handled by Repository)
+  const logs = await auditRepository.listForCurrentSession(user);
 
   const formatDate = (dateInput: unknown): string => {
     try {
