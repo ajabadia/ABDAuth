@@ -73,12 +73,17 @@
       "no_apps": "No se detectan señales de satélites en órbita",
       "form": {
         "name": "Nombre de la Aplicación",
+        "placeholder_name": "Ej. ABDQuiz",
         "description": "Descripción Funcional",
+        "placeholder_description": "Portal de formación industrial",
         "redirect_uris": "URIs de Redirección Autorizadas",
+        "placeholder_uri": "https://myapp.com/api/auth/callback",
+        "add_uri_btn": "Añadir URI",
         "client_id": "Client ID (Auto-generado)",
         "client_secret": "Client Secret (Confidencial)",
         "hover_reveal": "Pase el ratón para revelar secreto",
         "save": "Persistir Satélite",
+        "create": "Crear Aplicación",
         "cancel": "Abortar"
       },
       "cards": {
