@@ -5,6 +5,8 @@ import { Building2, Globe, Database, Plus, Search, ExternalLink } from 'lucide-r
 import { getTranslations } from 'next-intl/server';
 import type { Tenant } from "@/lib/schemas/auth";
 
+import type { IndustrialSession } from "@/types/auth";
+
 /**
  * 🏢 Industrial Tenant Management Panel
  */
@@ -16,8 +18,10 @@ export default async function TenantsPage() {
     redirect("/login");
   }
 
-  // 🔌 Fetching normalized data
-  const tenants = await tenantRepository.listAll();
+  const user = session.user as unknown as IndustrialSession;
+
+  // 🔌 Fetching normalized data (Security handled by Repository)
+  const tenants = await tenantRepository.listForCurrentSession(user);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">

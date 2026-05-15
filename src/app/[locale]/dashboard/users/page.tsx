@@ -15,12 +15,9 @@ export default async function UsersPage() {
   
   const t = await getTranslations('dashboard.users');
   const user = session.user as unknown as IndustrialSession;
-  const isSuperAdmin = user.role === 'SUPER_ADMIN';
 
-  // 🔌 Fetching filtered users
-  const users = isSuperAdmin 
-    ? await userRepository.listAll() 
-    : await userRepository.findByTenantId(user.tenantId);
+  // 🔌 Fetching filtered users (Security handled by Repository)
+  const users = await userRepository.listForCurrentSession(user);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">

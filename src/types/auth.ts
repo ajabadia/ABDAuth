@@ -12,6 +12,8 @@ export interface IndustrialUser extends NextAuthUser {
   email: string;
   role: UserRole;
   tenantId: string;
+  dbPrefix: string;
+  isolationStrategy: 'COLLECTION_PREFIX' | 'DATABASE_PER_TENANT';
   mfa_verified: boolean;
 }
 
@@ -26,5 +28,7 @@ export interface IndustrialSession {
   email: string;
   role: UserRole;
   tenantId: string;
+  dbPrefix: string;
+  isolationStrategy: 'COLLECTION_PREFIX' | 'DATABASE_PER_TENANT';
   mfa_verified: boolean;
 }

@@ -3,8 +3,6 @@ import { redirect } from "@/i18n/routing";
 import { Users, Activity, Key, Database } from "lucide-react";
 import { getTranslations } from 'next-intl/server';
 import type { IndustrialSession } from "@/types/auth";
-import type { Tenant } from "@/lib/schemas/auth";
-import { type TenantId } from "@/lib/schemas/common";
 import { userRepository } from "@/lib/repositories/UserRepository";
 import { tenantRepository } from "@/lib/repositories/TenantRepository";
 
@@ -26,17 +24,12 @@ export default async function DashboardPage({
   }
 
   const user = session.user as unknown as IndustrialSession;
-  const isSuperAdmin = user.role === 'SUPER_ADMIN';
 
-  // 1. Fetch filtered users
-  const allUsers = isSuperAdmin 
-    ? await userRepository.listAll() 
-    : await userRepository.findByTenantId(user.tenantId);
+  // 1. Fetch filtered users (Security handled by Repository)
+  const allUsers = await userRepository.listForCurrentSession(user);
 
-  // 2. Fetch filtered tenants
-  const allTenants = isSuperAdmin 
-    ? await tenantRepository.listAll() 
-    : [await tenantRepository.findByTenantId(user.tenantId as TenantId)].filter((t): t is Tenant => t !== null);
+  // 2. Fetch filtered tenants (Security handled by Repository)
+  const allTenants = await tenantRepository.listForCurrentSession(user);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">

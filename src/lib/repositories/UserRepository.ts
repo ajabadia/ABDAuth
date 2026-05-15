@@ -1,13 +1,15 @@
 import type { User } from '@/lib/schemas/auth';
+import { TenantAwareRepository } from './TenantAwareRepository';
+import { type SafeFilter } from './BaseRepository';
 import type { TenantId } from '@/lib/schemas/common';
-import { BaseRepository, type SafeFilter } from './BaseRepository';
 import { IndustrialNormalizer } from '../utils/IndustrialNormalizer';
+import type { IndustrialSession } from '@/types/auth';
 
 /**
  * 👤 UserRepository
  * Repository for global user management with Industrial Normalization.
  */
-export class UserRepository extends BaseRepository<User> {
+export class UserRepository extends TenantAwareRepository<User> {
   constructor() {
     super('users', 'AUTH');
   }
@@ -24,9 +26,11 @@ export class UserRepository extends BaseRepository<User> {
     return raws.map(IndustrialNormalizer.normalizeUser);
   }
 
-  // Override list to ensure all users are normalized
-  async listAll(): Promise<User[]> {
-    const raws = await this.list({});
+  /**
+   * 📋 List users for the current session context
+   */
+  async listForCurrentSession(session: IndustrialSession): Promise<User[]> {
+    const raws = await this.listForSession(session);
     return raws.map(IndustrialNormalizer.normalizeUser);
   }
 }

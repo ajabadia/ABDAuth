@@ -3,6 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { auditRepository } from '@/lib/repositories/AuditRepository';
+import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 
@@ -38,8 +39,9 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
           }
 
           const passwordsMatch = await bcrypt.compare(password, user.password);
-
           if (passwordsMatch) {
+            const tenant = await tenantRepository.findByTenantId(user.tenantId);
+            
             return {
               id: user._id?.toString() || '',
               name: user.name,
@@ -47,6 +49,8 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
               email: user.email,
               role: user.role,
               tenantId: user.tenantId,
+              dbPrefix: tenant?.dbPrefix || 'default',
+              isolationStrategy: tenant?.isolationStrategy || 'COLLECTION_PREFIX',
               mfa_verified: false,
             } as unknown as IndustrialUser;
           } else {
