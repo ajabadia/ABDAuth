@@ -12,15 +12,11 @@ export type SafeFilter<T> = Filter<T>;
  * Industrial abstraction for MongoDB operations with automatic auditing support.
  */
 export abstract class BaseRepository<T extends Document> {
-  private client: MongoClient;
+  private client: MongoClient | null = null;
   private dbName: string;
   private collectionName: string;
 
   constructor(collectionName: string, dbType: 'AUTH' | 'DATA' = 'AUTH') {
-    if (!process.env.MONGODB_URI) {
-      throw new AppError('MONGODB_URI is not defined in environment');
-    }
-    this.client = new MongoClient(process.env.MONGODB_URI);
     this.dbName = dbType === 'AUTH' ? (process.env.MONGODB_AUTH_DB || 'ABD-Auth') : (process.env.MONGODB_DATA_DB || 'ABD-Data');
     this.collectionName = collectionName;
   }
@@ -29,6 +25,18 @@ export abstract class BaseRepository<T extends Document> {
    * 🔌 Connection Orchestrator
    */
   protected async getCollection(): Promise<Collection<T>> {
+    if (!this.client) {
+      const uri = process.env.MONGODB_URI;
+      if (!uri) {
+        if (process.env.NEXT_PHASE === 'phase-production-build') {
+          // Silent mock during build
+          return {} as any;
+        }
+        throw new AppError('MONGODB_URI is not defined in environment');
+      }
+      this.client = new MongoClient(uri);
+    }
+
     try {
       await this.client.connect();
       return this.client.db(this.dbName).collection<T>(this.collectionName);

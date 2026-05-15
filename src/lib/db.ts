@@ -6,44 +6,53 @@ import { MongoClient, type Db } from 'mongodb';
  * Adheres to Zero-Noise and High-Fidelity standards.
  */
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Please add your Mongo URI to .env.local');
-}
+let client: MongoClient | null = null;
+let clientPromise: Promise<MongoClient> | null = null;
 
-const uri = process.env.MONGODB_URI;
-const options = {};
+function getClientPromise(): Promise<MongoClient> {
+  if (clientPromise) return clientPromise;
 
-let clientPromise: Promise<MongoClient>;
-
-if (process.env.NODE_ENV === 'development') {
-  // Use a global variable to preserve the connection across HMR reloads.
-  const globalWithMongo = globalThis as typeof globalThis & {
-    _mongoClientPromise?: Promise<MongoClient>;
-  };
-
-  if (!globalWithMongo._mongoClientPromise) {
-    const client = new MongoClient(uri, options);
-    globalWithMongo._mongoClientPromise = client.connect();
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    if (process.env.NEXT_PHASE === 'phase-production-build') {
+      // Mock promise during build to prevent crash
+      return Promise.resolve({} as any);
+    }
+    throw new Error('Please add your Mongo URI to .env.local');
   }
-  clientPromise = globalWithMongo._mongoClientPromise;
-} else {
-  // Direct connection in production.
-  const client = new MongoClient(uri, options);
-  clientPromise = client.connect();
+
+  const options = {};
+
+  if (process.env.NODE_ENV === 'development') {
+    const globalWithMongo = globalThis as typeof globalThis & {
+      _mongoClientPromise?: Promise<MongoClient>;
+    };
+
+    if (!globalWithMongo._mongoClientPromise) {
+      client = new MongoClient(uri, options);
+      globalWithMongo._mongoClientPromise = client.connect();
+    }
+    clientPromise = globalWithMongo._mongoClientPromise;
+  } else {
+    client = new MongoClient(uri, options);
+    clientPromise = client.connect();
+  }
+
+  return clientPromise;
 }
 
 /**
  * 🔌 Database Accessors
  */
 export async function connectDB(): Promise<Db> {
-  const client = await clientPromise;
-  return client.db();
+  const promise = await getClientPromise();
+  return promise.db();
 }
 
 export async function connectAuthDB(): Promise<Db> {
-  const client = await clientPromise;
+  const promise = await getClientPromise();
   const dbName = process.env.MONGODB_AUTH_DB || 'ABD-Auth';
-  return client.db(dbName);
+  return promise.db(dbName);
 }
 
-export default clientPromise;
+export default getClientPromise();
