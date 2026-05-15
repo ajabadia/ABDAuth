@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { applicationRepository } from '../lib/repositories/ApplicationRepository';
 import fs from 'fs';
 import path from 'path';
