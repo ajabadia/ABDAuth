@@ -18,6 +18,7 @@ export const AuditLogSchema = z.object({
     'USER_UPDATED',
     'TENANT_CREATED',
     'TENANT_UPDATED',
+    'TENANT_DELETED',
     'PASSWORD_CHANGE_REQUEST'
   ]),
   actorId: z.string(), // User ID or "SYSTEM"

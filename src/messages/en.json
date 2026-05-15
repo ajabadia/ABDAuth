@@ -63,8 +63,28 @@
       "title": "Tenant Management",
       "subtitle": "Isolated ecosystem administration",
       "new_tenant": "New Tenant",
+      "edit_tenant": "Edit Organization",
+      "register_tenant": "Register New Tenant",
       "industry": "Industry",
-      "database": "Database"
+      "database": "Database",
+      "confirm_delete": "Are you sure you want to deactivate this organization?",
+      "orchestrator_version": "Tenant Orchestrator v1.1",
+      "name_label": "Organization Name",
+      "id_label": "Tenant ID",
+      "isolation_label": "Isolation Strategy",
+      "status_label": "Operational Status",
+      "industries": {
+        "industrial": "Industrial",
+        "energy": "Energy",
+        "logistics": "Logistics",
+        "security": "Security"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Deactivate",
+        "save": "Save Changes",
+        "cancel": "Cancel"
+      }
     },
     "audit": {
       "title": "Audit Log",

@@ -63,8 +63,28 @@
       "title": "Gestión de Tenants",
       "subtitle": "Administración de ecosistemas aislados",
       "new_tenant": "Nuevo Tenant",
+      "edit_tenant": "Editar Organización",
+      "register_tenant": "Registrar Nuevo Tenant",
       "industry": "Industria",
-      "database": "Base de Datos"
+      "database": "Base de Datos",
+      "orchestrator_version": "Orquestador de Tenants v1.1",
+      "industries": {
+        "industrial": "Industrial",
+        "energy": "Energía",
+        "logistics": "Logística",
+        "security": "Seguridad"
+      },
+      "name_label": "Nombre Organización",
+      "id_label": "ID del Tenant",
+      "isolation_label": "Estrategia de Aislamiento",
+      "status_label": "Estado Operativo",
+      "actions": {
+        "edit": "Editar Configuración",
+        "delete": "Desactivar",
+        "save": "Guardar Configuración",
+        "cancel": "Cancelar"
+      },
+      "confirm_delete": "¿Está seguro de que desea desactivar esta organización?"
     },
     "audit": {
       "title": "Registro de Auditoría",
