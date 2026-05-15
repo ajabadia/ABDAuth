@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
-import { federatedCodeRepository } from '@/lib/repositories/FederatedCodeRepository';
+import { federatedCodeRepository, type FederatedCode } from '@/lib/repositories/FederatedCodeRepository';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
+import { type SafeFilter } from '@/lib/repositories/BaseRepository';
 
 /**
  * 🎫 Federated Token Endpoint
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
     }
 
     // 2. Validate Code
-    const rawCode = await federatedCodeRepository.findOne({ code } as any);
+    const rawCode = await federatedCodeRepository.findOne({ code } as unknown as SafeFilter<FederatedCode>);
     if (!rawCode) {
       return NextResponse.json({ error: 'Code not found' }, { status: 400 });
     }

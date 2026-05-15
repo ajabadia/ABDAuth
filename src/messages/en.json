@@ -16,6 +16,10 @@
       "isolation_desc": "Multitenant architecture with segregated databases.",
       "security": "SOC2 Security",
       "security_desc": "Real-time monitoring and immutable audit logs."
+    },
+    "footer": {
+      "core": "Core: Next.js 16",
+      "auth": "Auth: Industry-Federated"
     }
   },
   "login": {

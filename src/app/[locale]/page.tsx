@@ -107,8 +107,8 @@ export default async function RootPage() {
             {c('industrial_ecosystem')}
           </div>
           <div className="flex gap-8 font-mono text-[10px] text-neutral-600 uppercase tracking-widest">
-            <span>Core: Next.js 16</span>
-            <span>Auth: Industry-Federated</span>
+            <span>{t('footer.core')}</span>
+            <span>{t('footer.auth')}</span>
           </div>
         </div>
       </footer>

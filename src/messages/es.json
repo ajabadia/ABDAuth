@@ -16,6 +16,10 @@
       "isolation_desc": "Arquitectura Multitenant con bases de datos segregadas.",
       "security": "Seguridad SOC2",
       "security_desc": "Monitoreo en tiempo real y registros de auditoría inmutables."
+    },
+    "footer": {
+      "core": "Core: Next.js 16",
+      "auth": "Auth: Industry-Federated"
     }
   },
   "login": {

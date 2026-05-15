@@ -23,7 +23,7 @@ export class UserRepository extends TenantAwareRepository<User> {
 
   async findById(id: string | ObjectId): Promise<User | null> {
     const { ObjectId } = await import('mongodb');
-    let queryId: any = id;
+    let queryId: string | ObjectId = id;
     
     // 🛡️ Bulletproof conversion
     if (typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id)) {
@@ -41,7 +41,7 @@ export class UserRepository extends TenantAwareRepository<User> {
 
     // 🔄 Fallback 1: Search by string ID (if it wasn't a valid ObjectId)
     if (typeof id === 'string') {
-      const stringRaw = await this.findOne({ _id: id as any } as SafeFilter<User>);
+      const stringRaw = await this.findOne({ _id: id as unknown } as SafeFilter<User>);
       if (stringRaw) return IndustrialNormalizer.normalizeUser(stringRaw);
 
       // 🔄 Fallback 2: Search by email (extreme robustness)
