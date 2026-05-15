@@ -8,14 +8,14 @@
 - [x] **MFA Hardening**: Secure TOTP service with industrial-grade module resolution.
 
 ## 🛡️ Phase 2: Security & RBAC [IN PROGRESS]
-- [/] **Route Sanitization**: Implement middleware-based access control for the dashboard.
-- [ ] **Role Enforcement**: Restrict dashboard operations based on user roles (Admin vs. Operator).
-- [ ] **Audit Logging**: Immutable logging for all sensitive identity operations.
+- [ ] **MfaService (Port from ABDAgRAG)**: Full TOTP implementation with QR generation and hashed recovery codes.
+- [ ] **SessionService (Port from ABDAgRAG)**: Persistent session management in MongoDB with device/IP tracking and revocation.
 - [ ] **Telemetry Decentralization**: Migrate security logs to the `ABDElevators-Logs` database for centralized monitoring.
 - [ ] **Session Governance**: Implement secure session rotation and CSRF protection.
 
 ## 🚀 Phase 3: Cross-Project Integration [PENDING]
 - [ ] **Auth Validator API**: Implement `/api/auth/validate` for ABDAgRAG and ABDQuiz.
+- [ ] **Guardian Governance**: Move/Implement `GuardianService` in the future Governance App for advanced RBAC and business policies.
 - [ ] **SSO Portal**: Centralized login experience for the entire ABD Industrial Suite.
 - [ ] **Deployment**: Final production rollout on Vercel/Industrial Infrastructure.
 
