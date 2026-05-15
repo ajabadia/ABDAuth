@@ -62,5 +62,53 @@ Este documento registra los retos técnicos superados y las decisiones arquitect
   ```
 - **Control de Cierre de Sesión Limpio**: Se determinó que el cierre de sesión debe invalidar atómicamente la sesión del Identity Provider central. Si un satélite realiza un logout local pero no destruye la cookie central de `ABDAuth`, los logins subsecuentes loguearán automáticamente al usuario anterior de forma silenciosa. Por lo tanto, el endpoint `/api/auth/logout` de `ABDAuth` debe invocarse mediante navegación a nivel de red (`<a>` nativo) para purgar de forma transparente todo el ecosistema de cookies antes de reconducir al usuario a la pantalla de despedida.
 
+## 📦 5. The i18n String Scanner False-Positive
+**Issue**: The industrial i18n audit scanner (Era 11) flags capitalized TypeScript keywords (e.g., `Promise`, `ReturnType`) inside component files as "hardcoded strings".
+**Solution**: 
+- **Type Decoupling**: Move complex type definitions and function interfaces to a dedicated `types.ts` file within the component folder.
+- **Scanner Isolation**: By separating types from UI logic, we prevent the string scanner from misinterpreting technical declarations as user-facing text.
+
+## 🧱 6. Canonical Modular Components
+**Issue**: Large monolithic containers (`LARGE_FILE`) become hard to audit and lead to high cognitive load during certification.
+**Solution**:
+- **Atomic Decomposition**: Splitting containers into `Card`, `Form`, `Dialog`, and `types.ts`.
+- **Prop Serialization**: Passing serialized translations from Server Components to Client Containers ensures that localized strings are available without re-triggering audit flags at the client level.
+
+## ❄️ 7. React 19 Hydration & Script Injection
+**Issue**: Using a `mounted` check to wrap `ThemeProvider` (next-themes) causes hydration mismatches in React 19, triggering "script tag detected" console errors during server-to-client transitions.
+**Solution**:
+- **Aseptic Providers**: Remove manual mounting logic. Rely on `suppressHydrationWarning` on the `html` tag.
+
+## 🧹 8. Zero-Noise Final Cleanup
+**Issue**: Small technical debts like `console.error` or unused `_error` variables in `catch` blocks prevent industrial certification.
+**Solution**: 
+- **Pure Catch Blocks**: Use the modern `catch { ... }` syntax (without variable) if the error object isn't used.
+
+---
+## 📂 9. The Typo Trap (Malformed Routes)
+**Issue**: A simple typo during a `write_to_file` call created a parallel directory structure (`src/app/[locale` vs `src/app/[locale]`). Next.js's routing engine became unstable, serving malformed routes or legacy code, leading to runtime `MISSING_MESSAGE` errors.
+**Solution**: 
+- **Structural Audit**: Always perform a `list_dir` on the `src/app` root after significant routing changes.
+- **Strict Naming**: Use brackets `[]` explicitly and verify the exact character sequence to avoid "shadow routes".
+
+## 📦 10. The Dependency Mirage
+**Issue**: Assuming third-party libraries (e.g., `sonner`, `react-hook-form`, `radix-ui`) are available because they exist in satellite projects. This led to "Cannot find module" errors during TSC phases of the industrial audit.
+**Solution**:
+- **Baseline Verification**: Check `package.json` before implementing complex UI components.
+- **Minimalist Core**: Keep the core identity platform (ABDAuth) lean, using only standard React/Tailwind when possible to ensure it remains a reliable source of truth for the entire ecosystem.
+
+## 🎨 11. Vanilla Industrial UI
+**Issue**: Complex UI libraries can introduce "noise" and dependencies that complicate the 6-phase audit certification.
+**Solution**:
+- **Vanilla Implementation**: Rebuilding critical modules (like User Management) using standard HTML5 and React `useState`. 
+- **Result**: Faster audits, zero missing-dependency errors, and a more robust codebase that is easier to maintain and certify for production.
+
+## 🌐 12. Lazy Connection & Build-Time Shielding
+**Issue**: CI/CD pipelines (like Vercel) execute code at build-time to collect metadata. If database clients (MongoDB) validate environment variables at the module's top-level, the build crashes before production variables are available.
+**Solution**: 
+- **Lazy Initialization**: Refactor database clients to initialize the `MongoClient` only when a connection is explicitly requested (`connectDB`).
+- **Phase Detection**: Use `process.env.NEXT_PHASE` to return a mock/resolved promise during compilation, allowing the build to pass without a real database connection.
+- **Result**: Decoupled infrastructure that is resilient to CI/CD environmental constraints.
+
 ---
 *Estado de la Documentación: Sincronizado*
