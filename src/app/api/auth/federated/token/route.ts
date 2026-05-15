@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
 import { federatedCodeRepository, type FederatedCode } from '@/lib/repositories/FederatedCodeRepository';
 import { userRepository } from '@/lib/repositories/UserRepository';
@@ -6,17 +7,34 @@ import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { type SafeFilter } from '@/lib/repositories/BaseRepository';
 
 /**
+ * 🎫 Federated Token Schema
+ */
+const TokenExchangeSchema = z.object({
+  code: z.string().min(1),
+  client_id: z.string().min(1),
+  client_secret: z.string().min(1),
+  redirect_uri: z.string().url().optional(),
+});
+
+/**
  * 🎫 Federated Token Endpoint
  * Exchanges Code for User Profile & Industrial Session
  */
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { code, client_id, client_secret, redirect_uri } = body;
-
-    if (!code || !client_id || !client_secret) {
-      return NextResponse.json({ error: 'Missing parameters' }, { status: 400 });
+    const rawBody = await req.json();
+    
+    // 🛡️ Security Standard: Strict Input Validation
+    const validation = TokenExchangeSchema.safeParse(rawBody);
+    
+    if (!validation.success) {
+      return NextResponse.json({ 
+        error: 'Invalid parameters', 
+        details: validation.error.format() 
+      }, { status: 400 });
     }
+
+    const { code, client_id, client_secret, redirect_uri } = validation.data;
 
     // 1. Validate Client
     const app = await applicationRepository.findByClientId(client_id);
@@ -59,7 +77,7 @@ export async function POST(req: Request) {
 
     // 5. Build Industrial Response (Compatible with ABDQuiz bridge)
     return NextResponse.json({
-      access_token: 'at_' + rawCode.code, // Placeholder for real JWT if needed later
+      access_token: 'at_' + rawCode.code, // Placeholder for real JWT
       user: {
         id: user._id?.toString(),
         email: user.email,
@@ -72,7 +90,12 @@ export async function POST(req: Request) {
       }
     });
 
-  } catch {
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  } catch (error) {
+    // 🛡️ Security Standard: Opaque error messages for production
+    console.error('[SECURITY:TOKEN_EXCHANGE_FAILURE]', error);
+    return NextResponse.json({ 
+      error: 'Identity exchange failed',
+      code: 'FEDERATION_ERROR'
+    }, { status: 500 });
   }
 }
