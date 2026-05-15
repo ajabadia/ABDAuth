@@ -25,6 +25,7 @@ export const authConfig = {
     async session({ session, token }) {
       if (token && session.user) {
         const u = session.user as unknown as Record<string, unknown>;
+        u.id = token.sub; // 🛰️ Essential for Federated Identity
         u.role = token.role;
         u.tenantId = token.tenantId as string;
         u.mfa_verified = token.mfa_verified as boolean;
