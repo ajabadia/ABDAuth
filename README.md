@@ -1,8 +1,10 @@
 # 🛡️ ABDAuth Identity Ecosystem
 
 **Centralized IAM for the ABD Industrial Ecosystem.**
+![Status](https://img.shields.io/badge/Status-SYS__CERTIFIED__PROD-0070f3?style=for-the-badge)
+![Deployment](https://img.shields.io/badge/Deployment-STABLE-success?style=for-the-badge)
 
-ABDAuth is the certified identity provider (IdP) designed to manage authentication, authorization, and multi-tenant isolation across all projects (ABDAgRAG, ABDQuiz, etc.).
+ABDAuth is the certified identity provider (IdP) designed to manage authentication, authorization, and multi-tenant isolation across all satellite projects (ABDAgRAG, ABDQuiz, etc.) through secure OAuth2 federation.
 
 ## 🚀 Quick Start
 
