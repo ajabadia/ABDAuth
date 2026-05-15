@@ -38,8 +38,8 @@ export default auth((req) => {
   const isLocaleRoot = routing.locales.some(loc => pathname === `/${loc}`);
   
   if (isExactRoot || isLocaleRoot) {
-    const target = isLoggedIn ? `/${locale}/dashboard` : `/${locale}/login`;
-    return NextResponse.redirect(new URL(target, req.url));
+    // Allow the Landing Page to be rendered
+    return intlMiddleware(req);
   }
 
   // 2. Dashboard Protection & RBAC

@@ -5,6 +5,8 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "@/i18n/routing";
 import { Shield, Lock, Mail, Loader2, CheckCircle, AlertCircle, ArrowRight } from "lucide-react";
 import { useTranslations } from 'next-intl';
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
 
 export default function LoginPage() {
   const t = useTranslations('login');
@@ -41,8 +43,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 font-sans relative overflow-hidden transition-colors duration-300">
       <div className="bg-grain" />
+
+      {/* 🛠️ Accessibility Controls */}
+      <div className="absolute top-6 right-6 flex items-center gap-3 z-50">
+        <LocaleSwitcher />
+        <ThemeToggle />
+      </div>
       
       {/* 🛡️ Branding Section */}
       <div className="mb-12 flex flex-col items-center animate-in slide-in-from-top duration-700">
