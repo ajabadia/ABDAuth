@@ -1,33 +1,22 @@
 import type { AuditLog } from '@/lib/schemas/audit';
-import { BaseRepository, type SafeFilter } from './BaseRepository';
+import { TenantAwareRepository } from './TenantAwareRepository';
+import type { IndustrialSession } from '@/types/auth';
 
 /**
  * 🛡️ AuditRepository
  * Immutable repository for security event logging.
  */
-export class AuditRepository extends BaseRepository<AuditLog> {
+export class AuditRepository extends TenantAwareRepository<AuditLog> {
   constructor() {
     super('audit_logs', 'AUTH');
   }
 
-  async findByTenant(tenantId: string): Promise<AuditLog[]> {
-    const query: SafeFilter<AuditLog> = { tenantId };
-    const db = await this.getCollection();
-    const results = await db.find(query)
-      .sort({ timestamp: -1 })
-      .limit(100)
-      .toArray();
-    return results as unknown as AuditLog[];
-  }
-
-  async findByActor(actorId: string): Promise<AuditLog[]> {
-    const query: SafeFilter<AuditLog> = { actorId };
-    const db = await this.getCollection();
-    const results = await db.find(query)
-      .sort({ timestamp: -1 })
-      .limit(100)
-      .toArray();
-    return results as unknown as AuditLog[];
+  /**
+   * 📋 List logs for the current session context
+   */
+  async listForCurrentSession(session: IndustrialSession): Promise<AuditLog[]> {
+    const results = await this.listForSession(session);
+    return results.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()).slice(0, 100);
   }
 }
 
