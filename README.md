@@ -38,7 +38,11 @@ ABDAuth is the certified identity provider (IdP) designed to manage authenticati
 
 - **JWT Claims**: `sub`, `email`, `role`, `tenantId`, `mfa_verified`.
 - **Encryption**: AES-256-GCM for sensitive data.
-- **Route Protection**: Centralized `proxy.ts` guard.
+## 📖 Documentation
+
+- [**Technical Architecture**](../docs/ARCHITECTURE.md): Core design and component standards.
+- [**API Reference**](../docs/API_REFERENCE.md): SSO Federation and Governance endpoints.
+- [**Lessons Learned**](../docs/LESSONS_LEARNED.md): Industrial audit remediation log.
 
 ---
 © 2026 ABD Industrial Ecosystem
