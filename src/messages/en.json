@@ -30,10 +30,42 @@
     },
     "menu": {
       "overview": "Overview",
-      "users": "Users",
-      "tenants": "Tenants",
-      "audit": "Audit",
+      "users": "Identities",
+      "tenants": "Organizations",
+      "applications": "Satellites",
+      "audit": "System Audit",
       "settings": "Settings"
+    },
+    "applications": {
+      "title": "Satellite Ecosystem",
+      "subtitle": "FEDERATED APPLICATION REGISTRY",
+      "add_app": "Register App",
+      "new_app": "New Satellite",
+      "edit_app": "Edit Satellite",
+      "delete_confirm": "DANGER: Terminate satellite federation?",
+      "no_apps": "No satellite signals detected in orbit",
+      "form": {
+        "name": "Application Name",
+        "description": "Functional Description",
+        "redirect_uris": "Authorized Redirect URIs",
+        "client_id": "Client ID (Auto-generated)",
+        "client_secret": "Client Secret (Confidential)",
+        "hover_reveal": "Hover to reveal secret",
+        "placeholder_name": "ABDQuiz Federated",
+        "placeholder_description": "Official audit and quiz platform satellite...",
+        "placeholder_uri": "https://quiz.abd.com/api/auth/callback/abdauth",
+        "add_uri_btn": "+ Add Redirect URI",
+        "save": "Persist Satellite",
+        "cancel": "Abort",
+        "placeholder_client_id": "e.g., sat-xyz-12345",
+        "placeholder_client_secret": "****************************"
+      },
+      "cards": {
+        "active": "CONNECTED",
+        "inactive": "OFFLINE",
+        "client_credentials": "Client Credentials",
+        "authorized_uris": "Authorized URIs"
+      }
     },
     "jwt": {
       "title": "Industrial Identity Token",
@@ -47,16 +79,41 @@
       "protocol": "Auth_Protocol"
     },
     "users": {
-      "title": "User Management",
-      "subtitle": "Global identity administration",
-      "new_user": "New User",
+      "title": "Users",
+      "subtitle": "Operator and administrator management",
+      "add_user": "New User",
+      "edit_user": "Edit User",
       "search_placeholder": "Search identity...",
-      "table": {
-        "identity": "Identity",
+      "columns": {
+        "user": "User",
         "role": "Role",
-        "tenant": "Tenant",
+        "tenant": "Organization",
         "status": "Status",
-        "last_access": "Last Access"
+        "actions": "Actions"
+      },
+      "roles": {
+        "SUPER_ADMIN": "Super Administrator",
+        "ADMIN": "Tenant Administrator",
+        "USER": "Operator",
+        "TECHNICAL": "Technical"
+      },
+      "status": {
+        "active": "Active",
+        "suspended": "Suspended"
+      },
+      "form": {
+        "email": "Email Address",
+        "password": "Password",
+        "role": "Industrial Role",
+        "tenant": "Tenant Assignment",
+        "save": "Save Operator",
+        "cancel": "Cancel",
+        "name": "First Name",
+        "surname": "Last Name"
+      },
+      "messages": {
+        "save_success": "Operator synchronized successfully",
+        "save_error": "Failed to persist identity"
       }
     },
     "tenants": {

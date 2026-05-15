@@ -49,7 +49,7 @@ export default function LoginPage() {
         <div 
           role="button"
           tabIndex={0}
-          className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center mb-4 shadow-2xl shadow-blue-500/20 border border-blue-400/20 active:scale-95 transition-transform cursor-pointer"
+          className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-xl shadow-blue-500/10 border border-blue-400/20 active:scale-95 transition-transform cursor-pointer"
         >
           <Shield size={32} className="text-white" />
         </div>
@@ -62,7 +62,7 @@ export default function LoginPage() {
       </div>
 
       {/* 🔐 Login Terminal */}
-      <div className="w-full max-w-[380px] bg-card border border-border rounded-2xl shadow-2xl overflow-hidden relative z-10">
+      <div className="w-full max-w-[380px] bg-card border border-border rounded-xl shadow-xl overflow-hidden relative z-10">
         <div className="h-1.5 w-full bg-blue-600/10 flex">
           <div className="h-full bg-blue-600 w-1/3 animate-pulse" />
         </div>

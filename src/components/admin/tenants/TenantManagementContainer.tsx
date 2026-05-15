@@ -1,12 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { Plus, Search } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import type { Tenant } from "@/lib/schemas/auth"
 import { TenantDialog } from "./TenantDialog"
 import { TenantCard } from "./TenantCard"
 import { useRouter } from "next/navigation"
 import type { TenantManagementTranslations } from "./types"
+
+import { IndustrialSearchInput } from "@/components/ui/industrial/SearchInput"
 
 interface TenantManagementContainerProps {
   initialTenants: Tenant[]
@@ -79,19 +81,12 @@ export function TenantManagementContainer({ initialTenants, translations: t }: T
         </button>
       </header>
 
-      <div className="flex items-center gap-4 bg-card p-2 rounded-lg border border-border shadow-sm">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
-          <input 
-            type="text" 
-            aria-label="Search organizations"
-            placeholder="Search organizations..." 
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="w-full bg-transparent border-none focus:ring-0 text-xs pl-10 h-8 text-foreground" 
-          />
-        </div>
-      </div>
+      <IndustrialSearchInput 
+        value={search} 
+        onChange={setSearch} 
+        placeholder="Search organizations..." 
+        ariaLabel="Search organizations" 
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {filteredTenants.map((tenant) => (

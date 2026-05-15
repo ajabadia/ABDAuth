@@ -30,10 +30,36 @@
     },
     "menu": {
       "overview": "Resumen",
-      "users": "Usuarios",
-      "tenants": "Tenants",
+      "users": "Identidades",
+      "tenants": "Organizaciones",
+      "applications": "Satélites",
       "audit": "Auditoría",
       "settings": "Ajustes"
+    },
+    "applications": {
+      "title": "Ecosistema de Satélites",
+      "subtitle": "REGISTRO DE APLICACIONES FEDERADAS",
+      "add_app": "Registrar App",
+      "new_app": "Nuevo Satélite",
+      "edit_app": "Editar Satélite",
+      "delete_confirm": "PELIGRO: ¿Terminar federación del satélite?",
+      "no_apps": "No se detectan señales de satélites en órbita",
+      "form": {
+        "name": "Nombre de la Aplicación",
+        "description": "Descripción Funcional",
+        "redirect_uris": "URIs de Redirección Autorizadas",
+        "client_id": "Client ID (Auto-generado)",
+        "client_secret": "Client Secret (Confidencial)",
+        "hover_reveal": "Pase el ratón para revelar secreto",
+        "save": "Persistir Satélite",
+        "cancel": "Abortar"
+      },
+      "cards": {
+        "active": "CONECTADO",
+        "inactive": "OFFLINE",
+        "client_credentials": "Credenciales de Cliente",
+        "authorized_uris": "URIs Autorizadas"
+      }
     },
     "jwt": {
       "title": "Token de Identidad Industrial",
@@ -47,16 +73,41 @@
       "protocol": "Protocolo_Auth"
     },
     "users": {
-      "title": "Gestión de Usuarios",
-      "subtitle": "Administración de identidades globales",
-      "new_user": "Nuevo Usuario",
+      "title": "Usuarios",
+      "subtitle": "Gestión de operadores y administradores",
+      "add_user": "Nuevo Usuario",
+      "edit_user": "Editar Usuario",
       "search_placeholder": "Buscar identidad...",
-      "table": {
-        "identity": "Identidad",
+      "columns": {
+        "user": "Usuario",
         "role": "Rol",
-        "tenant": "Tenant",
+        "tenant": "Organización",
         "status": "Estado",
-        "last_access": "Último Acceso"
+        "actions": "Acciones"
+      },
+      "roles": {
+        "SUPER_ADMIN": "Super Administrador",
+        "ADMIN": "Administrador de Tenant",
+        "USER": "Operador",
+        "TECHNICAL": "Técnico"
+      },
+      "status": {
+        "active": "Activo",
+        "suspended": "Suspendido"
+      },
+      "form": {
+        "email": "Correo Electrónico",
+        "password": "Contraseña",
+        "role": "Rol Industrial",
+        "tenant": "Asignación de Tenant",
+        "save": "Guardar Operador",
+        "cancel": "Cancelar",
+        "name": "Nombre",
+        "surname": "Apellidos"
+      },
+      "messages": {
+        "save_success": "Operador sincronizado correctamente",
+        "save_error": "Error al persistir identidad"
       }
     },
     "tenants": {

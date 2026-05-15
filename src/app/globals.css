@@ -79,7 +79,7 @@
 
 /* 🧪 Glassmorphism Logic */
 .glass-panel {
-  @apply backdrop-blur-xl border border-border shadow-2xl;
+  @apply backdrop-blur-xl border border-border shadow-xl;
   background-color: var(--card-bg, rgba(255, 255, 255, 0.5));
 }
 

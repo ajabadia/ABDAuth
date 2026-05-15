@@ -61,6 +61,10 @@ export function MobileNav({ user }: { user: NavUser }) {
               {user.role === 'SUPER_ADMIN' && (
                 <MobileNavItem href="/dashboard/tenants" icon={<Database size={18} />} label={t('tenants')} onClick={() => setIsOpen(false)} />
               )}
+
+              {user.role === 'SUPER_ADMIN' && (
+                <MobileNavItem href="/dashboard/applications" icon={<Shield size={18} />} label={t('applications')} onClick={() => setIsOpen(false)} />
+              )}
               
               {(user.role === 'SUPER_ADMIN' || user.role === 'ADMIN') && (
                 <MobileNavItem href="/dashboard/audit" icon={<ScrollText size={18} />} label={t('audit')} onClick={() => setIsOpen(false)} />

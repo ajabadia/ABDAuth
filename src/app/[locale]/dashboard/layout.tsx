@@ -54,6 +54,10 @@ export default async function DashboardLayout({
             {user.role === 'SUPER_ADMIN' && (
               <NavItem href="/dashboard/tenants" icon={<Database size={16} />} label={t('menu.tenants')} />
             )}
+
+            {user.role === 'SUPER_ADMIN' && (
+              <NavItem href="/dashboard/applications" icon={<Shield size={16} />} label={t('menu.applications')} />
+            )}
             
             {(user.role === 'SUPER_ADMIN' || user.role === 'ADMIN') && (
               <NavItem href="/dashboard/audit" icon={<ScrollText size={16} />} label={t('menu.audit')} />

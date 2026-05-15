@@ -28,7 +28,7 @@ export function TenantForm({ initialData, onSubmit, onCancel, isSubmitting }: Te
 
   React.useEffect(() => {
     if (initialData) {
-      setFormData(initialData)
+      setFormData(prev => ({ ...prev, ...initialData }))
     }
   }, [initialData])
 
