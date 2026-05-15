@@ -2,8 +2,7 @@ import { auth } from '@/auth';
 import { Link } from '@/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { Shield, Zap, Lock, ChevronRight, Globe } from 'lucide-react';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher';
+import { SystemSettings } from '@/components/ui/SystemSettings';
 
 /**
  * 🏭 Root Landing Page
@@ -42,8 +41,7 @@ export default async function RootPage() {
             {c('soc2_monitoring')}
           </div>
           <div className="h-6 w-[1px] bg-border mx-2" />
-          <LocaleSwitcher />
-          <ThemeToggle />
+          <SystemSettings />
         </div>
       </nav>
 

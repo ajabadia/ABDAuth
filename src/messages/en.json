@@ -37,6 +37,15 @@
     "demo_pass": "11111111",
     "footer_text": "Certified Identity System v1.0"
   },
+  "settings": {
+    "title": "System Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "theme_system": "System",
+    "close": "Close"
+  },
   "dashboard": {
     "welcome": "Welcome",
     "subtitle": "Industrial Identity Management",

@@ -37,6 +37,15 @@
     "demo_pass": "11111111",
     "footer_text": "Sistema de Identidad Certificado v1.0"
   },
+  "settings": {
+    "title": "Ajustes de Sistema",
+    "language": "Idioma",
+    "theme": "Tema",
+    "theme_light": "Claro",
+    "theme_dark": "Oscuro",
+    "theme_system": "Sistema",
+    "close": "Cerrar"
+  },
   "dashboard": {
     "welcome": "Bienvenido",
     "subtitle": "Gestión de Identidad Industrial",

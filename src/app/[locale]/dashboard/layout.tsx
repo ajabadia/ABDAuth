@@ -1,8 +1,7 @@
 import { auth, signOut } from "@/auth";
 import { redirect, Link } from "@/i18n/routing";
 import { Shield, LayoutDashboard, Users, Settings, LogOut, ScrollText, Database } from 'lucide-react';
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
+import { SystemSettings } from "@/components/ui/SystemSettings";
 import { MobileNav } from "@/components/MobileNav";
 import { getTranslations } from 'next-intl/server';
 import NavItem from "@/components/NavItem";
@@ -86,8 +85,7 @@ export default async function DashboardLayout({
       <main className="md:ml-64 p-6 md:p-8 relative z-10 pt-20 md:pt-8 min-h-screen">
         <header className="flex justify-end mb-6">
           <div className="flex items-center gap-3">
-            <LocaleSwitcher />
-            <ThemeToggle />
+            <SystemSettings />
             <form action={async () => {
               'use server';
               await signOut();
