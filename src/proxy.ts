@@ -42,6 +42,12 @@ export default auth((req) => {
   
   if (isPublicRoute) {
     if (isLoggedIn) {
+      const { searchParams } = new URL(req.url);
+      const callbackUrl = searchParams.get('callbackUrl');
+      
+      if (callbackUrl) {
+        return NextResponse.redirect(new URL(callbackUrl, req.url));
+      }
       return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
     }
     return intlMiddleware(req);
