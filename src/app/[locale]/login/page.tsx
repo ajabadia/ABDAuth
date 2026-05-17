@@ -39,8 +39,17 @@ export default function LoginPage() {
         toast.success(common('brand'), {
           description: "Acceso concedido. Sincronizando..."
         });
-        // Redirect is handled by the server action or manual router push
-        router.push('/dashboard');
+        
+        // 🌐 Robust Federated SSO Redirection
+        // Extract callbackUrl using native URLSearchParams to avoid Next.js SSR Suspense compilation warnings
+        const params = new URLSearchParams(window.location.search);
+        const callbackUrl = params.get('callbackUrl');
+        
+        if (callbackUrl) {
+          window.location.href = callbackUrl;
+        } else {
+          router.push('/dashboard');
+        }
       }
     } catch (err: unknown) {
       if (err instanceof Error && (err.message === 'NEXT_REDIRECT' || (err as { digest?: string }).digest?.includes('NEXT_REDIRECT'))) {

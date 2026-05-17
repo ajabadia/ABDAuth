@@ -43,5 +43,24 @@ Este documento registra los retos técnicos superados y las decisiones arquitect
 - **Next.js 16 Redirect Handling**: When using Server Actions with `next-auth` and `next-intl`, the `NEXT_REDIRECT` error must be gracefully handled or ignored in client-side try/catch blocks to prevent false-positive error notifications during successful navigation.
 - **Lección**: Toda actualización de secretos de identidad (contraseña, MFA) debe exigir la validación previa del "Auth Secret" actual, incluso si el usuario ya está autenticado, siguiendo los estándares de NIST y OWASP.
 
+### 9. 🔌 Gobernanza de Flujos Federados SSO y Prevención de Bucles de Secuestro (SSO Dashboard Trap)
+
+- **El Problema**: Cuando un usuario no autenticado en un satélite (como `ABDQuiz`) iniciaba sesión federada, era dirigido a `ABDAuth/api/auth/federated/authorize` y luego a `/login?callbackUrl=...`. Sin embargo, en el instante en que se completaba la autenticación y la sesión pasaba a estar activa, el middleware (`proxy.ts`) central de `ABDAuth` interceptaba la ruta pública `/login`, detectaba que `isLoggedIn` era verdadero, e ignoraba el `callbackUrl` para forzar una redirección predeterminada a `/${locale}/dashboard`. Esto "secuestraba" al usuario en el panel central de identidad, impidiendo el retorno a la aplicación satélite.
+- **La Solución**: Modificar el middleware perimetral (`proxy.ts`) para que si un usuario autenticado accede a una ruta pública (`/login` o `/register`), se evalúe prioritariamente la presencia del parámetro `callbackUrl`. Si existe, se le redirige inmediatamente a dicho destino en lugar de forzar el dashboard:
+  ```typescript
+  if (isPublicRoute) {
+    if (isLoggedIn) {
+      const { searchParams } = new URL(req.url);
+      const callbackUrl = searchParams.get('callbackUrl');
+      if (callbackUrl) {
+        return NextResponse.redirect(new URL(callbackUrl, req.url));
+      }
+      return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
+    }
+    return intlMiddleware(req);
+  }
+  ```
+- **Control de Cierre de Sesión Limpio**: Se determinó que el cierre de sesión debe invalidar atómicamente la sesión del Identity Provider central. Si un satélite realiza un logout local pero no destruye la cookie central de `ABDAuth`, los logins subsecuentes loguearán automáticamente al usuario anterior de forma silenciosa. Por lo tanto, el endpoint `/api/auth/logout` de `ABDAuth` debe invocarse mediante navegación a nivel de red (`<a>` nativo) para purgar de forma transparente todo el ecosistema de cookies antes de reconducir al usuario a la pantalla de despedida.
+
 ---
 *Estado de la Documentación: Sincronizado*
