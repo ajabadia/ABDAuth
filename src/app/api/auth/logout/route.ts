@@ -10,20 +10,33 @@ export async function GET(request: NextRequest) {
 
   const response = NextResponse.redirect(new URL(redirectUri));
 
-  // 🧹 Wipe NextAuth session cookies (both standard and secure production ones)
+  // 🧹 Wipe NextAuth/Auth.js session cookies (both standard and secure production ones)
   const cookiesToWipe = [
+    // Auth.js v5 (NextAuth v5) cookies
+    'authjs.session-token',
+    '__Secure-authjs.session-token',
+    'authjs.callback-url',
+    '__Secure-authjs.callback-url',
+    'authjs.csrf-token',
+    '__Secure-authjs.csrf-token',
+    // NextAuth v4 legacy cookies
     'next-auth.session-token',
     '__Secure-next-auth.session-token',
     'next-auth.callback-url',
-    'next-auth.csrf-token'
+    '__Secure-next-auth.callback-url',
+    'next-auth.csrf-token',
+    '__Secure-next-auth.csrf-token'
   ];
 
   for (const cookieName of cookiesToWipe) {
+    // Determine secure and samesite based on cookie prefix
+    const isSecureCookie = cookieName.startsWith('__Secure-');
+    
     response.cookies.set(cookieName, '', {
       path: '/',
       maxAge: 0,
       httpOnly: true,
-      secure: true,
+      secure: isSecureCookie,
       sameSite: 'lax'
     });
   }
