@@ -35,11 +35,17 @@ export async function GET(request: NextRequest) {
     response.cookies.set(cookieName, '', {
       path: '/',
       maxAge: 0,
+      expires: new Date(0),
       httpOnly: true,
       secure: isSecureCookie,
       sameSite: 'lax'
     });
   }
+
+  // 🛡️ Volumetric Anti-Caching Headers (SOC2 Standards)
+  response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  response.headers.set('Pragma', 'no-cache');
+  response.headers.set('Expires', '0');
 
   return response;
 }
