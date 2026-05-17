@@ -113,7 +113,7 @@ export function ApplicationManagementContainer({ initialApplications, t }: Appli
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200" role="dialog" aria-modal="true">
           <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setIsDialogOpen(false)} />
           
-          <div className="relative w-full max-w-lg bg-card border border-border rounded-xl shadow-xl overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="relative w-full max-w-lg bg-card border border-border rounded-xl shadow-xl overflow-y-auto max-h-[95vh] md:max-h-[90vh] animate-in zoom-in-95 duration-200">
             <IndustrialModalHeader 
               title={editingApp ? t.edit_app : t.new_app} 
               subtitle="SATELLITE ORCHESTRATOR V1.0" 

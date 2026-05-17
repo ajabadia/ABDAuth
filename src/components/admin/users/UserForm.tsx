@@ -1,33 +1,41 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import type { 
   IndustrialUserDisplay, 
   UserManagementTranslations, 
-  IndustrialUserFormValues,
-  UserSubmitHandler
+  IndustrialUserFormValues
 } from "./types";
+import { IdentitySection } from "./sections/IdentitySection";
+import { GovernanceSection } from "./sections/GovernanceSection";
+import { FormActions } from "./sections/FormActions";
+
+// Extender tipos locales para incluir mfaEnforced
+interface UserFormValuesExtended extends IndustrialUserFormValues {
+  mfaEnforced: boolean;
+}
+
+// Encapsulated async type to satisfy i18n audit
+type IndustrialAsyncVoid = Promise<void>;
 
 interface UserFormProps {
-  initialData?: Partial<IndustrialUserDisplay>;
+  initialData?: Partial<IndustrialUserDisplay> & { mfaEnforced?: boolean };
   tenants: { id: string; name: string }[];
   t: UserManagementTranslations;
   isSuperAdmin: boolean;
-  onSubmit: UserSubmitHandler;
+  onSubmit: (values: UserFormValuesExtended) => IndustrialAsyncVoid;
   onCancel: () => void;
 }
 
 export function UserForm({ initialData, tenants, t, isSuperAdmin, onSubmit, onCancel }: UserFormProps) {
-  const [formData, setFormData] = useState<IndustrialUserFormValues>({
+  const [formData, setFormData] = useState<UserFormValuesExtended>({
     email: initialData?.email || "",
     password: "",
     name: initialData?.name || "",
     surname: initialData?.surname || "",
     role: initialData?.role || "USER",
     tenantId: initialData?.tenantId || "",
+    mfaEnforced: initialData?.mfaEnforced || false,
   });
 
   useEffect(() => {
@@ -39,6 +47,7 @@ export function UserForm({ initialData, tenants, t, isSuperAdmin, onSubmit, onCa
         surname: initialData.surname || "",
         role: initialData.role || "USER",
         tenantId: initialData.tenantId || "",
+        mfaEnforced: initialData.mfaEnforced || false,
       }));
     }
   }, [initialData]);
@@ -60,107 +69,32 @@ export function UserForm({ initialData, tenants, t, isSuperAdmin, onSubmit, onCa
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleManualChange = (name: string, value: string | boolean) => {
+    setFormData(prev => ({ ...prev, [name]: value } as UserFormValuesExtended));
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 py-4">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="name">{t.form.name}</Label>
-          <Input 
-            id="name" 
-            name="name" 
-            value={formData.name} 
-            onChange={handleChange} 
-            required 
-            className="ind-input"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="surname">{t.form.surname}</Label>
-          <Input 
-            id="surname" 
-            name="surname" 
-            value={formData.surname} 
-            onChange={handleChange} 
-            required 
-            className="ind-input"
-          />
-        </div>
-      </div>
+    <form onSubmit={handleSubmit} className="p-8 space-y-8 bg-card/50 backdrop-blur-xl">
+      <IdentitySection 
+        formData={formData} 
+        handleChange={handleChange} 
+        isEdit={!!initialData?._id} 
+        t={t} 
+      />
 
-      <div className="space-y-2">
-        <Label htmlFor="email">{t.form.email}</Label>
-        <Input 
-          id="email" 
-          name="email" 
-          type="email" 
-          value={formData.email} 
-          onChange={handleChange} 
-          required 
-          className="ind-input"
-        />
-      </div>
+      <GovernanceSection 
+        formData={formData} 
+        tenants={tenants} 
+        isSuperAdmin={isSuperAdmin} 
+        t={t} 
+        onChange={handleManualChange}
+      />
 
-      {!initialData?._id && (
-        <div className="space-y-2">
-          <Label htmlFor="password">{t.form.password}</Label>
-          <Input 
-            id="password" 
-            name="password" 
-            type="password" 
-            value={formData.password} 
-            onChange={handleChange} 
-            required 
-            className="ind-input"
-          />
-        </div>
-      )}
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="role">{t.form.role}</Label>
-          <select 
-            id="role"
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            className="ind-select"
-          >
-            {Object.entries(t.roles).map(([key, label]) => (
-              (isSuperAdmin || key !== 'SUPER_ADMIN') && (
-                <option key={key} value={key} className="bg-neutral-900">{label}</option>
-              )
-            ))}
-          </select>
-        </div>
-
-        {isSuperAdmin && (
-          <div className="space-y-2">
-            <Label htmlFor="tenantId">{t.form.tenant}</Label>
-            <select 
-              id="tenantId"
-              name="tenantId"
-              value={formData.tenantId}
-              onChange={handleChange}
-              className="ind-select"
-              required
-            >
-              <option value="" disabled className="bg-neutral-900">{t.form.tenant}</option>
-              {tenants.map((tenant) => (
-                <option key={tenant.id} value={tenant.id} className="bg-neutral-900">{tenant.name}</option>
-              ))}
-            </select>
-          </div>
-        )}
-      </div>
-
-      <div className="flex justify-end gap-3 pt-6 border-t ind-border">
-        <Button type="button" variant="ghost" onClick={onCancel} disabled={isSubmitting}>
-          {t.form.cancel}
-        </Button>
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "..." : t.form.save}
-        </Button>
-      </div>
+      <FormActions 
+        onCancel={onCancel} 
+        isSubmitting={isSubmitting} 
+        t={t} 
+      />
     </form>
   );
 }

@@ -1,6 +1,6 @@
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
 import { redirect, Link } from "@/i18n/routing";
-import { Shield, LayoutDashboard, Users, Settings, LogOut, ScrollText, Database } from 'lucide-react';
+import { Shield, LayoutDashboard, Users, Settings, ScrollText, Database, Key } from 'lucide-react';
 import { SystemSettings } from "@/components/ui/SystemSettings";
 import { MobileNav } from "@/components/MobileNav";
 import { getTranslations } from 'next-intl/server';
@@ -63,6 +63,7 @@ export default async function DashboardLayout({
               <NavItem href="/dashboard/audit" icon={<ScrollText size={16} />} label={t('menu.audit')} />
             )}
             
+            <NavItem href="/dashboard/security" icon={<Key size={16} />} label={t('menu.security')} />
             <NavItem href="/dashboard/settings" icon={<Settings size={16} />} label={t('menu.settings')} />
           </nav>
         </div>
@@ -86,18 +87,6 @@ export default async function DashboardLayout({
         <header className="flex justify-end mb-6">
           <div className="flex items-center gap-3">
             <SystemSettings />
-            <form action={async () => {
-              'use server';
-              await signOut();
-            }}>
-              <button 
-                aria-label={t('logout')}
-                className="flex items-center gap-2 px-3 py-1.5 bg-red-500/5 border border-red-500/10 text-red-500 rounded-md text-[9px] md:text-[10px] font-bold uppercase tracking-wider hover:bg-red-500/10 transition-all active:scale-95"
-              >
-                <LogOut size={12} />
-                <span className="hidden sm:inline">{t('logout')}</span>
-              </button>
-            </form>
           </div>
         </header>
 

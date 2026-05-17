@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 
 import { IndustrialModalHeader } from "@/components/ui/industrial/ModalHeader";
 import { IndustrialSearchInput } from "@/components/ui/industrial/SearchInput";
+import { toast } from "sonner";
 
 interface UserManagementContainerProps {
   t: UserManagementTranslations;
@@ -27,9 +28,13 @@ export function UserManagementContainer({ t, isSuperAdmin }: UserManagementConta
     try {
       const response = await fetch('/api/admin/users');
       const data = await response.json();
-      setUsers(data as IndustrialUserDisplay[]);
+      if (Array.isArray(data)) {
+        setUsers(data as IndustrialUserDisplay[]);
+      } else {
+        setUsers([]);
+      }
     } catch {
-      // Silent catch
+      setUsers([]);
     }
   };
 
@@ -38,9 +43,13 @@ export function UserManagementContainer({ t, isSuperAdmin }: UserManagementConta
     try {
       const response = await fetch('/api/admin/tenants');
       const data = await response.json();
-      setTenants((data as { tenantId: string, name: string }[]).map((tOrg) => ({ id: tOrg.tenantId, name: tOrg.name })));
+      if (Array.isArray(data)) {
+        setTenants((data as { tenantId: string, name: string }[]).map((tOrg) => ({ id: tOrg.tenantId, name: tOrg.name })));
+      } else {
+        setTenants([]);
+      }
     } catch {
-      // Silent catch
+      setTenants([]);
     }
   };
 
@@ -57,19 +66,33 @@ export function UserManagementContainer({ t, isSuperAdmin }: UserManagementConta
 
   const handleSubmit = async (data: IndustrialUserFormValues) => {
     try {
+      const method = editingUser ? 'PUT' : 'POST';
+      const body = editingUser ? { ...data, _id: editingUser._id } : data;
+
       const response = await fetch('/api/admin/users', {
-        method: 'POST',
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(body),
       });
 
       if (response.ok) {
         setIsDialogOpen(false);
+        setEditingUser(null);
+        toast.success('SYSTEM_SYNC_COMPLETE', {
+          description: t.messages.saveSuccess
+        });
         router.refresh();
         fetchUsers();
+      } else {
+        const errorData = await response.json();
+        toast.error('SYSTEM_SYNC_FAILURE', {
+          description: errorData.error || t.messages.saveError
+        });
       }
-    } catch {
-      // Silent catch
+    } catch (err: unknown) {
+      toast.error('NETWORK_ORCHESTRATION_ERROR', {
+        description: err instanceof Error ? err.message : 'Critical system failure'
+      });
     }
   };
 
@@ -125,7 +148,7 @@ export function UserManagementContainer({ t, isSuperAdmin }: UserManagementConta
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200" role="dialog" aria-modal="true">
           <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setIsDialogOpen(false)} />
           
-          <div className="relative w-full max-w-lg bg-card border border-border rounded-xl shadow-xl overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="relative w-full max-w-lg bg-card border border-border rounded-xl shadow-xl overflow-y-auto max-h-[95vh] md:max-h-[90vh] animate-in zoom-in-95 duration-200">
             <IndustrialModalHeader 
               title={editingUser ? t.editUser : t.addUser} 
               subtitle="USER ORCHESTRATOR V1.1" 

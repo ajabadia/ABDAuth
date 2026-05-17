@@ -13,9 +13,15 @@ export interface IndustrialUser {
   email: string;
   role: UserRole;
   tenantId: string;
+  sessionId?: string; // 🗝️ Telemetry Session Reference
   dbPrefix: string;
   isolationStrategy: 'COLLECTION_PREFIX' | 'DATABASE_PER_TENANT';
+  mfaEnabled: boolean;
+  mfaEnforced: boolean;
   mfa_verified: boolean;
+  active?: boolean;
+  loginAttempts?: number;
+  lockoutUntil?: Date;
 }
 
 export type IndustrialSession = IndustrialUser;

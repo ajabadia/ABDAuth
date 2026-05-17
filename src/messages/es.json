@@ -24,6 +24,11 @@
   },
   "login": {
     "subtitle": "Gestor de Identidad Industrial",
+    "mfa_setup": {
+      "title": "Seguridad Obligatoria",
+      "description": "Tu cuenta requiere Autenticación Multi-Factor (2FA) para acceder a los sistemas protegidos. Configúralo ahora para continuar.",
+      "cancel_logout": "Cancelar y cerrar sesión"
+    },
     "email_label": "Identity_Principal (Email)",
     "email_placeholder": "usuario@ejemplo.com",
     "password_label": "Auth_Secret (Contraseña)",
@@ -35,7 +40,35 @@
     "demo_title": "Credenciales de Laboratorio",
     "demo_user": "ajabadia@gmail.com",
     "demo_pass": "11111111",
-    "footer_text": "Sistema de Identidad Certificado v1.0"
+    "footer_text": "Sistema de Identidad Certificado v1.0",
+    "mfa": {
+      "title": "Verificación de Identidad",
+      "subtitle": "Segundo Factor Requerido",
+      "description": "Introduzca el código de seguridad generado por su aplicación TOTP para autorizar el acceso.",
+      "placeholder": "000 000",
+      "button": "Verificar y Acceder",
+      "error_invalid": "Código de verificación no válido",
+      "back_to_login": "Volver al inicio de sesión"
+    },
+    "forgot_password": "¿Olvidó su contraseña?",
+    "forgot_password_link": "¿Olvidó su contraseña?",
+    "request_reset": {
+      "title": "Recuperar Acceso",
+      "subtitle": "Protocolo de Restauración de Identidad",
+      "description": "Introduzca su Identity_Principal (Email) para recibir un enlace de recuperación de alta prioridad.",
+      "button": "Enviar Enlace de Rescate",
+      "success": "Si el sistema reconoce la identidad, se enviará un enlace de restauración en breve.",
+      "back_to_login": "Regresar al terminal de acceso"
+    },
+    "reset_password": {
+      "title": "Restaurar Secreto",
+      "subtitle": "Actualización de Credenciales de Seguridad",
+      "new_password_label": "Nueva Contraseña Industrial",
+      "confirm_password_label": "Confirmar Nueva Contraseña",
+      "button": "Confirmar Restauración",
+      "success": "Identidad restaurada correctamente. Redirigiendo...",
+      "error_invalid_token": "El token de restauración no es válido o ha expirado"
+    }
   },
   "settings": {
     "title": "Ajustes de Sistema",
@@ -44,12 +77,20 @@
     "theme_light": "Claro",
     "theme_dark": "Oscuro",
     "theme_system": "Sistema",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "logout": "Cerrar Sesión",
+    "login": "Iniciar Sesión"
   },
   "dashboard": {
     "welcome": "Bienvenido",
     "subtitle": "Gestión de Identidad Industrial",
     "status_online": "Sistema_En_Línea",
+    "promotion": {
+      "mfa_title": "Mejore su Seguridad Industrial",
+      "mfa_desc": "Su cuenta actualmente solo está protegida por contraseña. Active el segundo factor para cumplir con los estándares SOC2.",
+      "mfa_cta": "Configurar 2FA",
+      "mfa_badge": "SOC2_REQUERIDO"
+    },
     "logout": "Cerrar Sesión",
     "common": {
       "industrial_ecosystem": "ABD Industrial Ecosystem © 2026",
@@ -61,6 +102,7 @@
       "tenants": "Organizaciones",
       "applications": "Satélites",
       "audit": "Auditoría",
+      "security": "Seguridad",
       "settings": "Ajustes"
     },
     "applications": {
@@ -115,7 +157,14 @@
         "role": "Rol",
         "tenant": "Organización",
         "status": "Estado",
+        "mfa": "MFA",
         "actions": "Acciones"
+      },
+      "mfa": {
+        "enabled": "2FA ACTIVO",
+        "disabled": "SIN 2FA",
+        "reset": "Resetear MFA",
+        "reset_confirm": "¿Está seguro de que desea resetear el MFA para este usuario?"
       },
       "roles": {
         "SUPER_ADMIN": "Super Administrador",
@@ -125,7 +174,8 @@
       },
       "status": {
         "active": "Activo",
-        "suspended": "Suspendido"
+        "suspended": "Suspendido",
+        "pending": "Pendiente"
       },
       "form": {
         "email": "Correo Electrónico",
@@ -135,7 +185,12 @@
         "save": "Guardar Operador",
         "cancel": "Cancelar",
         "name": "Nombre",
-        "surname": "Apellidos"
+        "surname": "Apellidos",
+        "core_identity": "Identidad Principal",
+        "governance_policy": "Política de Gobernanza",
+        "enforce_mfa": "Obligar MFA",
+        "mandatory_onboarding": "Onboarding Obligatorio Activo",
+        "standard_security": "Política de Seguridad Estándar"
       },
       "messages": {
         "save_success": "Operador sincronizado correctamente",
@@ -177,6 +232,54 @@
         "event": "Evento",
         "actor": "Actor",
         "status": "Resultado"
+      }
+    },
+    "security": {
+      "title": "Gobernanza de Seguridad",
+      "description": "Gestione su identidad industrial y controle sus sesiones activas.",
+      "mfa": {
+        "title": "Autenticación Multi-Factor (2FA)",
+        "subtitle": "Gobernanza Standard TOTP",
+        "status_active": "PROTEGIDO",
+        "status_inactive": "VULNERABLE",
+        "info_active": "Tu cuenta está protegida con autenticación de dos factores. Se requerirá un código de seguridad para cada inicio de sesión.",
+        "info_inactive": "Añade una capa extra de seguridad a tu identidad industrial. Activa el MFA para protegerte contra accesos no autorizados.",
+        "enable": "Activar 2FA",
+        "disable": "Desactivar 2FA",
+        "setup_title": "Configurar Autenticación Industrial",
+        "setup_step1": "1. Escanee este código QR con su aplicación de autenticación (Google Authenticator, Authy, etc).",
+        "setup_step2": "2. Introduzca el código de 6 dígitos generado por la aplicación.",
+        "manual_key": "Clave Manual",
+        "verify_btn": "Verificar y Activar",
+        "backup_codes_title": "Códigos de Recuperación",
+        "backup_codes_desc": "Guarde estos códigos en un lugar seguro. Solo se mostrarán una vez.",
+        "mandatory_notice": "Seguridad obligatoria activa por política de organización.",
+        "copy_codes": "Copiar Códigos",
+        "done_btn": "He guardado los códigos",
+        "cancel": "Cancelar",
+        "redirecting_notice": "Redirigiendo al dashboard en 3s..."
+      },
+      "sessions": {
+        "title": "Sesiones Activas",
+        "subtitle": "Gobernanza de Acceso Activo",
+        "current": "Sesión Actual",
+        "revoke": "Revocar Acceso",
+        "revoke_all": "Cerrar todas las sesiones remotas",
+        "no_sessions": "No hay otras sesiones detectadas",
+        "device_unknown": "Dispositivo Desconocido",
+        "last_active": "Última actividad"
+      },
+      "password": {
+        "title": "Cambiar Contraseña",
+        "subtitle": "Actualización de Secretos Auth",
+        "current_label": "Contraseña Actual",
+        "new_label": "Nueva Contraseña",
+        "confirm_label": "Confirmar Nueva Contraseña",
+        "button": "Actualizar Contraseña",
+        "success": "Contraseña actualizada correctamente",
+        "error_current": "La contraseña actual es incorrecta",
+        "error_match": "Las contraseñas no coinciden",
+        "error_length": "La contraseña debe tener al menos 8 caracteres"
       }
     }
   }

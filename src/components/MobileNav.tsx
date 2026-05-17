@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react";
-import { Shield, Menu, X, LayoutDashboard, Users, Database, ScrollText, Settings } from 'lucide-react';
+import { Shield, Menu, X, LayoutDashboard, Users, Database, ScrollText, Settings, Key } from 'lucide-react';
 import { Link } from '@/i18n/routing';
-import { ThemeToggle } from "./ThemeToggle";
+import { SystemSettings } from "./ui/SystemSettings";
 import { useTranslations } from "next-intl";
 
 interface NavUser {
@@ -31,7 +31,7 @@ export function MobileNav({ user }: { user: NavUser }) {
       </Link>
 
       <div className="flex items-center gap-2">
-        <ThemeToggle />
+        <SystemSettings />
         <button aria-label="Open Menu"
           onClick={() => setIsOpen(!isOpen)}
           className="p-2 hover:bg-secondary rounded-md transition-colors"
@@ -70,6 +70,7 @@ export function MobileNav({ user }: { user: NavUser }) {
                 <MobileNavItem href="/dashboard/audit" icon={<ScrollText size={18} />} label={t('audit')} onClick={() => setIsOpen(false)} />
               )}
               
+              <MobileNavItem href="/dashboard/security" icon={<Key size={18} />} label={t('security')} onClick={() => setIsOpen(false)} />
               <MobileNavItem href="/dashboard/settings" icon={<Settings size={18} />} label={t('settings')} onClick={() => setIsOpen(false)} />
             </nav>
           </aside>

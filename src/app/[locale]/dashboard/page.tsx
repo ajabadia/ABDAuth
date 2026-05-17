@@ -6,6 +6,8 @@ import type { IndustrialSession } from "@/types/auth";
 import { userRepository } from "@/lib/repositories/UserRepository";
 import { tenantRepository } from "@/lib/repositories/TenantRepository";
 
+import { MfaPromotion } from "@/components/dashboard/MfaPromotion";
+
 /**
  * 📊 Dashboard Overview (Industrial Localized)
  * Monitoring and quick access panel with strict RBAC enforcement.
@@ -16,10 +18,11 @@ export default async function DashboardPage({
   params: Promise<{ locale: string }>;
 }) {
   const session = await auth();
+  const locale = (await params).locale;
   const t = await getTranslations('dashboard');
 
   if (!session) {
-    redirect({ href: '/login', locale: (await params).locale });
+    redirect({ href: '/login', locale });
     return null;
   }
 
@@ -33,6 +36,19 @@ export default async function DashboardPage({
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
+      {/* 🛡️ MFA Promotion (Industrial Recommendation) */}
+      {!user.mfaEnabled && (
+        <MfaPromotion 
+          t={{
+            mfa_title: t('promotion.mfa_title'),
+            mfa_desc: t('promotion.mfa_desc'),
+            mfa_cta: t('promotion.mfa_cta'),
+            mfa_badge: t('promotion.mfa_badge'),
+          }}
+          locale={locale}
+        />
+      )}
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold tracking-tight text-foreground">{t('welcome')}, {user.name}</h2>

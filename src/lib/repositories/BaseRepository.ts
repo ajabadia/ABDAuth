@@ -1,4 +1,4 @@
-import { MongoClient, type Collection, type Document, type Filter, type OptionalUnlessRequiredId, type UpdateFilter, type UpdateOptions, type ObjectId } from 'mongodb';
+import { type Collection, type Document, type Filter, type OptionalUnlessRequiredId, type UpdateFilter, type UpdateOptions, type ObjectId } from 'mongodb';
 import { AppError } from '../errors';
 
 /**
@@ -12,36 +12,32 @@ export type SafeFilter<T> = Filter<T>;
  * Industrial abstraction for MongoDB operations with automatic auditing support.
  */
 export abstract class BaseRepository<T extends Document> {
-  private client: MongoClient | null = null;
   private dbName: string;
   private collectionName: string;
+  private dbType: 'AUTH' | 'DATA' | 'LOGS';
 
-  constructor(collectionName: string, dbType: 'AUTH' | 'DATA' = 'AUTH') {
-    this.dbName = dbType === 'AUTH' 
-      ? (process.env.MONGODB_AUTH_DB || 'ABDElevators-Auth') 
-      : (process.env.MONGODB_DATA_DB || 'ABDElevators');
+  constructor(collectionName: string, dbType: 'AUTH' | 'DATA' | 'LOGS' = 'AUTH') {
+    this.dbType = dbType;
+    if (dbType === 'LOGS') {
+      this.dbName = process.env.MONGODB_LOGS_DB || 'ABDElevators-Logs';
+    } else if (dbType === 'DATA') {
+      this.dbName = process.env.MONGODB_DATA_DB || 'ABDElevators';
+    } else {
+      this.dbName = process.env.MONGODB_AUTH_DB || 'ABDElevators-Auth';
+    }
     this.collectionName = collectionName;
   }
 
   /**
-   * 🔌 Connection Orchestrator
+   * 🔌 Connection Orchestrator (Singleton Industrial)
    */
   protected async getCollection(): Promise<Collection<T>> {
-    if (!this.client) {
-      const uri = process.env.MONGODB_URI;
-      if (!uri) {
-        if (process.env.NEXT_PHASE === 'phase-production-build') {
-          // Silent mock during build
-          return {} as unknown as Collection<T>;
-        }
-        throw new AppError('MONGODB_URI is not defined in environment');
-      }
-      this.client = new MongoClient(uri);
-    }
-
+    const { mongoClientPromise, mongoLogsClientPromise } = await import('../mongodb');
+    const clientPromise = this.dbType === 'LOGS' ? mongoLogsClientPromise : mongoClientPromise;
+    
     try {
-      await this.client.connect();
-      return this.client.db(this.dbName).collection<T>(this.collectionName);
+      const client = await clientPromise;
+      return client.db(this.dbName).collection<T>(this.collectionName);
     } catch (error) {
       throw new AppError(`Database connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -65,8 +61,20 @@ export abstract class BaseRepository<T extends Document> {
   }
 
   async update(id: string | ObjectId, data: UpdateFilter<T>, filter: SafeFilter<T> = {}, options: UpdateOptions = {}): Promise<boolean> {
+    const { ObjectId } = await import('mongodb');
     const col = await this.getCollection();
-    const query = { _id: id, ...filter } as Filter<T>;
+    
+    // 🛡️ Bulletproof ID conversion
+    let queryId = id;
+    if (typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id)) {
+      try {
+        queryId = new ObjectId(id);
+      } catch {
+        queryId = id;
+      }
+    }
+
+    const query = { _id: queryId, ...filter } as Filter<T>;
     
     // Industrial Smart Update
     let updateDoc: UpdateFilter<T> = data;
@@ -85,5 +93,16 @@ export abstract class BaseRepository<T extends Document> {
     
     const result = await col.updateOne(query, update);
     return result.modifiedCount > 0;
+  }
+
+  async deleteMany(filter: SafeFilter<T>): Promise<number> {
+    const col = await this.getCollection();
+    const result = await col.deleteMany(filter);
+    return result.deletedCount;
+  }
+
+  async count(filter: SafeFilter<T> = {}): Promise<number> {
+    const col = await this.getCollection();
+    return await col.countDocuments(filter);
   }
 }

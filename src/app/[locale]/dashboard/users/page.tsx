@@ -12,6 +12,7 @@ interface LocalizedMessages {
       status: {
         active: string;
         suspended: string;
+        pending: string;
       };
     };
   };
@@ -47,6 +48,12 @@ export default async function UsersPage() {
     },
     roles: dashboard.users.roles,
     status: dashboard.users.status,
+    mfa: {
+      enabled: t("mfa.enabled"),
+      disabled: t("mfa.disabled"),
+      reset: t("mfa.reset"),
+      reset_confirm: t("mfa.reset_confirm"),
+    },
     form: {
       email: t("form.email"),
       password: t("form.password"),
@@ -56,6 +63,11 @@ export default async function UsersPage() {
       cancel: t("form.cancel"),
       name: t("form.name"),
       surname: t("form.surname"),
+      core_identity: t("form.core_identity"),
+      governance_policy: t("form.governance_policy"),
+      enforce_mfa: t("form.enforce_mfa"),
+      mandatory_onboarding: t("form.mandatory_onboarding"),
+      standard_security: t("form.standard_security"),
     },
     messages: {
       saveSuccess: t("messages.save_success"),

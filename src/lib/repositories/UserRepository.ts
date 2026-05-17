@@ -66,6 +66,11 @@ export class UserRepository extends TenantAwareRepository<User> {
     const raws = await this.listForSession(session);
     return raws.map(IndustrialNormalizer.normalizeUser);
   }
+
+  async updateMfaStatus(userId: string, enabled: boolean): Promise<boolean> {
+    const result = await this.update(userId, { mfaEnabled: enabled, updatedAt: new Date() });
+    return result;
+  }
 }
 
 export const userRepository = new UserRepository();

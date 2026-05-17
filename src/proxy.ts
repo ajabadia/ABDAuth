@@ -11,20 +11,34 @@ const intlMiddleware = createMiddleware(routing);
  * Orchestrates authentication, RBAC, and internationalization.
  */
 export default auth((req) => {
-  const { pathname } = req.nextUrl;
-  const isLoggedIn = !!req.auth;
-  const user = req.auth?.user as unknown as IndustrialUser | undefined;
-  const userRole = user?.role;
-
-  // 🌐 Robust Locale Extraction
+  // 🌐 Robust Locale Extraction (Ultra-Defensive for Next.js 16)
+  const pathname = req?.nextUrl?.pathname || "/";
   const segments = pathname.split('/');
   const rawLocale = segments.length > 1 ? segments[1] : '';
-  const isAuthorizedLocale = routing.locales.includes(rawLocale as typeof routing.locales[number]);
-  const locale = isAuthorizedLocale ? rawLocale : routing.defaultLocale;
+  const locale = (routing.locales as readonly string[]).includes(rawLocale) ? rawLocale : routing.defaultLocale;
 
+  const isLoggedIn = !!req?.auth;
+  const user = req?.auth?.user as IndustrialUser | undefined;
+  const userRole = user?.role;
+
+  // 🛡️ MFA Enforcement & Enrollment (Industrial Fail-Closed)
+  const isMfaRoute = pathname.includes('/login/mfa');
+  const isMfaSetupRoute = pathname.includes('/login/mfa/setup');
+
+  if (isLoggedIn && !isMfaRoute && !isMfaSetupRoute) {
+    // 1. Mandatory Verification (if enabled)
+    if (user?.mfaEnabled && !user?.mfa_verified) {
+      return NextResponse.redirect(new URL(`/${locale}/login/mfa`, req.url));
+    }
+    
+    // 2. Mandatory Enrollment (if enforced but not yet enabled)
+    if (user?.mfaEnforced && !user?.mfaEnabled) {
+      return NextResponse.redirect(new URL(`/${locale}/login/mfa/setup`, req.url));
+    }
+  }
 
   // 🚪 Public Routes Protection
-  const isPublicRoute = pathname.includes('/login') || pathname.includes('/register');
+  const isPublicRoute = (pathname.includes('/login') || pathname.includes('/register')) && !isMfaRoute;
   
   if (isPublicRoute) {
     if (isLoggedIn) {
@@ -67,5 +81,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.svg$).*)'],
+  matcher: ['/((?!.*api|_next/static|_next/image|.*\\.svg$).*)'],
 };

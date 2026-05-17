@@ -8,6 +8,9 @@ export interface IndustrialUserDisplay {
   role: UserRole;
   tenantId: string;
   status?: 'ACTIVE' | 'SUSPENDED';
+  mfaEnabled?: boolean;
+  mfaEnforced?: boolean;
+  emailVerified?: string;
   createdAt: string;
 }
 
@@ -27,6 +30,13 @@ export interface UserManagementTranslations {
   status: {
     active: string;
     suspended: string;
+    pending: string;
+  };
+  mfa: {
+    enabled: string;
+    disabled: string;
+    reset: string;
+    reset_confirm: string;
   };
   form: {
     email: string;
@@ -37,6 +47,11 @@ export interface UserManagementTranslations {
     cancel: string;
     name: string;
     surname: string;
+    core_identity: string;
+    governance_policy: string;
+    enforce_mfa: string;
+    mandatory_onboarding: string;
+    standard_security: string;
   };
   messages: {
     saveSuccess: string;
@@ -53,6 +68,7 @@ export interface IndustrialUserFormValues {
   surname: string;
   role: string;
   tenantId: string;
+  mfaEnforced: boolean;
 }
 
 export type UserSubmitHandler = (data: IndustrialUserFormValues) => Promise<void>;

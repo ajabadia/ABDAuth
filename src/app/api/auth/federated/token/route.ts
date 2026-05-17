@@ -90,9 +90,8 @@ export async function POST(req: Request) {
       }
     });
 
-  } catch (error) {
+  } catch {
     // 🛡️ Security Standard: Opaque error messages for production
-    console.error('[SECURITY:TOKEN_EXCHANGE_FAILURE]', error);
     return NextResponse.json({ 
       error: 'Identity exchange failed',
       code: 'FEDERATION_ERROR'

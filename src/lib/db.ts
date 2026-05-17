@@ -21,7 +21,11 @@ function getClientPromise(): Promise<MongoClient> {
     throw new Error('Please add your Mongo URI to .env.local');
   }
 
-  const options = {};
+  const options = {
+    connectTimeoutMS: 20000,
+    socketTimeoutMS: 60000,
+    family: 4,
+  };
 
   if (process.env.NODE_ENV === 'development') {
     const globalWithMongo = globalThis as typeof globalThis & {

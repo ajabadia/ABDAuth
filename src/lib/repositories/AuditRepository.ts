@@ -8,7 +8,7 @@ import type { IndustrialSession } from '@/types/auth';
  */
 export class AuditRepository extends TenantAwareRepository<AuditLog> {
   constructor() {
-    super('audit_logs', 'AUTH');
+    super('access_logs', 'LOGS');
   }
 
   /**

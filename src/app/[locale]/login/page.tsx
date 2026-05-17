@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "@/i18n/routing";
 import { Shield, Lock, Mail, Loader2, CheckCircle, AlertCircle, ArrowRight } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { SystemSettings } from "@/components/ui/SystemSettings";
+import { toast } from "sonner";
+import { loginAction } from "./actions";
 
 export default function LoginPage() {
   const t = useTranslations('login');
@@ -22,20 +23,31 @@ export default function LoginPage() {
     setIsLoading(true);
     setError("");
 
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('password', password);
+
     try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
+      const result = await loginAction(formData);
 
       if (result?.error) {
         setError(t('error_invalid'));
+        toast.error(t('error_invalid'), {
+          description: common('brand'),
+        });
       } else {
+        toast.success(common('brand'), {
+          description: "Acceso concedido. Sincronizando..."
+        });
+        // Redirect is handled by the server action or manual router push
         router.push('/dashboard');
       }
-    } catch {
-      setError(t('errors.invalid_credentials'));
+    } catch (err: unknown) {
+      if (err instanceof Error && (err.message === 'NEXT_REDIRECT' || (err as { digest?: string }).digest?.includes('NEXT_REDIRECT'))) {
+        return;
+      }
+      setError(t('error_generic'));
+      toast.error(t('error_generic'));
     } finally {
       setIsLoading(false);
     }
@@ -80,6 +92,8 @@ export default function LoginPage() {
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-blue-500 transition-colors" size={14} />
               <input
                 type="email"
+                name="email"
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t('email_placeholder')}
@@ -95,12 +109,24 @@ export default function LoginPage() {
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-blue-500 transition-colors" size={14} />
               <input
                 type="password"
+                name="password"
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={t('password_placeholder')}
                 className="w-full bg-secondary/30 border-border border rounded-lg h-10 pl-10 pr-4 text-xs focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500 outline-none transition-all placeholder:text-muted-foreground/30 text-foreground"
                 required
               />
+            </div>
+            <div className="flex justify-end pt-1">
+              <button 
+                aria-label={t('forgot_password_link')}
+                type="button"
+                onClick={() => router.push('/login/forgot-password')}
+                className="text-[10px] font-bold text-muted-foreground hover:text-blue-500 transition-colors uppercase tracking-widest"
+              >
+                {t('forgot_password_link')}
+              </button>
             </div>
           </div>
 
@@ -111,11 +137,12 @@ export default function LoginPage() {
             </div>
           )}
 
-          <button aria-label={t('button')}
-            type="submit"
-            disabled={isLoading}
-            className="w-full h-10 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-600/50 text-white rounded-lg text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20"
-          >
+          <button 
+                type="submit"
+                disabled={isLoading}
+                aria-label={t('button')}
+                className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-[10px] font-black uppercase tracking-widest py-3 rounded-lg border-b-2 border-blue-800 active:border-b-0 active:translate-y-[1px] transition-all flex items-center justify-center gap-2"
+              >
             {isLoading ? <Loader2 size={16} className="animate-spin" /> : <><ArrowRight size={16} /> {t('button')}</>}
           </button>
         </form>

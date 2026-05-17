@@ -51,6 +51,9 @@ export class SecurityService {
    * Decrypts an encrypted string.
    */
   public static decrypt(encryptedData: string): string {
+    if (!encryptedData || typeof encryptedData !== 'string') {
+      return '';
+    }
     try {
       const [ivHex, encryptedHex, authTagHex] = encryptedData.split(':');
 
