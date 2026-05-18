@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "@/i18n/routing";
 import { Shield, Lock, Mail, Loader2, CheckCircle, AlertCircle, ArrowRight } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { SystemSettings } from "@/components/ui/SystemSettings";
 import { toast } from "sonner";
 import { loginAction } from "./actions";
+import { generateTenantCss } from "@abd/styles";
 
 export default function LoginPage() {
   const t = useTranslations('login');
@@ -17,6 +18,48 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // 🎨 Dynamic White-Label States
+  const [brandingCss, setBrandingCss] = useState("");
+  const [tenantBranding, setTenantBranding] = useState<any>(null);
+  const [tenantName, setTenantName] = useState("");
+
+  // 🔄 Load Tenant Branding on mount if provided in search parameters
+  useEffect(() => {
+    const fetchTenantBranding = async () => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        let tenantId = params.get('tenant');
+        
+        if (!tenantId) {
+          const callbackUrl = params.get('callbackUrl');
+          if (callbackUrl) {
+            try {
+              const cbParams = new URL(callbackUrl).searchParams;
+              tenantId = cbParams.get('tenant');
+            } catch {}
+          }
+        }
+        
+        if (tenantId) {
+          const res = await fetch(`/api/auth/tenant/info?tenantId=${tenantId}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.active && data.branding?.theme) {
+              const css = generateTenantCss(data.branding.theme);
+              setBrandingCss(css);
+              setTenantBranding(data.branding);
+              setTenantName(data.name);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('[LOGIN_BRANDING_ERROR]', err);
+      }
+    };
+    
+    fetchTenantBranding();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +84,6 @@ export default function LoginPage() {
         });
         
         // 🌐 Robust Federated SSO Redirection
-        // Extract callbackUrl using native URLSearchParams to avoid Next.js SSR Suspense compilation warnings
         const params = new URLSearchParams(window.location.search);
         const callbackUrl = params.get('callbackUrl');
         
@@ -64,6 +106,9 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 font-sans relative overflow-hidden transition-colors duration-300">
+      {brandingCss && (
+        <style id="tenant-branding-gateway" dangerouslySetInnerHTML={{ __html: brandingCss }} />
+      )}
       <div className="bg-grain" />
 
       {/* 🛠️ Accessibility Controls */}
@@ -73,15 +118,19 @@ export default function LoginPage() {
       
       {/* 🛡️ Branding Section */}
       <div className="mb-12 flex flex-col items-center animate-in slide-in-from-top duration-700">
-        <div 
-          role="button"
-          tabIndex={0}
-          className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-xl shadow-blue-500/10 border border-blue-400/20 active:scale-95 transition-transform cursor-pointer"
-        >
-          <Shield size={32} className="text-white" />
-        </div>
+        {tenantBranding?.logoUrl ? (
+          <img src={tenantBranding.logoUrl} alt={tenantName} className="h-14 mb-4 object-contain max-w-[220px]" />
+        ) : (
+          <div 
+            role="button"
+            tabIndex={0}
+            className="w-14 h-14 bg-primary text-primary-foreground rounded-xl flex items-center justify-center mb-4 shadow-xl shadow-primary/10 border border-primary/20 active:scale-95 transition-transform cursor-pointer"
+          >
+            <Shield size={32} className="text-primary-foreground" />
+          </div>
+        )}
         <h1 className="text-xl font-black text-foreground tracking-tighter uppercase">
-          {common('brand')}
+          {tenantName || common('brand')}
         </h1>
         <p className="text-[10px] text-muted-foreground font-mono uppercase tracking-[0.3em] mt-2 opacity-60">
           {t('subtitle')}
@@ -90,15 +139,15 @@ export default function LoginPage() {
 
       {/* 🔐 Login Terminal */}
       <div className="w-full max-w-[380px] bg-card border border-border rounded-xl shadow-xl overflow-hidden relative z-10">
-        <div className="h-1.5 w-full bg-blue-600/10 flex">
-          <div className="h-full bg-blue-600 w-1/3 animate-pulse" />
+        <div className="h-1.5 w-full bg-primary/10 flex">
+          <div className="h-full bg-primary w-1/3 animate-pulse" />
         </div>
         
         <form onSubmit={handleSubmit} className="p-8 space-y-5 relative z-10">
           <div className="space-y-2">
             <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest ml-1">{t('email_label')}</label>
             <div className="relative group/input">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-blue-500 transition-colors" size={14} />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-primary transition-colors" size={14} />
               <input
                 type="email"
                 name="email"
@@ -106,7 +155,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t('email_placeholder')}
-                className="w-full bg-secondary/30 border-border border rounded-lg h-10 pl-10 pr-4 text-xs focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500 outline-none transition-all placeholder:text-muted-foreground/30 text-foreground"
+                className="w-full bg-secondary/30 border-border border rounded-lg h-10 pl-10 pr-4 text-xs focus:ring-1 focus:ring-primary/30 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/30 text-foreground"
                 required
               />
             </div>
@@ -115,7 +164,7 @@ export default function LoginPage() {
           <div className="space-y-2">
             <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest ml-1">{t('password_label')}</label>
             <div className="relative group/input">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-blue-500 transition-colors" size={14} />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-primary transition-colors" size={14} />
               <input
                 type="password"
                 name="password"
@@ -123,7 +172,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={t('password_placeholder')}
-                className="w-full bg-secondary/30 border-border border rounded-lg h-10 pl-10 pr-4 text-xs focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500 outline-none transition-all placeholder:text-muted-foreground/30 text-foreground"
+                className="w-full bg-secondary/30 border-border border rounded-lg h-10 pl-10 pr-4 text-xs focus:ring-1 focus:ring-primary/30 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/30 text-foreground"
                 required
               />
             </div>
@@ -132,7 +181,7 @@ export default function LoginPage() {
                 aria-label={t('forgot_password_link')}
                 type="button"
                 onClick={() => router.push('/login/forgot-password')}
-                className="text-[10px] font-bold text-muted-foreground hover:text-blue-500 transition-colors uppercase tracking-widest"
+                className="text-[10px] font-bold text-muted-foreground hover:text-primary transition-colors uppercase tracking-widest"
               >
                 {t('forgot_password_link')}
               </button>
@@ -150,9 +199,9 @@ export default function LoginPage() {
                 type="submit"
                 disabled={isLoading}
                 aria-label={t('button')}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-[10px] font-black uppercase tracking-widest py-3 rounded-lg border-b-2 border-blue-800 active:border-b-0 active:translate-y-[1px] transition-all flex items-center justify-center gap-2"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed text-[10px] font-black uppercase tracking-widest py-3 rounded-lg border-b-2 border-primary/80 active:border-b-0 active:translate-y-[1px] transition-all flex items-center justify-center gap-2"
               >
-            {isLoading ? <Loader2 size={16} className="animate-spin" /> : <><ArrowRight size={16} /> {t('button')}</>}
+            {isLoading ? <Loader2 size={16} className="animate-spin text-primary-foreground" /> : <><ArrowRight size={16} /> {t('button')}</>}
           </button>
         </form>
 

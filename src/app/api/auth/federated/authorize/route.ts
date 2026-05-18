@@ -13,6 +13,7 @@ export async function GET(req: Request) {
   const clientId = searchParams.get('client_id');
   const redirectUri = searchParams.get('redirect_uri');
   const state = searchParams.get('state') || '';
+  const tenantParam = searchParams.get('tenant') || '';
 
   if (!clientId || !redirectUri) {
     return NextResponse.json({ error: 'Missing client_id or redirect_uri' }, { status: 400 });
@@ -24,17 +25,51 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Invalid or inactive client' }, { status: 401 });
   }
 
-  // 2. Validate Redirect URI (Security Standard)
-  if (!app.redirectUris.includes(redirectUri)) {
+  // 2. Validate Redirect URI (Security Standard with Dynamic Subdomain matching)
+  const isRedirectValid = (() => {
+    if (app.redirectUris.includes(redirectUri)) return true;
+    try {
+      const reqUrl = new URL(redirectUri);
+      for (const reg of app.redirectUris) {
+        try {
+          const regUrl = new URL(reg);
+          if (
+            reqUrl.protocol !== regUrl.protocol ||
+            reqUrl.pathname !== regUrl.pathname ||
+            reqUrl.port !== regUrl.port
+          ) {
+            continue;
+          }
+          const reqHost = reqUrl.hostname;
+          const regHost = regUrl.hostname;
+          if (reqHost.endsWith(regHost)) {
+            const prefix = reqHost.substring(0, reqHost.length - regHost.length);
+            if (prefix === '' || prefix.endsWith('.')) {
+              return true;
+            }
+          }
+        } catch {}
+      }
+    } catch {}
+    return false;
+  })();
+
+  if (!isRedirectValid) {
     return NextResponse.json({ error: 'Redirect URI mismatch' }, { status: 400 });
   }
 
   // 3. Check Session
   const session = await auth();
   if (!session?.user) {
-    // Redirect to login with original return parameters
+    // Redirect to login with original return parameters and tenant pre-vesting data
     const loginUrl = new URL('/login', req.url);
     const callback = new URL(req.url);
+    
+    if (tenantParam) {
+      callback.searchParams.set('tenant', tenantParam);
+      loginUrl.searchParams.set('tenant', tenantParam);
+    }
+    
     loginUrl.searchParams.set('callbackUrl', callback.toString());
     return NextResponse.redirect(loginUrl);
   }
@@ -57,3 +92,4 @@ export async function GET(req: Request) {
 
   return NextResponse.redirect(target);
 }
+
