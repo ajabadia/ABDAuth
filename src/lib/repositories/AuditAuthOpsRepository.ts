@@ -1,30 +1,55 @@
 import { BaseRepository, type SafeFilter } from './BaseRepository';
-import type { AuditAuthOps } from '@/lib/schemas/audit';
+import { LogsClient } from '@/lib/logs-client';
 
 /**
  * 🛡️ AuditAuthOpsRepository
  * Persistence repository for local auth operations and SSO logs.
- * Target: 'audit_auth_ops' collection in AUTH database.
+ * Migrated to centralize writes to ABDLogs and query from central_audit_logs.
  */
-export class AuditAuthOpsRepository extends BaseRepository<AuditAuthOps> {
+export class AuditAuthOpsRepository extends BaseRepository<any> {
   constructor() {
-    super('audit_auth_ops', 'AUTH');
+    super('central_audit_logs', 'LOGS');
   }
 
   /**
-   * 📋 List operational logs filtered by tenantId
+   * 📡 Redirect writes to central ABDLogs service
    */
-  async findByTenantId(tenantId: string): Promise<AuditAuthOps[]> {
-    const query: SafeFilter<AuditAuthOps> = { tenantId };
+  override async create(data: any): Promise<string> {
+    try {
+      await LogsClient.log({
+        tenantId: data.tenantId || 'SYSTEM',
+        action: data.action || 'UNKNOWN_OP',
+        entityType: data.entityType || 'SYSTEM',
+        entityId: data.entityId || 'SYSTEM',
+        userId: data.userId || 'SYSTEM',
+        userEmail: data.userEmail || 'system@abdlogs.local',
+        changedFields: {
+          ...(data.changedFields || {}),
+          ...(data.previousState ? { previousState: data.previousState } : {})
+        },
+        ipAddress: data.ipAddress,
+        userAgent: data.userAgent
+      });
+    } catch (err) {
+      console.error('[AUDIT_AUTH_OPS_REPOSITORY_WRITE_ERROR] Failed to route to LogsClient:', err);
+    }
+    return 'central_log_async_id';
+  }
+
+  /**
+   * 📋 List operational logs filtered by tenantId from central_audit_logs
+   */
+  async findByTenantId(tenantId: string): Promise<any[]> {
+    const query: SafeFilter<any> = { tenantId, appId: 'auth' };
     const results = await this.list(query);
     return results.sort((a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0));
   }
 
   /**
-   * 📋 List operational logs for a user
+   * 📋 List operational logs for a user from central_audit_logs
    */
-  async findByUserId(userId: string): Promise<AuditAuthOps[]> {
-    const query: SafeFilter<AuditAuthOps> = { userId };
+  async findByUserId(userId: string): Promise<any[]> {
+    const query: SafeFilter<any> = { userId, appId: 'auth' };
     const results = await this.list(query);
     return results.sort((a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0));
   }

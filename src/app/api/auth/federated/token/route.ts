@@ -5,6 +5,7 @@ import { federatedCodeRepository, type FederatedCode } from '@/lib/repositories/
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { type SafeFilter } from '@/lib/repositories/BaseRepository';
+import { SsoService } from '@/services/auth/SsoService';
 
 /**
  * 🎫 Federated Token Schema
@@ -75,9 +76,22 @@ export async function POST(req: Request) {
 
     const tenant = await tenantRepository.findByTenantId(user.tenantId);
 
-    // 5. Build Industrial Response (Compatible with ABDQuiz bridge)
+    // 5. Generate cryptographically signed JWT via SsoService
+    const token = await SsoService.generateToken({
+      sub: user._id?.toString() || '',
+      email: user.email,
+      name: user.name,
+      surname: user.surname || '',
+      role: user.role,
+      tenantId: user.tenantId,
+      permissions: [],
+      dbPrefix: tenant?.dbPrefix || 'default',
+      isolationStrategy: tenant?.isolationStrategy || 'COLLECTION_PREFIX',
+    });
+
+    // 6. Build Industrial Response (JWT + auxiliary user data)
     return NextResponse.json({
-      access_token: 'at_' + rawCode.code, // Placeholder for real JWT
+      token,
       user: {
         id: user._id?.toString(),
         email: user.email,
@@ -85,8 +99,6 @@ export async function POST(req: Request) {
         surname: user.surname,
         role: user.role,
         tenantId: user.tenantId,
-        dbPrefix: tenant?.dbPrefix || 'default',
-        isolationStrategy: tenant?.isolationStrategy || 'COLLECTION_PREFIX',
         branding: tenant?.branding || null,
       }
     });

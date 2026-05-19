@@ -11,9 +11,12 @@ export interface SsoPayload {
   sub: string;
   email: string;
   name: string;
+  surname: string;
   tenantId: string;
   role: string;
   permissions: string[];
+  dbPrefix: string;
+  isolationStrategy: string;
 }
 
 /**
@@ -55,9 +58,12 @@ export class SsoService {
       sub: payload.sub,
       email: payload.email,
       name: payload.name,
+      surname: payload.surname,
       tenantId: payload.tenantId,
       role: payload.role,
       permissions: payload.permissions,
+      dbPrefix: payload.dbPrefix,
+      isolationStrategy: payload.isolationStrategy,
     })
       .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
       .setIssuedAt()
@@ -128,10 +134,13 @@ export class SsoService {
     const token = await this.generateToken({
       sub: userId,
       email: userEmail,
-      name: `${userName} ${userSurname || ''}`.trim(),
+      name: userName,
+      surname: userSurname || '',
       tenantId,
       role,
       permissions,
+      dbPrefix: tenant?.dbPrefix || 'default',
+      isolationStrategy: tenant?.isolationStrategy || 'COLLECTION_PREFIX',
     });
 
     // 7. Resolve Destination URL with Tenant sub-domain pattern injection
