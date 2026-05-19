@@ -66,8 +66,7 @@ async function seedSatellite() {
       clientSecret: 'abdgov-industrial-super-secret-key-2026',
       redirectUris: [
         'http://localhost:3500/api/auth/federated/callback',
-        'http://localhost:3600/api/auth/federated/callback',
-        'https://abd-logs.vercel.app/api/auth/federated/callback'
+        'https://abd-tenant-gobernance.vercel.app/api/auth/federated/callback'
       ],
       active: true,
       updatedAt: new Date(),
@@ -82,6 +81,34 @@ async function seedSatellite() {
         createdAt: new Date(),
       });
       console.log('🚀 ABDtenantGobernance registered successfully!');
+    }
+
+    // 3. Seed ABDLogs
+    const clientIdLogs = 'abdlogs-industrial-client-id';
+    const existingLogs = await applicationRepository.findByClientId(clientIdLogs);
+    
+    const logsData = {
+      name: 'ABDLogs Federated',
+      description: 'Official centralized logging and auditing console.',
+      clientId: clientIdLogs,
+      clientSecret: 'abdlogs-industrial-super-secret-key-2026',
+      redirectUris: [
+        'http://localhost:3600/api/auth/federated/callback',
+        'https://abd-logs.vercel.app/api/auth/federated/callback'
+      ],
+      active: true,
+      updatedAt: new Date(),
+    };
+
+    if (existingLogs) {
+      console.log('🔄 ABDLogs already registered. Updating...');
+      await applicationRepository.update(existingLogs._id, logsData);
+    } else {
+      await applicationRepository.create({
+        ...logsData,
+        createdAt: new Date(),
+      });
+      console.log('🚀 ABDLogs registered successfully!');
     }
 
     process.exit(0);
