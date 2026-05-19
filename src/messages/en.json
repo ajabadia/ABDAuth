@@ -86,6 +86,13 @@
     "back_to_dashboard": "Back to dashboard",
     "welcome": "Welcome",
     "subtitle": "Industrial Identity Management",
+    "errors": {
+      "SELECT_TENANT_REQUIRED": "Please select an active organization to sign in to the application.",
+      "APPLICATION_NOT_LICENSED": "The application is not licensed for the selected organization.",
+      "UNAUTHORIZED_TENANT_ACCESS": "Unauthorized access to the selected organization.",
+      "APPLICATION_INACTIVE": "The selected application is offline or inactive.",
+      "DEFAULT": "Failed to establish SSO connection with the satellite application."
+    },
     "status_online": "System_Online",
     "promotion": {
       "mfa_title": "Enhance Your Industrial Security",

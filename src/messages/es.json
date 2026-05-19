@@ -86,6 +86,13 @@
     "back_to_dashboard": "Volver al panel",
     "welcome": "Bienvenido",
     "subtitle": "Gestión de Identidad Industrial",
+    "errors": {
+      "SELECT_TENANT_REQUIRED": "Seleccione una organización activa para iniciar sesión en la aplicación.",
+      "APPLICATION_NOT_LICENSED": "La aplicación no está licenciada para la organización seleccionada.",
+      "UNAUTHORIZED_TENANT_ACCESS": "Acceso no autorizado a la organización seleccionada.",
+      "APPLICATION_INACTIVE": "La aplicación seleccionada está fuera de línea o inactiva.",
+      "DEFAULT": "Error al realizar el enlace SSO con la aplicación satélite."
+    },
     "status_online": "Sistema_En_Línea",
     "promotion": {
       "mfa_title": "Mejore su Seguridad Industrial",

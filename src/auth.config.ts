@@ -31,6 +31,7 @@ export const authConfig = {
         const updatedUser = session.user as IndustrialUser;
         if (updatedUser.mfa_verified !== undefined) token.mfa_verified = updatedUser.mfa_verified;
         if (updatedUser.mfaEnabled !== undefined) token.mfaEnabled = updatedUser.mfaEnabled;
+        if (updatedUser.tenantId !== undefined) token.tenantId = updatedUser.tenantId;
       }
       
       return token;

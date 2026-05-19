@@ -12,22 +12,22 @@ import { MfaPromotion } from "@/components/dashboard/MfaPromotion";
 import { PageHeader } from "@/components/ui/industrial/PageHeader";
 import { TokenPreview } from "./components/TokenPreview";
 import { StatsPanel } from "./components/StatsPanel";
+import { SsoErrorAlert } from "./components/SsoErrorAlert";
 import { getTenantSelectorTranslations, getAppLauncherTranslations } from "./components/translations";
 import type { TenantId } from "@/lib/schemas/common";
 import type { Application } from "@/lib/schemas/auth";
 import type { SafeFilter } from "@/lib/repositories/BaseRepository";
 
-/**
- * 📊 Dashboard Overview (Industrial Multi-Tenant Launcher)
- * Integrates Tenant switching, Active Applications Touch Grid, and JWT stats.
- */
 export default async function DashboardPage({
-  params
+  params,
+  searchParams
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ error?: string }>;
 }) {
   const session = await auth();
   const { locale } = await params;
+  const { error } = await searchParams;
   const t = await getTranslations('dashboard');
 
   if (!session) {
@@ -42,23 +42,30 @@ export default async function DashboardPage({
     return null;
   }
 
-  // 1. Fetch user memberships dynamically to check multi-tenancy
-  const targetTenantIds = Array.from(new Set([
-    dbUser.tenantId, 
-    ...(dbUser.tenantIds || []), 
-    ...(dbUser.tenants?.map(t => t.tenantId) || [])
-  ].filter(Boolean))) as TenantId[];
-
-  const tenantsPromises = targetTenantIds.map(tid => tenantRepository.findByTenantId(tid));
-  const userTenants = (await Promise.all(tenantsPromises)).filter((t): t is Exclude<typeof t, null | undefined> => !!t);
+  // 1. Fetch user memberships dynamically to check multi-tenancy / context switching
+  let userTenants: Array<{ tenantId: string; name: string; industry?: string; active: boolean }> = [];
+  if (user.role === 'SUPER_ADMIN') {
+    const allDbTenants = await tenantRepository.listForCurrentSession(user);
+    userTenants = [
+      { tenantId: 'GLOBAL', name: 'CONSOLA DEL SISTEMA (GLOBAL)', industry: 'SYSTEM', active: true },
+      ...allDbTenants.map(t => ({ tenantId: t.tenantId, name: t.name, industry: t.industry, active: t.active !== false }))
+    ];
+  } else {
+    const targetTenantIds = Array.from(new Set([dbUser.tenantId, ...(dbUser.tenantIds || []), ...(dbUser.tenants?.map(t => t.tenantId) || [])].filter(Boolean))) as TenantId[];
+    const dbTenants = (await Promise.all(targetTenantIds.map(tid => tenantRepository.findByTenantId(tid)))).filter(Boolean);
+    userTenants = dbTenants.map(t => ({ tenantId: t!.tenantId, name: t!.name, industry: t!.industry, active: t!.active !== false }));
+  }
 
   // 2. Fetch allowed apps for the currently active tenant
   let allowedApps: Application[] = [];
-  if (user.tenantId && user.tenantId !== 'GLOBAL') {
-    const activeTenant = await tenantRepository.findByTenantId(user.tenantId as TenantId);
-    if (activeTenant && activeTenant.allowedApps) {
-      const appsPromises = activeTenant.allowedApps.map(slug => applicationRepository.findOne({ slug } as SafeFilter<Application>));
-      allowedApps = (await Promise.all(appsPromises)).filter((a): a is Application => !!a);
+  if (user.tenantId) {
+    if (user.tenantId === 'GLOBAL') {
+      allowedApps = user.role === 'SUPER_ADMIN' ? await applicationRepository.list({ active: true }) : [];
+    } else {
+      const activeTenant = await tenantRepository.findByTenantId(user.tenantId as TenantId);
+      if (activeTenant?.allowedApps) {
+        allowedApps = (await Promise.all(activeTenant.allowedApps.map(slug => applicationRepository.findOne({ slug } as SafeFilter<Application>)))).filter((a): a is Application => !!a);
+      }
     }
   }
 
@@ -69,6 +76,8 @@ export default async function DashboardPage({
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
+      {error && <SsoErrorAlert error={error} t={t} />}
+
       {!user.mfaEnabled && (
         <MfaPromotion 
           t={{
@@ -82,11 +91,7 @@ export default async function DashboardPage({
       )}
 
       <PageHeader
-        title={
-          <>
-            {t('welcome')}, <span className="text-primary">{user.name}</span>
-          </>
-        }
+        title={<>{t('welcome')}, <span className="text-primary">{user.name}</span></>}
         subtitle={`${t('subtitle')} • INDUSTRIAL_MODE_ACTIVE`}
         breadcrumb={`${t('control_console')} • ${t('menu.overview')}`}
         icon={LayoutDashboard}
@@ -98,17 +103,17 @@ export default async function DashboardPage({
         }
       />
 
-      {/* 🏢 Part 1: Tenant Switcher (Show if user belongs to multiple organizations) */}
+      {/* 🏢 Part 1: Tenant Switcher */}
       {userTenants.length > 1 && (
         <TenantSelector 
-          tenants={userTenants.map(t => ({ tenantId: t.tenantId, name: t.name, industry: t.industry, active: t.active }))}
+          tenants={userTenants}
           activeTenantId={user.tenantId}
           translations={getTenantSelectorTranslations(locale)}
         />
       )}
 
       {/* 🛰️ Part 2: Allowed Applications Launcher Grid */}
-      {user.tenantId && user.tenantId !== 'GLOBAL' && (
+      {user.tenantId && (
         <AppLauncherGrid 
           apps={allowedApps}
           activeTenantId={user.tenantId}
