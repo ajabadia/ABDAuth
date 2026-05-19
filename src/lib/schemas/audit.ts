@@ -38,3 +38,33 @@ export const AuditLogSchema = z.object({
 });
 
 export type AuditLog = z.infer<typeof AuditLogSchema>;
+
+/**
+ * 🛡️ AuditAuthOps Schema (Local Operational Logs)
+ * Compliant with DISENO_SSO_TENANTS.md standard
+ */
+export const AuditAuthOpsSchema = z.object({
+  _id: z.any().optional(),
+  tenantId: z.string(), // Slug of the tenant (or 'SYSTEM' or 'GLOBAL')
+  action: z.enum([
+    'USER_LOGIN',
+    'USER_LOGOUT',
+    'SSO_HANDSHAKE_GRANTED',
+    'SSO_HANDSHAKE_DENIED',
+    'TENANT_CREATED',
+    'TENANT_UPDATED',
+    'TENANT_SUSPENDED',
+  ]),
+  entityType: z.enum(['USER', 'TENANT', 'SSO']),
+  entityId: z.string(), // ID of target entity
+  userId: z.string(),   // Actor User ID
+  userEmail: z.string(), // Actor Email
+  changedFields: z.record(z.string(), z.unknown()).default({}),
+  previousState: z.record(z.string(), z.unknown()).optional(),
+  ipAddress: z.string().optional(),
+  userAgent: z.string().optional(),
+  createdAt: z.date().optional(),
+});
+
+export type AuditAuthOps = z.infer<typeof AuditAuthOpsSchema>;
+

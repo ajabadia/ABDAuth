@@ -56,7 +56,12 @@ export abstract class BaseRepository<T extends Document> {
 
   async create(data: OptionalUnlessRequiredId<T>): Promise<string> {
     const col = await this.getCollection();
-    const result = await col.insertOne(data);
+    const doc = {
+      createdAt: new Date(),
+      timestamp: new Date(),
+      ...data
+    } as unknown as OptionalUnlessRequiredId<T>;
+    const result = await col.insertOne(doc);
     return result.insertedId.toString();
   }
 
