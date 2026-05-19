@@ -24,6 +24,7 @@ export const authConfig = {
         token.mfaEnabled = raw.mfaEnabled ?? false;
         token.mfaEnforced = raw.mfaEnforced ?? false;
         token.mfa_verified = raw.mfa_verified ?? false;
+        token.surname = raw.surname;
       }
       
       // 🔄 Support for unstable_update()
@@ -47,6 +48,7 @@ export const authConfig = {
         u.mfaEnabled = token.mfaEnabled as boolean;
         u.mfaEnforced = token.mfaEnforced as boolean;
         u.mfa_verified = token.mfa_verified as boolean;
+        u.surname = token.surname as string;
       }
       return session;
     },
