@@ -49,7 +49,7 @@ export default async function DashboardLayout({
 
       <TacticalSidebar user={user} logoUrl={logoUrl} locale={locale} />
 
-      <main className="min-h-screen bg-background text-foreground p-6 md:p-12 selection:bg-primary/30 relative z-10" role="main">
+      <main className="min-h-screen bg-background text-foreground pt-24 pb-6 px-6 md:px-12 md:pb-12 lg:pl-[368px] lg:pt-12 lg:pr-12 lg:pb-12 selection:bg-primary/30 relative z-10" role="main">
         <div className="max-w-7xl mx-auto flex flex-col gap-10">
           <header className="flex justify-end">
             <SystemSettings />
