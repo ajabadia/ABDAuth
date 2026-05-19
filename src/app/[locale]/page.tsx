@@ -1,121 +1,139 @@
 import { auth } from '@/auth';
 import { Link } from '@/i18n/routing';
 import { getTranslations } from 'next-intl/server';
-import { Shield, Zap, Lock, ChevronRight, Globe } from 'lucide-react';
+import { Shield, Zap, Lock, ChevronRight } from 'lucide-react';
 import { SystemSettings } from '@/components/ui/SystemSettings';
 
 /**
  * 🏭 Root Landing Page
- * Premium industrial entry point for the ABD Identity Gateway.
- * Fully theme-aware and multi-language.
+ * Conforms 100% to the ABD Suite Landing Standard.
+ * Industrial instrument console feel, theme-aware, and fully localized.
  */
 export default async function RootPage() {
   const session = await auth();
   const t = await getTranslations('landing');
   const c = await getTranslations('common');
 
-  return (
-    <main className="min-h-screen bg-background text-foreground selection:bg-primary/30 overflow-hidden relative transition-colors duration-500">
-      {/* 🏗️ Industrial Grid Background */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] dark:opacity-[0.1]">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--foreground))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--foreground))_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-      </div>
+  // Dynamic brand title division for visual anchoring
+  const rawTitle = t('hero_title');
+  const brandName = "ABD";
+  const restOfTitle = rawTitle.toLowerCase().startsWith(brandName.toLowerCase())
+    ? rawTitle.slice(brandName.length).trim()
+    : rawTitle;
 
-      {/* 🛰️ Glow Effects */}
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center p-6 md:p-24 bg-background text-foreground selection:bg-primary/30 overflow-hidden relative" role="main">
+      {/* 🏗️ Atmosphere & Grid */}
+      <div className="absolute inset-0 z-0 bg-industrial-grid mask-industrial-fade opacity-50 pointer-events-none" />
+      
+      {/* 🛰️ Glow Effect */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-primary/5 dark:bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
 
-      {/* 🛡️ Header */}
-      <nav className="relative z-10 max-w-7xl mx-auto px-6 py-6 flex justify-between items-center border-b border-border/50">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-primary rounded-sm flex items-center justify-center font-black text-primary-foreground italic">
-            A
-          </div>
-          <span className="font-mono text-sm font-bold tracking-[0.3em] uppercase opacity-80">
-            {c('brand')}
+      {/* 🛠️ System Settings Console */}
+      <div className="absolute top-6 right-6 z-50">
+        <SystemSettings />
+      </div>
+
+      {/* 📟 Main Console Screen */}
+      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl gap-12 animate-in fade-in duration-500">
+        
+        {/* 1. Status Pill */}
+        <div className="inline-flex items-center gap-2.5 px-3 py-1 bg-muted/50 border border-border text-[10px] uppercase tracking-[0.25em] text-muted-foreground font-mono rounded-sm select-none">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
           </span>
+          {c('soc2_monitoring')}
         </div>
-        
-        <div className="flex items-center gap-4">
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1 bg-muted border border-border rounded-full text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
-            <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
-            {c('soc2_monitoring')}
-          </div>
-          <div className="h-6 w-[1px] bg-border mx-2" />
-          <SystemSettings />
-        </div>
-      </nav>
 
-      {/* 🚀 Hero Section */}
-      <section className="relative z-10 max-w-7xl mx-auto px-6 pt-24 pb-32 flex flex-col items-center text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 bg-primary/5 border border-primary/20 rounded-full text-xs font-mono text-primary uppercase tracking-widest animate-fade-in">
-          <Globe className="w-3 h-3" />
-          Certified Identity System v1.0
+        {/* 2. Mega Título en Cursiva Negrita */}
+        <div className="flex flex-col gap-4">
+          <h1 className="text-5xl md:text-8xl font-black tracking-tighter italic uppercase antialiased text-foreground leading-none">
+            {brandName} <span className="text-primary">{restOfTitle}</span>
+          </h1>
+          
+          {/* 3. Subtítulo Delgado */}
+          <p className="max-w-[650px] text-sm md:text-base text-muted-foreground font-light leading-relaxed mx-auto">
+            {t('hero_subtitle')}
+          </p>
         </div>
-        
-        <h1 className="text-6xl md:text-8xl font-black tracking-tighter italic uppercase mb-8 leading-[0.9] text-transparent bg-clip-text bg-gradient-to-b from-foreground to-foreground/40">
-          {t('hero_title')}
-        </h1>
-        
-        <p className="max-w-2xl text-lg md:text-xl text-muted-foreground font-light leading-relaxed mb-12">
-          {t('hero_subtitle')}
-        </p>
 
-        <div className="flex flex-col sm:flex-row gap-4">
+        {/* 4. Tactical Action Area (CTA) */}
+        <div className="flex flex-col items-center gap-3 mt-4">
           {session ? (
             <Link 
-              href="/dashboard" 
-              className="px-10 py-4 bg-primary text-primary-foreground font-bold uppercase tracking-widest hover:opacity-90 transition-all duration-300 flex items-center gap-2 group"
+              href="/dashboard"
+              aria-label={t('cta_dashboard')}
+              className="px-10 py-4 bg-primary text-primary-foreground font-mono text-xs uppercase tracking-widest font-black rounded-none border border-primary/30 hover:bg-primary/95 active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 group"
             >
               {t('cta_dashboard')}
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="w-4 h-4 animate-pulse" />
             </Link>
           ) : (
             <Link 
-              href="/login" 
-              className="px-10 py-4 bg-primary text-primary-foreground font-bold uppercase tracking-widest hover:opacity-90 transition-all duration-300 flex items-center gap-2 group"
+              href="/login"
+              aria-label={t('cta_login')}
+              className="px-10 py-4 bg-primary text-primary-foreground font-mono text-xs uppercase tracking-widest font-black rounded-none border border-primary/30 hover:bg-primary/95 active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 group"
             >
               {t('cta_login')}
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="w-4 h-4 animate-pulse" />
             </Link>
           )}
+          <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-muted-foreground/40">
+            SYS_GATEWAY_ACTIVE
+          </span>
         </div>
-      </section>
 
-      {/* 🛠️ Features Grid */}
-      <section className="relative z-10 max-w-7xl mx-auto px-6 pb-32">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-8 bg-card border border-border hover:border-primary/20 transition-all group shadow-sm">
-            <Zap className="w-10 h-10 text-primary mb-6 group-hover:scale-110 transition-transform" />
-            <h3 className="text-xl font-bold uppercase tracking-tight mb-3 italic">{t('features.federated')}</h3>
-            <p className="text-muted-foreground leading-relaxed text-sm">{t('features.federated_desc')}</p>
+        {/* 5. Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mt-12">
+          <div className="p-6 bg-card border border-border rounded-sm flex flex-col gap-4 text-left">
+            <div className="p-2.5 bg-primary/5 border border-primary/20 text-primary w-fit rounded-sm">
+              <Zap className="w-5 h-5" />
+            </div>
+            <h3 className="text-sm font-black uppercase tracking-wider text-foreground">
+              {t('features.federated')}
+            </h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {t('features.federated_desc')}
+            </p>
           </div>
-          
-          <div className="p-8 bg-card border border-border hover:border-primary/20 transition-all group shadow-sm">
-            <Shield className="w-10 h-10 text-primary mb-6 group-hover:scale-110 transition-transform" />
-            <h3 className="text-xl font-bold uppercase tracking-tight mb-3 italic">{t('features.isolation')}</h3>
-            <p className="text-muted-foreground leading-relaxed text-sm">{t('features.isolation_desc')}</p>
+
+          <div className="p-6 bg-card border border-border rounded-sm flex flex-col gap-4 text-left">
+            <div className="p-2.5 bg-primary/5 border border-primary/20 text-primary w-fit rounded-sm">
+              <Shield className="w-5 h-5" />
+            </div>
+            <h3 className="text-sm font-black uppercase tracking-wider text-foreground">
+              {t('features.isolation')}
+            </h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {t('features.isolation_desc')}
+            </p>
           </div>
-          
-          <div className="p-8 bg-card border border-border hover:border-primary/20 transition-all group shadow-sm">
-            <Lock className="w-10 h-10 text-primary mb-6 group-hover:scale-110 transition-transform" />
-            <h3 className="text-xl font-bold uppercase tracking-tight mb-3 italic">{t('features.security')}</h3>
-            <p className="text-muted-foreground leading-relaxed text-sm">{t('features.security_desc')}</p>
+
+          <div className="p-6 bg-card border border-border rounded-sm flex flex-col gap-4 text-left">
+            <div className="p-2.5 bg-primary/5 border border-primary/20 text-primary w-fit rounded-sm">
+              <Lock className="w-5 h-5" />
+            </div>
+            <h3 className="text-sm font-black uppercase tracking-wider text-foreground">
+              {t('features.security')}
+            </h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {t('features.security_desc')}
+            </p>
           </div>
         </div>
-      </section>
 
-      {/* 🏁 Footer */}
-      <footer className="relative z-10 border-t border-border py-12">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="font-mono text-[10px] text-muted-foreground uppercase tracking-[0.4em]">
-            {c('industrial_ecosystem')}
-          </div>
-          <div className="flex gap-8 font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
+        {/* 6. Telemetry Footer */}
+        <div className="mt-16 flex flex-col items-center gap-6 w-full">
+          <div className="w-24 h-[1px] bg-border/60" />
+          <div className="flex flex-wrap justify-center gap-12 font-mono text-[9px] uppercase tracking-[0.3em] text-muted-foreground/30">
             <span>{t('footer.core')}</span>
             <span>{t('footer.auth')}</span>
+            <span>{c('industrial_ecosystem')}</span>
           </div>
         </div>
-      </footer>
+
+      </div>
     </main>
   );
 }

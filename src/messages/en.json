@@ -82,6 +82,8 @@
     "login": "Login"
   },
   "dashboard": {
+    "control_console": "Control Console",
+    "back_to_dashboard": "Back to dashboard",
     "welcome": "Welcome",
     "subtitle": "Industrial Identity Management",
     "status_online": "System_Online",
@@ -158,7 +160,16 @@
         "role": "Role",
         "tenant": "Organization",
         "status": "Status",
+        "mfa": "MFA",
         "actions": "Actions"
+      },
+      "mfa": {
+        "enabled": "2FA ACTIVE",
+        "disabled": "NO 2FA",
+        "reset": "Reset MFA",
+        "reset_confirm": "Are you sure you want to reset MFA for this user?",
+        "reset_success": "MFA reset successfully",
+        "reset_error": "Error resetting MFA"
       },
       "roles": {
         "SUPER_ADMIN": "Super Administrator",
@@ -261,7 +272,10 @@
         "revoke_all": "Close all remote sessions",
         "no_sessions": "No other sessions detected",
         "device_unknown": "Unknown Device",
-        "last_active": "Last active"
+        "last_active": "Last active",
+        "browser_on_os": "{browser} on {os}",
+        "browser_unknown": "Unknown Browser",
+        "os_unknown": "Unknown OS"
       },
       "password": {
         "title": "Change Password",
@@ -273,7 +287,8 @@
         "success": "Password updated successfully",
         "error_current": "Current password is incorrect",
         "error_match": "Passwords do not match",
-        "error_length": "Password must be at least 8 characters"
+        "error_length": "Password must be at least 8 characters",
+        "error_update": "Failed to update password"
       }
     }
   }

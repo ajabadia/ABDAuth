@@ -24,7 +24,7 @@ export function MfaRecoveryState({
       animate={{ scale: 1, opacity: 1 }}
       className="space-y-6"
     >
-      <div className="bg-emerald-500/5 border border-emerald-500/20 p-5 rounded-xl flex items-start gap-4">
+      <div className="bg-emerald-500/5 border border-emerald-500/20 p-5 rounded-none flex items-start gap-4">
         <CheckCircle2 className="text-emerald-500 mt-1 shrink-0" size={24} />
         <div className="space-y-1">
           <h3 className="font-bold text-emerald-500 text-sm tracking-tight">{t('backup_codes_title')}</h3>
@@ -32,9 +32,9 @@ export function MfaRecoveryState({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 bg-muted/20 p-4 rounded-xl border border-border">
+      <div className="grid grid-cols-2 gap-2 bg-muted/20 p-4 rounded-none border border-border">
         {recoveryCodes.map(code => (
-          <div key={code} className="p-2.5 rounded-lg bg-card border border-border/40 text-center font-mono text-[10px] font-bold text-foreground/70 hover:border-primary/30 transition-colors uppercase tracking-wider">
+          <div key={code} className="p-2.5 rounded-sm bg-card border border-border/40 text-center font-mono text-[10px] font-bold text-foreground/70 hover:border-primary/30 transition-colors uppercase tracking-wider">
             {code}
           </div>
         ))}
@@ -50,7 +50,7 @@ export function MfaRecoveryState({
           {t('copy_codes')}
         </Button>
         <Button 
-          className="bg-primary text-primary-foreground h-12 px-10 font-black text-[9px] uppercase tracking-[0.2em] shadow-none rounded-lg" 
+          className="bg-primary text-primary-foreground h-12 px-10 font-black text-[9px] uppercase tracking-[0.2em] shadow-none rounded-none" 
           onClick={onDone}
         >
           {t('done_btn')}

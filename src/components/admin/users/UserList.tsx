@@ -30,7 +30,7 @@ export function UserList({ users, t, isSuperAdmin, onEdit }: UserListProps) {
       </div>
 
       {users.length === 0 && (
-        <div className="ind-border ind-bg p-20 text-center rounded-xl">
+        <div className="ind-border ind-bg p-20 text-center rounded-none">
           <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground animate-pulse font-black">
             No system identities detected in sector
           </p>

@@ -3,9 +3,10 @@
 import React, { useState } from 'react';
 import { useTranslations, useFormatter, useNow } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Monitor, Smartphone, Tablet, XCircle, MapPin, Clock, Loader2, LogOut } from 'lucide-react';
+import { Monitor, Loader2, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { revokeSessionAction, revokeAllOtherSessionsAction } from '@/services/auth/security-actions';
+import { SessionItem } from './components/SessionItem';
 
 interface Session {
   _id?: string;
@@ -44,9 +45,9 @@ export function SessionManager({ sessions: initialSessions }: SessionManagerProp
     try {
       await revokeSessionAction(id);
       setSessions(prev => prev.filter(s => s._id !== id));
-      notify("Sesión revocada");
+      notify(t('revoke'));
     } catch {
-      notify("Error al revocar", 'error');
+      notify(t('revoke'), 'error');
     } finally {
       setLoadingId(null);
     }
@@ -58,31 +59,23 @@ export function SessionManager({ sessions: initialSessions }: SessionManagerProp
     try {
       await revokeAllOtherSessionsAction();
       setSessions(prev => prev.filter(s => s.isCurrent));
-      notify("Sesiones remotas cerradas");
+      notify(t('revoke_all'));
     } catch {
-      notify("Error al revocar sesiones", 'error');
+      notify(t('revoke'), 'error');
     } finally {
       setLoadingId(null);
     }
   };
 
-  const getDeviceIcon = (type: string) => {
-    switch (type) {
-      case 'MOBILE': return <Smartphone size={20} />;
-      case 'TABLET': return <Tablet size={20} />;
-      default: return <Monitor size={20} />;
-    }
-  };
-
   return (
-    <div className="relative bg-card border border-border rounded-xl overflow-hidden shadow-sm transition-all duration-300 h-fit">
+    <div className="relative bg-card border border-border rounded-sm overflow-hidden shadow-sm transition-all duration-300 h-fit">
       <AnimatePresence>
         {notification && (
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 10 }}
             exit={{ opacity: 0 }}
-            className={`absolute top-0 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full text-[10px] font-bold shadow-lg border ${
+            className={`absolute top-0 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-none text-[10px] font-bold shadow-lg border ${
               notification.type === 'success' 
                 ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 backdrop-blur-md' 
                 : 'bg-destructive/10 text-destructive border-destructive/20 backdrop-blur-md'
@@ -95,11 +88,11 @@ export function SessionManager({ sessions: initialSessions }: SessionManagerProp
 
       <div className="p-6 border-b border-border bg-muted/30 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary/10 text-primary rounded-lg">
+          <div className="p-2 bg-primary/10 text-primary rounded-sm">
             <Monitor size={20} />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-foreground">{t('title')}</h2>
+            <h2 className="text-sm font-black uppercase tracking-widest text-foreground flex items-center gap-2">{t('title')}</h2>
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest">{t('subtitle')}</p>
           </div>
         </div>
@@ -107,7 +100,7 @@ export function SessionManager({ sessions: initialSessions }: SessionManagerProp
           <Button 
             variant="ghost" 
             size="sm" 
-            className="text-destructive hover:bg-destructive/10 text-[10px] h-9 font-bold uppercase tracking-widest gap-2"
+            className="text-destructive hover:bg-destructive/10 text-[10px] h-9 font-bold uppercase tracking-widest gap-2 rounded-sm"
             onClick={handleRevokeOthers}
             disabled={loadingId === 'ALL'}
           >
@@ -119,58 +112,23 @@ export function SessionManager({ sessions: initialSessions }: SessionManagerProp
 
       <div className="divide-y divide-border/40">
         <AnimatePresence initial={false}>
-          {sessions.map((session) => (
-            <motion.div 
-              key={session._id} 
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="p-5 flex items-center justify-between hover:bg-muted/30 transition-all group"
-            >
-              <div className="flex items-center gap-5">
-                <div className={`p-4 rounded-xl transition-all duration-500 ${session.isCurrent ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20' : 'bg-muted text-muted-foreground group-hover:bg-card group-hover:border-border'}`}>
-                  {getDeviceIcon(session.device?.type || 'UNKNOWN')}
-                </div>
-                <div className="space-y-1.5">
-                  <div className="flex items-center gap-3">
-                    <span className="font-bold text-sm text-foreground tracking-tight">
-                      {session.device?.browser || 'Navegador'} en {session.device?.os || 'OS'}
-                    </span>
-                    {session.isCurrent && (
-                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[9px] font-black tracking-[0.2em]">
-                        {t('current').toUpperCase()}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-[11px] text-muted-foreground font-medium">
-                    <span className="flex items-center gap-2">
-                      <MapPin size={13} className="text-primary/60" /> {session.ip}
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <Clock size={13} className="text-primary/60" /> 
-                      {format.relativeTime(new Date(session.lastActive), now)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {!session.isCurrent && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 h-10 w-10 rounded-lg transition-all"
-                  onClick={() => handleRevoke(session._id)}
-                  disabled={loadingId === session._id}
-                >
-                  {loadingId === session._id ? (
-                    <Loader2 size={18} className="animate-spin" />
-                  ) : (
-                    <XCircle size={20} />
-                  )}
-                </Button>
-              )}
-            </motion.div>
-          ))}
+          {sessions.length > 0 ? (
+            sessions.map((session) => (
+              <SessionItem 
+                key={session._id}
+                session={session}
+                loadingId={loadingId}
+                t={t}
+                format={format}
+                now={now}
+                onRevoke={handleRevoke}
+              />
+            ))
+          ) : (
+            <div className="p-8 text-center text-xs text-muted-foreground font-mono uppercase tracking-widest bg-muted/10">
+              {t('no_sessions')}
+            </div>
+          )}
         </AnimatePresence>
       </div>
     </div>

@@ -48,9 +48,13 @@ export async function GET(req: Request) {
               return true;
             }
           }
-        } catch {}
+        } catch {
+          // Ignore invalid registered URL parsing errors
+        }
       }
-    } catch {}
+    } catch {
+      // Ignore invalid incoming redirectUri parsing errors
+    }
     return false;
   })();
 

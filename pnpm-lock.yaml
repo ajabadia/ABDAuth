@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@abd/styles':
+        specifier: github:ajabadia/ABDStyles#main
+        version: https://codeload.github.com/ajabadia/ABDStyles/tar.gz/88d315b7d1e759f1da1fa36bb0797bf84ddf77f9
       '@radix-ui/react-label':
         specifier: ^2.1.8
         version: 2.1.8(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -110,6 +113,10 @@ importers:
         version: 6.0.3
 
 packages:
+
+  '@abd/styles@https://codeload.github.com/ajabadia/ABDStyles/tar.gz/88d315b7d1e759f1da1fa36bb0797bf84ddf77f9':
+    resolution: {tarball: https://codeload.github.com/ajabadia/ABDStyles/tar.gz/88d315b7d1e759f1da1fa36bb0797bf84ddf77f9}
+    version: 1.0.0
 
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}

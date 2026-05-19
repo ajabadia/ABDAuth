@@ -95,7 +95,7 @@ export function MfaControl({ isActive, isMandatory = false, initialStep = 'IDLE'
   };
 
   return (
-    <div className="relative bg-card border border-border rounded-xl overflow-hidden shadow-none transition-all duration-300">
+    <div className="relative bg-card border border-border rounded-none overflow-hidden shadow-none transition-all duration-300">
       <MfaHeader enabled={enabled} t={t} />
 
       <div className="p-6">

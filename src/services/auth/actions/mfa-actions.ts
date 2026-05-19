@@ -10,12 +10,21 @@ import type { IndustrialUser } from "@/types/auth";
 import type { EntityId } from "@/lib/schemas/common";
 
 /**
+ * 🛡️ Helper to fetch and guarantee the authenticated session user
+ */
+async function getRequiredUser(): Promise<IndustrialUser> {
+  const session = await auth();
+  const user = session?.user as IndustrialUser;
+  if (!user) throw new Error("Unauthorized");
+  return user;
+}
+
+/**
  * 🔒 MFA: Verify token during login flow
  */
 export async function verifyMfaLoginAction(token: string) {
   const session = await auth();
   const user = session?.user as IndustrialUser;
-  
   if (!user) return { success: false, error: "Unauthorized" };
 
   const isValid = await MfaService.verifyToken(user.id, token);
@@ -28,7 +37,7 @@ export async function verifyMfaLoginAction(token: string) {
       }
     });
 
-    const locale = (await getLocale());
+    const locale = await getLocale();
     redirect({ href: '/dashboard', locale });
     return { success: true };
   }
@@ -40,10 +49,7 @@ export async function verifyMfaLoginAction(token: string) {
  * 🔒 MFA: Setup initial configuration
  */
 export async function setupMfaAction() {
-  const session = await auth();
-  const user = session?.user as IndustrialUser;
-  if (!user) throw new Error("Unauthorized");
-
+  const user = await getRequiredUser();
   return await MfaService.setup(user.id, user.email || "");
 }
 
@@ -51,10 +57,7 @@ export async function setupMfaAction() {
  * 🔓 MFA: Verify and enable
  */
 export async function enableMfaAction(secret: string, token: string) {
-  const session = await auth();
-  const user = session?.user as IndustrialUser;
-  if (!user) throw new Error("Unauthorized");
-
+  const user = await getRequiredUser();
   const result = await MfaService.enable(user.id, secret, token);
   
   if (result.success) {
@@ -72,10 +75,7 @@ export async function enableMfaAction(secret: string, token: string) {
 }
 
 export async function disableMfaAction() {
-  const session = await auth();
-  const user = session?.user as IndustrialUser;
-  if (!user) throw new Error("Unauthorized");
-
+  const user = await getRequiredUser();
   const dbUser = await userRepository.findById(user.id as EntityId);
   const mfaEnforced = dbUser?.mfaEnforced ?? user.mfaEnforced;
 
@@ -97,10 +97,8 @@ export async function disableMfaAction() {
  * 🔒 Admin: Reset MFA for a specific user
  */
 export async function adminResetMfaAction(targetUserId: string) {
-  const session = await auth();
-  const user = session?.user as IndustrialUser;
-  
-  if (!user || (user.role !== 'SUPER_ADMIN' && user.role !== 'ADMIN')) {
+  const user = await getRequiredUser();
+  if (user.role !== 'SUPER_ADMIN' && user.role !== 'ADMIN') {
     throw new Error("Unauthorized: Admin privileges required");
   }
 

@@ -6,6 +6,21 @@
 - **Zero-Noise Compliance**: 6-Phase Audit PASSED (Era 11). System certified for production.
 - **Production Deployment**: STABLE. Deployed at https://abd-auth.vercel.app with build-time environmental shielding.
 
+## 🗓️ 2026-05-19 (Visual System Centralization & Header Standardization)
+- [x] **Shared CSS Library Integration**: Integrated `@abd/styles` via local module imports and resolved Next.js 16/Turbopack import path resolution and Tailwind CSS v4 color theme mapping in `globals.css`.
+- [x] **Header Alignment**: Standardized all panel headers using `STYLE_GUIDE.md` specifications (Variante A for Main Dashboard, Variante B with aseptic back buttons for Users, Satellites, Audit, and Security).
+- [x] **Navigation and UI Polish**: Removed deprecated settings link from `TacticalSidebar` and corrected key mapping translations in `SystemSettings` to fix runtime localization exceptions.
+
+## 🗓️ 2026-05-19 (Tenant Governance Delegation & Federation Documentation)
+- [x] **Tenant Governance Delegation**: Decoupled tenant and space management from ABDAuth. Central identity logic modified to support `tenantIds` arrays and dynamic active tenant resolution via multi-tenant selectors.
+- [x] **Satellite Integration Documentation**: Created `SATELLITE_INTEGRATION.md` detailing the Federated SSO Handshake, proxy interception, and `abd_session` cookie bridge architecture for ecosystem apps (e.g., `ABDtenantGobernance`, `ABDQuiz`).
+- [x] **Superuser Ecosystem Scope**: Implemented `GLOBAL` scope for `SUPER_ADMIN` roles across the federated identity pipeline.
+
+## 🗓️ 2026-05-17 (Session Hardening & SLO unifications)
+- [x] **Session Verification REST API**: Deployed secure endpoint `/api/auth/session/verify` to query active users status in vivo from satellites.
+- [x] **Front-Channel Single Sign-Out (SLO)**: Upgraded `/api/auth/logout` central endpoint to execute Front-Channel SLO using dynamic parallel iframes and fallback JS redirects.
+- [x] **Branding Integration Prompts**: Consolidated copy-pasteable integration guides and prompt structures (`INTEGRATION_PROMPTS.md`) in documentation roots to accelerate sibling applications branding setup.
+
 ## 🗓️ 2026-05-15 (Industrial Certification)
 - [x] **SYS_CERTIFIED (Era 11)**: Full industrial certification achieved across all 6 audit phases.
 - [x] **Industrial E2E Framework**: Deployed Playwright suite with 100% success on Login, MFA, Password Recovery, and Admin Governance.

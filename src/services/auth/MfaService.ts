@@ -4,7 +4,10 @@ import bcrypt from 'bcryptjs';
 import { mfaRepository } from '@/lib/repositories/MfaRepository';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { auditRepository } from '@/lib/repositories/AuditRepository';
+import { generateBackupCodes, hashBackupCodes } from '@/lib/utils/backup-codes';
 import type { EntityId } from '@/lib/schemas/common';
+import { z } from 'zod';
+import { AuditEventSchema } from '@/lib/schemas/audit';
 
 /**
  * 🔒 MfaService
@@ -47,15 +50,9 @@ export class MfaService {
       return { success: false, backupCodes: [] };
     }
 
-    // 2. Generate 8 backup codes (10 chars each)
-    const rawBackupCodes = Array.from({ length: 8 }, () => {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      return Array.from({ length: 10 }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
-    });
-
-    const hashedBackupCodes = await Promise.all(
-      rawBackupCodes.map(code => bcrypt.hash(code, 10))
-    );
+    // 2. Generate and encrypt 8 backup codes
+    const rawBackupCodes = generateBackupCodes();
+    const hashedBackupCodes = await hashBackupCodes(rawBackupCodes);
 
     // 3. Persist MFA Config
     await mfaRepository.enable(userId, {
@@ -69,15 +66,7 @@ export class MfaService {
     await userRepository.updateMfaStatus(userId, true);
 
     // 5. Audit the event
-    const user = await userRepository.findById(userId);
-    await auditRepository.create({
-      timestamp: new Date(),
-      event: 'MFA_ENABLED',
-      actorId: userId,
-      actorEmail: user?.email,
-      tenantId: user?.tenantId || 'SYSTEM',
-      status: 'SUCCESS'
-    });
+    await this.logEvent(userId, 'MFA_ENABLED');
 
     return { success: true, backupCodes: rawBackupCodes };
   }
@@ -103,7 +92,7 @@ export class MfaService {
       });
 
       if (result.valid) {
-        await this.logSuccess(userId, 'TOTP');
+        await this.logEvent(userId, 'MFA_VERIFY_SUCCESS', { method: 'TOTP' });
         return true;
       }
     }
@@ -117,7 +106,7 @@ export class MfaService {
         const updatedCodes = backupCodes.filter((_, index) => index !== i);
         await mfaRepository.updateBackupCodes(userId, updatedCodes);
         
-        await this.logSuccess(userId, 'BACKUP_CODE');
+        await this.logEvent(userId, 'MFA_VERIFY_SUCCESS', { method: 'BACKUP_CODE' });
         return true;
       }
     }
@@ -125,16 +114,19 @@ export class MfaService {
     return false;
   }
 
-  private static async logSuccess(userId: string, method: string) {
+  /**
+   * 🛡️ Helper to log successful events asynchronously to audit repository
+   */
+  private static async logEvent(userId: string, event: z.infer<typeof AuditEventSchema>, metadata?: Record<string, unknown>) {
     const user = await userRepository.findById(userId);
     await auditRepository.create({
       timestamp: new Date(),
-      event: 'MFA_VERIFY_SUCCESS',
+      event,
       actorId: userId,
       actorEmail: user?.email,
       tenantId: user?.tenantId || 'SYSTEM',
       status: 'SUCCESS',
-      metadata: { method }
+      metadata
     });
   }
 
@@ -144,23 +136,13 @@ export class MfaService {
   static async disable(userId: string): Promise<void> {
     await mfaRepository.disable(userId);
     await userRepository.updateMfaStatus(userId, false);
-
-    const user = await userRepository.findById(userId);
-    await auditRepository.create({
-      timestamp: new Date(),
-      event: 'MFA_DISABLED',
-      actorId: userId,
-      actorEmail: user?.email,
-      tenantId: user?.tenantId || 'SYSTEM',
-      status: 'SUCCESS'
-    });
+    await this.logEvent(userId, 'MFA_DISABLED');
   }
 
   /**
    * ✅ Check if MFA is required for a user
    */
   static async isRequired(userId: string): Promise<boolean> {
-    const user = await userRepository.findById(userId);
-    return !!user?.mfaEnabled;
+    return !!(await userRepository.findById(userId))?.mfaEnabled;
   }
 }

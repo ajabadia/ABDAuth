@@ -1,15 +1,14 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { UserCard } from "./UserCard";
-import { UserForm } from "./UserForm";
-import { Plus } from "lucide-react";
+import { Plus, ArrowLeft, Users } from "lucide-react";
 import type { IndustrialUserDisplay, UserManagementTranslations, IndustrialUserFormValues } from "./types";
 import { useRouter } from "next/navigation";
-
-import { IndustrialModalHeader } from "@/components/ui/industrial/ModalHeader";
+import { Link } from "@/i18n/routing";
 import { IndustrialSearchInput } from "@/components/ui/industrial/SearchInput";
 import { toast } from "sonner";
+import { UserGrid } from "./components/UserGrid";
+import { UserFormModal } from "./components/UserFormModal";
 
 interface UserManagementContainerProps {
   t: UserManagementTranslations;
@@ -98,18 +97,37 @@ export function UserManagementContainer({ t, isSuperAdmin }: UserManagementConta
 
   return (
     <div className="space-y-6">
-      <header className="flex justify-between items-end">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground">{t.title}</h2>
-          <p className="text-[10px] text-muted-foreground font-mono uppercase tracking-[0.2em] mt-1">
-            {t.subtitle} • {users.length} records
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border pb-8">
+        <div className="flex flex-col gap-2">
+          {/* Monospace Breadcrumb */}
+          <div className="text-[10px] font-mono font-black uppercase tracking-[0.25em] text-primary flex items-center gap-2 mb-2">
+            <Users size={14} className="text-primary animate-pulse" aria-hidden="true" />
+            {t.controlConsole || "CONSOLA DE CONTROL"} • {t.menuUsers || "IDENTITIES"}
+          </div>
+          
+          {/* Fila de Título e Interacción */}
+          <div className="flex items-center gap-4 mt-1">
+            <Link
+              href="/dashboard"
+              aria-label={t.backToDashboard || "Back to dashboard"}
+              className="inline-flex items-center justify-center p-2 bg-transparent text-muted-foreground hover:text-foreground border border-border hover:border-border/80 transition-all duration-200 cursor-pointer rounded-none active:scale-[0.95] shrink-0 focus:outline-none focus:ring-1 focus:ring-primary/50"
+            >
+              <ArrowLeft size={14} />
+            </Link>
+            <h1 className="text-3xl font-black uppercase italic tracking-tight text-foreground leading-none flex-1 truncate">
+              {t.title}
+            </h1>
+          </div>
+          
+          <p className="text-sm text-muted-foreground font-sans mt-2 leading-relaxed">
+            {t.subtitle} • <span className="text-primary font-bold">{users.length} records</span>
           </p>
         </div>
         
         <button 
           aria-label={t.addUser}
           onClick={() => { setEditingUser(null); setIsDialogOpen(true); }}
-          className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-md text-[10px] font-bold uppercase tracking-wider transition-all shadow-lg shadow-blue-600/10"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-transparent text-primary border border-primary/40 hover:border-primary hover:bg-primary/10 font-mono text-[10px] font-black uppercase tracking-wider transition-all duration-200 cursor-pointer rounded-none active:scale-[0.98]"
         >
           <Plus size={14} />
           {t.addUser}
@@ -123,51 +141,24 @@ export function UserManagementContainer({ t, isSuperAdmin }: UserManagementConta
         ariaLabel="Search identity" 
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {filteredUsers.map((user) => (
-          <UserCard 
-            key={user._id} 
-            user={user} 
-            t={t} 
-            isSuperAdmin={isSuperAdmin} 
-            onEdit={(u) => { setEditingUser(u); setIsDialogOpen(true); }} 
-          />
-        ))}
-      </div>
-
-      {users.length === 0 && (
-        <div className="p-20 text-center border border-dashed border-border rounded-xl">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground animate-pulse font-bold">
-            No system identities detected in sector
-          </p>
-        </div>
-      )}
+      <UserGrid 
+        users={users}
+        filteredUsers={filteredUsers}
+        t={t}
+        isSuperAdmin={isSuperAdmin}
+        onEdit={(u) => { setEditingUser(u); setIsDialogOpen(true); }}
+      />
 
       {/* Industrial Modal */}
-      {isDialogOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200" role="dialog" aria-modal="true">
-          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setIsDialogOpen(false)} />
-          
-          <div className="relative w-full max-w-lg bg-card border border-border rounded-xl shadow-xl overflow-y-auto max-h-[95vh] md:max-h-[90vh] animate-in zoom-in-95 duration-200">
-            <IndustrialModalHeader 
-              title={editingUser ? t.editUser : t.addUser} 
-              subtitle="USER ORCHESTRATOR V1.1" 
-              icon={Plus} 
-              onClose={() => setIsDialogOpen(false)} 
-            />
-            <div className="p-0">
-              <UserForm 
-                initialData={editingUser || undefined}
-                tenants={tenants}
-                t={t}
-                isSuperAdmin={isSuperAdmin}
-                onSubmit={handleSubmit}
-                onCancel={() => setIsDialogOpen(false)}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <UserFormModal 
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        editingUser={editingUser}
+        tenants={tenants}
+        t={t}
+        isSuperAdmin={isSuperAdmin}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 }

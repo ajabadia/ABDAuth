@@ -87,6 +87,7 @@ export async function POST(req: Request) {
         tenantId: user.tenantId,
         dbPrefix: tenant?.dbPrefix || 'default',
         isolationStrategy: tenant?.isolationStrategy || 'COLLECTION_PREFIX',
+        branding: tenant?.branding || null,
       }
     });
 

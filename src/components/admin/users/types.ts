@@ -19,6 +19,9 @@ export interface UserManagementTranslations {
   subtitle: string;
   addUser: string;
   editUser: string;
+  controlConsole?: string;
+  menuUsers?: string;
+  backToDashboard?: string;
   columns: {
     user: string;
     role: string;
@@ -37,6 +40,8 @@ export interface UserManagementTranslations {
     disabled: string;
     reset: string;
     reset_confirm: string;
+    reset_success: string;
+    reset_error: string;
   };
   form: {
     email: string;

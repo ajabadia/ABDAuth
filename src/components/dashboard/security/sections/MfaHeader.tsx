@@ -12,11 +12,11 @@ export function MfaHeader({ enabled, t }: MfaHeaderProps) {
     <div className="p-6 border-b border-border bg-muted/20">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary/10 text-primary rounded-lg">
+          <div className="p-2 bg-primary/10 text-primary rounded-sm">
             <Key size={20} />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-foreground">{t('title')}</h2>
+            <h2 className="text-sm font-black uppercase tracking-widest text-foreground flex items-center gap-2">{t('title')}</h2>
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest">{t('subtitle')}</p>
           </div>
         </div>

@@ -5,6 +5,9 @@ export interface ApplicationManagementTranslations {
   subtitle: string;
   add_app: string;
   new_app: string;
+  controlConsole?: string;
+  menuApplications?: string;
+  backToDashboard?: string;
   edit_app: string;
   delete_confirm: string;
   no_apps: string;

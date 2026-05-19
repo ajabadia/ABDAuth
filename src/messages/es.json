@@ -82,6 +82,8 @@
     "login": "Iniciar Sesión"
   },
   "dashboard": {
+    "control_console": "Consola de Control",
+    "back_to_dashboard": "Volver al panel",
     "welcome": "Bienvenido",
     "subtitle": "Gestión de Identidad Industrial",
     "status_online": "Sistema_En_Línea",
@@ -164,7 +166,9 @@
         "enabled": "2FA ACTIVO",
         "disabled": "SIN 2FA",
         "reset": "Resetear MFA",
-        "reset_confirm": "¿Está seguro de que desea resetear el MFA para este usuario?"
+        "reset_confirm": "¿Está seguro de que desea resetear el MFA para este usuario?",
+        "reset_success": "MFA reseteado correctamente",
+        "reset_error": "Error al resetear MFA"
       },
       "roles": {
         "SUPER_ADMIN": "Super Administrador",
@@ -267,7 +271,10 @@
         "revoke_all": "Cerrar todas las sesiones remotas",
         "no_sessions": "No hay otras sesiones detectadas",
         "device_unknown": "Dispositivo Desconocido",
-        "last_active": "Última actividad"
+        "last_active": "Última actividad",
+        "browser_on_os": "{browser} en {os}",
+        "browser_unknown": "Navegador desconocido",
+        "os_unknown": "Sistema operativo desconocido"
       },
       "password": {
         "title": "Cambiar Contraseña",
@@ -279,7 +286,8 @@
         "success": "Contraseña actualizada correctamente",
         "error_current": "La contraseña actual es incorrecta",
         "error_match": "Las contraseñas no coinciden",
-        "error_length": "La contraseña debe tener al menos 8 caracteres"
+        "error_length": "La contraseña debe tener al menos 8 caracteres",
+        "error_update": "Error al actualizar contraseña"
       }
     }
   }

@@ -1,33 +1,24 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/auth';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { auditRepository } from '@/lib/repositories/AuditRepository';
 import { TenantSchema, type Tenant } from '@/lib/schemas/auth';
-import type { IndustrialSession } from '@/types/auth';
+import { validateSuperAdminSession } from '@/lib/utils/api-auth';
 
 /**
  * 🏢 Tenants Admin API
  * Orchestrates global organization management. Restricted to SUPER_ADMIN.
  */
 export async function GET() {
-  const session = await auth();
-  const user = session?.user as unknown as IndustrialSession;
-  
-  if (!user || user.role !== 'SUPER_ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized: SuperAdmin privileges required' }, { status: 403 });
-  }
+  const { authorized, user, response } = await validateSuperAdminSession();
+  if (!authorized) return response!;
 
-  const tenants = await tenantRepository.listForCurrentSession(user);
+  const tenants = await tenantRepository.listForCurrentSession(user!);
   return NextResponse.json(tenants);
 }
 
 export async function POST(request: Request) {
-  const session = await auth();
-  const user = session?.user as unknown as IndustrialSession;
-
-  if (!user || user.role !== 'SUPER_ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized: SuperAdmin privileges required' }, { status: 403 });
-  }
+  const { authorized, user, response } = await validateSuperAdminSession();
+  if (!authorized) return response!;
 
   try {
     const body = await request.json();
@@ -42,8 +33,8 @@ export async function POST(request: Request) {
     await auditRepository.create({
       timestamp: new Date(),
       event: 'TENANT_CREATED',
-      actorId: user.id,
-      actorEmail: user.email,
+      actorId: user!.id,
+      actorEmail: user!.email,
       tenantId: validatedData.tenantId,
       status: 'SUCCESS',
       metadata: { tenantName: validatedData.name, dbPrefix: validatedData.dbPrefix }

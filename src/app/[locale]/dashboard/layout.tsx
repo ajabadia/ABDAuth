@@ -1,10 +1,10 @@
 import { auth } from "@/auth";
-import { redirect, Link } from "@/i18n/routing";
-import { Shield, LayoutDashboard, Users, Settings, ScrollText, Database, Key } from 'lucide-react';
-import { SystemSettings } from "@/components/ui/SystemSettings";
-import { MobileNav } from "@/components/MobileNav";
+import { redirect } from "@/i18n/routing";
 import { getTranslations } from 'next-intl/server';
-import NavItem from "@/components/NavItem";
+import { tenantRepository } from "@/lib/repositories/TenantRepository";
+import type { TenantId } from '@/lib/schemas/common';
+import { TacticalSidebar } from "@/components/TacticalSidebar";
+import { SystemSettings } from "@/components/ui/SystemSettings";
 
 import type { IndustrialSession } from "@/types/auth";
 
@@ -30,72 +30,38 @@ export default async function DashboardLayout({
 
   const user = session.user as unknown as IndustrialSession;
 
+  // 🎨 Resolve active tenant logo dynamically for unified dashboard branding
+  let logoUrl: string | null = null;
+  if (user?.tenantId) {
+    try {
+      const tenant = await tenantRepository.findByTenantId(user.tenantId as TenantId);
+      if (tenant?.branding?.logoUrl) {
+        logoUrl = tenant.branding.logoUrl;
+      }
+    } catch (err) {
+      console.error("Failed to retrieve tenant logo from database:", err);
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-blue-500/30 transition-colors duration-300">
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary/30 transition-colors duration-300">
       <div className="bg-grain" />
 
-      {/* 🧭 Desktop Sidebar */}
-      <aside className="fixed left-0 top-0 h-full w-64 bg-card border-r border-border z-20 hidden md:flex flex-col">
-        <div className="p-6">
-          <Link href="/dashboard" className="flex items-center gap-3 mb-8">
-            <div className="w-7 h-7 bg-blue-600 rounded-md flex items-center justify-center border border-blue-400/20">
-              <Shield size={16} className="text-white" />
-            </div>
-            <span className="font-bold tracking-tighter text-lg uppercase">{t('menu.overview')}</span>
-          </Link>
+      <TacticalSidebar user={user} logoUrl={logoUrl} locale={locale} />
 
-          <nav className="space-y-1">
-            <NavItem href="/dashboard" icon={<LayoutDashboard size={16} />} label={t('menu.overview')} />
-            
-            {(user.role === 'SUPER_ADMIN' || user.role === 'ADMIN') && (
-              <NavItem href="/dashboard/users" icon={<Users size={16} />} label={t('menu.users')} />
-            )}
-            
-            {user.role === 'SUPER_ADMIN' && (
-              <NavItem href="/dashboard/tenants" icon={<Database size={16} />} label={t('menu.tenants')} />
-            )}
-
-            {user.role === 'SUPER_ADMIN' && (
-              <NavItem href="/dashboard/applications" icon={<Shield size={16} />} label={t('menu.applications')} />
-            )}
-            
-            {(user.role === 'SUPER_ADMIN' || user.role === 'ADMIN') && (
-              <NavItem href="/dashboard/audit" icon={<ScrollText size={16} />} label={t('menu.audit')} />
-            )}
-            
-            <NavItem href="/dashboard/security" icon={<Key size={16} />} label={t('menu.security')} />
-            <NavItem href="/dashboard/settings" icon={<Settings size={16} />} label={t('menu.settings')} />
-          </nav>
-        </div>
-
-        <div className="mt-auto p-4 border-t border-border">
-          <div className="flex items-center gap-3 p-3 bg-secondary/50 rounded-lg border border-border">
-            <div className="w-8 h-8 bg-background rounded flex items-center justify-center font-bold text-xs border border-border">
-              {user.name?.charAt(0) || 'U'}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[11px] font-bold truncate">{user.name}</p>
-              <p className="text-[9px] text-muted-foreground uppercase tracking-widest">{user.role}</p>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <MobileNav user={user} />
-
-      <main className="md:ml-64 p-6 md:p-8 relative z-10 pt-20 md:pt-8 min-h-screen">
-        <header className="flex justify-end mb-6">
-          <div className="flex items-center gap-3">
+      <main className="min-h-screen bg-background text-foreground p-6 md:p-12 selection:bg-primary/30 relative z-10" role="main">
+        <div className="max-w-7xl mx-auto flex flex-col gap-10">
+          <header className="flex justify-end">
             <SystemSettings />
-          </div>
-        </header>
+          </header>
 
-        {children}
-        
-        <footer className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4 opacity-30">
-          <div className="text-[9px] font-mono tracking-tighter uppercase text-muted-foreground">{t('common.industrial_ecosystem')}</div>
-          <div className="text-[9px] font-mono tracking-tighter uppercase text-muted-foreground">{t('common.soc2_monitoring')}</div>
-        </footer>
+          {children}
+          
+          <footer className="mt-auto pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4 opacity-30">
+            <div className="text-[9px] font-mono tracking-tighter uppercase text-muted-foreground">{t('common.industrial_ecosystem')}</div>
+            <div className="text-[9px] font-mono tracking-tighter uppercase text-muted-foreground">{t('common.soc2_monitoring')}</div>
+          </footer>
+        </div>
       </main>
     </div>
   );

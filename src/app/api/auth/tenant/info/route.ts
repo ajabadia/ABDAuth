@@ -46,6 +46,7 @@ export async function GET(request: Request) {
       branding: tenant.branding || null,
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('[TENANT_INFO_API_ERROR]', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

@@ -39,7 +39,7 @@ export function MfaVerificationForm() {
   return (
     <div className="w-full max-w-md mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary/10 text-primary mb-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-sm bg-primary/10 text-primary mb-4">
           <ShieldCheck size={32} />
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
@@ -50,7 +50,7 @@ export function MfaVerificationForm() {
         </p>
       </div>
 
-      <div className="bg-card p-8 rounded-xl border border-border space-y-6">
+      <div className="bg-card p-8 rounded-sm border border-border space-y-6">
         <p className="text-sm text-center text-muted-foreground leading-relaxed font-medium">
           {t('description')}
         </p>
@@ -60,7 +60,7 @@ export function MfaVerificationForm() {
             <Input
               type="text"
               placeholder={t('placeholder')}
-              className="h-14 text-center text-2xl font-mono tracking-[0.2em] bg-muted/20 border-border rounded-lg focus:ring-primary/20 transition-all uppercase shadow-none"
+              className="h-14 text-center text-2xl font-mono tracking-[0.2em] bg-muted/20 border-border rounded-sm focus:ring-primary/20 transition-all uppercase shadow-none"
               maxLength={12}
               value={token}
               onChange={(e) => setToken(e.target.value.replace(/[^A-Za-z0-9]/g, ''))}
@@ -74,7 +74,7 @@ export function MfaVerificationForm() {
             <motion.div 
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 text-red-600 dark:text-red-400 text-xs font-bold text-center"
+              className="p-3 rounded-sm bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 text-red-600 dark:text-red-400 text-xs font-bold text-center"
             >
               {error}
             </motion.div>
@@ -82,7 +82,7 @@ export function MfaVerificationForm() {
 
           <Button 
             type="submit" 
-            className="w-full h-12 bg-primary text-primary-foreground hover:opacity-90 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition-all shadow-none"
+            className="w-full h-12 bg-primary text-primary-foreground hover:opacity-95 rounded-none font-mono font-black text-[9px] uppercase tracking-[0.2em] transition-all shadow-none border border-primary/30 active:scale-95"
             disabled={loading || token.length < 1}
           >
             {loading ? <Loader2 className="animate-spin mr-2" size={14} /> : null}

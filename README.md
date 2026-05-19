@@ -68,6 +68,7 @@ ABDAuth is the certified identity provider (IdP) designed to manage authenticati
 - [**Federated Handshake**](./docs/FEDERATED_HANDSHAKE.md): Token exchange and satellite integration.
 - [**Technical Architecture**](./docs/ARCHITECTURE.md): Core design and component standards.
 - [**API Reference**](./docs/API_REFERENCE.md): SSO Federation and Governance endpoints.
+- [**Integration Prompts & Sibling Guides**](./docs/INTEGRATION_PROMPTS.md): Copy-pasteable prompts to integrate central styles into sibling systems.
 - [**Lessons Learned**](./docs/LESSONS_LEARNED.md): Industrial audit remediation log.
 
 ---

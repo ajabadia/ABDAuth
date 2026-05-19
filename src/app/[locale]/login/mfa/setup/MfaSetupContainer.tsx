@@ -54,7 +54,7 @@ export function MfaSetupContainer({ t, isMandatory, needsSync }: MfaSetupContain
 
       <div className="w-full max-w-2xl space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-500/10 text-amber-600 rounded-xl border border-amber-500/20 mb-2">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-500/10 text-amber-600 rounded-sm border border-amber-500/20 mb-2">
             <ShieldAlert size={32} />
           </div>
           <h1 className="text-3xl font-black tracking-[0.05em] text-foreground uppercase">
@@ -65,7 +65,7 @@ export function MfaSetupContainer({ t, isMandatory, needsSync }: MfaSetupContain
           </p>
         </div>
 
-        <div className="bg-card rounded-xl border border-border shadow-none overflow-hidden">
+        <div className="bg-card rounded-sm border border-border shadow-none overflow-hidden">
           <MfaControl 
             isActive={false} 
             isMandatory={isMandatory}
@@ -77,7 +77,7 @@ export function MfaSetupContainer({ t, isMandatory, needsSync }: MfaSetupContain
         <div className="flex justify-center pt-2">
           <Button 
             variant="ghost" 
-            className="text-muted-foreground hover:text-foreground gap-2 font-black uppercase tracking-[0.2em] text-[9px] h-10 px-6 rounded-lg"
+            className="text-muted-foreground hover:text-foreground gap-2 font-black uppercase tracking-[0.2em] text-[9px] h-10 px-6 rounded-none font-mono"
             onClick={() => signOut({ callbackUrl: '/login' })}
           >
             <LogOut size={14} />

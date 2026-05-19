@@ -12,7 +12,7 @@ interface IndustrialSearchInputProps {
 
 export function IndustrialSearchInput({ value, onChange, placeholder, ariaLabel }: IndustrialSearchInputProps) {
   return (
-    <div className="flex items-center gap-4 bg-card p-2 rounded-lg border border-border shadow-sm">
+    <div className="flex items-center gap-4 bg-card p-2 rounded-none border border-border shadow-sm">
       <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
         <input 

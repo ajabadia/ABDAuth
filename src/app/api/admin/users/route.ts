@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/auth';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { auditRepository } from '@/lib/repositories/AuditRepository';
 import { EmailService } from '@/services/email/EmailService';
 import { resetTokenRepository } from '@/lib/repositories/ResetTokenRepository';
-import type { IndustrialSession } from '@/types/auth';
 import { IndustrialNormalizer } from '@/lib/utils/IndustrialNormalizer';
+import { validateAdminSession } from '@/lib/utils/api-auth';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 
@@ -15,13 +14,10 @@ import crypto from 'crypto';
  */
 export async function GET() {
   try {
-    const session = await auth() as unknown as { user: IndustrialSession };
+    const { authorized, user, response } = await validateAdminSession();
+    if (!authorized) return response!;
 
-    if (!session?.user || (session.user.role !== 'SUPER_ADMIN' && session.user.role !== 'ADMIN')) {
-      return NextResponse.json({ error: 'Unauthorized Access' }, { status: 403 });
-    }
-
-    const users = await userRepository.listForSession(session.user);
+    const users = await userRepository.listForSession(user!);
     
     // Sanitize and Normalize sensitive data before sending to UI
     const sanitizedUsers = users.map(u => {
@@ -41,24 +37,22 @@ export async function GET() {
  */
 export async function POST(request: Request) {
   try {
-    const session = await auth() as unknown as { user: IndustrialSession };
-    if (!session?.user || (session.user.role !== 'SUPER_ADMIN' && session.user.role !== 'ADMIN')) {
-      return NextResponse.json({ error: 'Unauthorized Access' }, { status: 403 });
-    }
+    const { authorized, user, response } = await validateAdminSession();
+    if (!authorized) return response!;
 
     const payload = await request.json();
 
     // 🛡️ Security Enforcement
     const newUser = {
       ...payload,
-      tenantId: session.user.role === 'SUPER_ADMIN' ? payload.tenantId : session.user.tenantId,
+      tenantId: user!.role === 'SUPER_ADMIN' ? payload.tenantId : user!.tenantId,
       createdAt: new Date(),
       updatedAt: new Date(),
       mfaEnabled: false,
       active: false, // Pending activation
     };
 
-    if (session.user.role !== 'SUPER_ADMIN' && newUser.role === 'SUPER_ADMIN') {
+    if (user!.role !== 'SUPER_ADMIN' && newUser.role === 'SUPER_ADMIN') {
       return NextResponse.json({ error: 'Cannot escalate privileges' }, { status: 403 });
     }
 
@@ -87,15 +81,15 @@ export async function POST(request: Request) {
         verificationUrl,
       });
 
-    await auditRepository.create({
-      timestamp: new Date(),
-      event: 'USER_CREATED',
-      actorId: session.user.id,
-      actorEmail: session.user.email,
-      tenantId: session.user.tenantId,
-      status: 'SUCCESS',
-      metadata: { targetUserId: created, invitationSent: true }
-    });
+      await auditRepository.create({
+        timestamp: new Date(),
+        event: 'USER_CREATED',
+        actorId: user!.id,
+        actorEmail: user!.email,
+        tenantId: user!.tenantId,
+        status: 'SUCCESS',
+        metadata: { targetUserId: created, invitationSent: true }
+      });
     } catch (emailErr) {
       if (!process.env.RESEND_API_KEY) {
         // eslint-disable-next-line no-console
@@ -118,10 +112,8 @@ export async function POST(request: Request) {
  */
 export async function PUT(request: Request) {
   try {
-    const session = await auth() as unknown as { user: IndustrialSession };
-    if (!session?.user || (session.user.role !== 'SUPER_ADMIN' && session.user.role !== 'ADMIN')) {
-      return NextResponse.json({ error: 'Unauthorized Access' }, { status: 403 });
-    }
+    const { authorized, user, response } = await validateAdminSession();
+    if (!authorized) return response!;
 
     const { _id, password, ...payload } = await request.json();
     if (!_id) return NextResponse.json({ error: 'User ID required' }, { status: 400 });
@@ -138,11 +130,11 @@ export async function PUT(request: Request) {
     await userRepository.update(_id, updateData);
 
     // 🗝️ Critical: If admin is editing THEMSELVES, synchronize the session
-    if (_id === session.user.id) {
+    if (_id === user!.id) {
       const { unstable_update } = await import('@/auth');
       await unstable_update({
         user: {
-          ...session.user,
+          ...user!,
           ...payload,
           mfaEnforced: !!payload.mfaEnforced
         }

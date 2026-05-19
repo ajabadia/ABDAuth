@@ -34,7 +34,7 @@ export function MfaIdleState({
       className="flex flex-col md:flex-row items-center gap-10"
     >
       <div className="flex-shrink-0">
-        <div className={`w-24 h-24 rounded-xl border flex items-center justify-center transition-colors duration-500 ${
+        <div className={`w-24 h-24 rounded-none border flex items-center justify-center transition-colors duration-500 ${
           enabled 
             ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-500' 
             : 'bg-muted/30 border-border text-muted-foreground'
@@ -52,7 +52,7 @@ export function MfaIdleState({
             <div className="flex flex-wrap gap-3">
               {initialStep === 'SETUP' && (
                 <Button 
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground h-10 px-10 font-black uppercase tracking-[0.2em] text-[9px] rounded-lg shadow-none"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground h-10 px-10 font-black uppercase tracking-[0.2em] text-[9px] rounded-none shadow-none"
                   onClick={() => onComplete?.()}
                 >
                   {t('done_btn')}
@@ -62,7 +62,7 @@ export function MfaIdleState({
               {!isMandatory ? (
                 <Button 
                   variant="outline" 
-                  className="border-destructive/20 text-destructive hover:bg-destructive/5 h-10 px-8 font-black uppercase tracking-[0.2em] text-[9px] rounded-lg shadow-none"
+                  className="border-destructive/20 text-destructive hover:bg-destructive/5 h-10 px-8 font-black uppercase tracking-[0.2em] text-[9px] rounded-none shadow-none"
                   onClick={onDisable}
                   disabled={loading}
                 >
@@ -86,7 +86,7 @@ export function MfaIdleState({
           </div>
         ) : (
           <Button 
-            className="bg-primary hover:bg-primary/90 text-primary-foreground h-10 px-8 gap-3 font-black uppercase tracking-[0.2em] text-[9px] rounded-lg shadow-none"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground h-10 px-8 gap-3 font-black uppercase tracking-[0.2em] text-[9px] rounded-none shadow-none"
             onClick={onStartSetup}
             disabled={loading}
           >

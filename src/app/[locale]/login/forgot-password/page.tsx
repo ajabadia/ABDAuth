@@ -48,9 +48,9 @@ export default function ForgotPasswordPage() {
       <div className="mb-12 flex flex-col items-center animate-in slide-in-from-top duration-700">
         <div 
           onClick={() => router.push('/login')}
-          className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-xl shadow-blue-500/10 border border-blue-400/20 active:scale-95 transition-transform cursor-pointer"
+          className="w-14 h-14 bg-primary rounded-sm flex items-center justify-center mb-4 shadow-xl shadow-primary/10 border border-primary/20 active:scale-95 transition-transform cursor-pointer"
         >
-          <Shield size={32} className="text-white" />
+          <Shield size={32} className="text-primary-foreground" />
         </div>
         <h1 className="text-xl font-black text-foreground tracking-tighter uppercase">
           {t('title')}
@@ -60,9 +60,9 @@ export default function ForgotPasswordPage() {
         </p>
       </div>
 
-      <div className="w-full max-w-[380px] bg-card border border-border rounded-xl shadow-xl overflow-hidden relative z-10">
-        <div className="h-1.5 w-full bg-blue-600/10 flex">
-          <div className="h-full bg-blue-600 w-1/3 animate-pulse" />
+      <div className="w-full max-w-[380px] bg-card border border-border rounded-sm shadow-xl overflow-hidden relative z-10">
+        <div className="h-1.5 w-full bg-primary/10 flex">
+          <div className="h-full bg-primary w-1/3 animate-pulse" />
         </div>
         
         <div className="p-8 space-y-6 relative z-10">
@@ -77,13 +77,13 @@ export default function ForgotPasswordPage() {
                   {t('identity_principal')}
                 </label>
                 <div className="relative group/input">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-blue-500 transition-colors" size={14} />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-primary transition-colors" size={14} />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="usuario@ejemplo.com"
-                    className="w-full bg-secondary/30 border-border border rounded-lg h-10 pl-10 pr-4 text-xs focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500 outline-none transition-all placeholder:text-muted-foreground/30 text-foreground"
+                    className="w-full bg-secondary/30 border-border border rounded-sm h-10 pl-10 pr-4 text-xs focus:ring-1 focus:ring-primary/30 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/30 text-foreground"
                     required
                   />
                 </div>
@@ -93,9 +93,9 @@ export default function ForgotPasswordPage() {
                 type="submit"
                 disabled={isLoading}
                 aria-label={t('send_link')}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-[10px] font-black uppercase tracking-widest py-3 rounded-lg border-b-2 border-blue-800 active:border-b-0 active:translate-y-[1px] transition-all flex items-center justify-center gap-2"
+                className="w-full bg-primary hover:bg-primary/95 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground text-[10px] font-mono uppercase tracking-widest font-black py-3 rounded-none border border-primary/30 active:scale-95 transition-all flex items-center justify-center gap-2"
               >
-                {isLoading ? <Loader2 size={16} className="animate-spin" /> : <><Send size={14} /> {t('button')}</>}
+                {isLoading ? <Loader2 size={16} className="animate-spin text-primary-foreground" /> : <><Send size={14} /> {t('button')}</>}
               </button>
             </form>
           ) : (
@@ -112,7 +112,7 @@ export default function ForgotPasswordPage() {
           <button 
             aria-label={t('back_to_login')}
             onClick={() => router.push('/login')}
-            className="w-full bg-transparent hover:bg-blue-500/5 text-muted-foreground hover:text-blue-500 text-[9px] font-bold uppercase tracking-widest py-2 rounded-lg transition-colors border border-transparent hover:border-blue-500/10 flex items-center justify-center gap-2"
+            className="w-full bg-transparent hover:bg-primary/5 text-muted-foreground hover:text-primary text-[9px] font-mono uppercase tracking-widest font-bold py-2 rounded-none transition-colors border border-transparent hover:border-primary/10 flex items-center justify-center gap-2"
           >
             <ArrowLeft size={12} />
             {t('back_to_login')}

@@ -30,6 +30,7 @@ export default async function UsersPage() {
   }
 
   const t = await getTranslations("dashboard.users");
+  const d = await getTranslations("dashboard");
   const messages = await getMessages() as unknown as LocalizedMessages;
   const dashboard = messages.dashboard;
 
@@ -39,6 +40,9 @@ export default async function UsersPage() {
     subtitle: t("subtitle"),
     addUser: t("add_user"),
     editUser: t("edit_user"),
+    controlConsole: d("control_console"),
+    menuUsers: d("menu.users"),
+    backToDashboard: d("back_to_dashboard"),
     columns: {
       user: t("columns.user"),
       role: t("columns.role"),
@@ -53,6 +57,8 @@ export default async function UsersPage() {
       disabled: t("mfa.disabled"),
       reset: t("mfa.reset"),
       reset_confirm: t("mfa.reset_confirm"),
+      reset_success: t("mfa.reset_success"),
+      reset_error: t("mfa.reset_error"),
     },
     form: {
       email: t("form.email"),
@@ -76,11 +82,9 @@ export default async function UsersPage() {
   };
 
   return (
-    <div className="container mx-auto py-10">
-      <UserManagementContainer 
-        t={translations} 
-        isSuperAdmin={session.user.role === 'SUPER_ADMIN'} 
-      />
-    </div>
+    <UserManagementContainer 
+      t={translations} 
+      isSuperAdmin={session.user.role === 'SUPER_ADMIN'} 
+    />
   );
 }

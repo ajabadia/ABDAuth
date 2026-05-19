@@ -5,6 +5,7 @@ import type { IndustrialApplicationDisplay } from "@/components/admin/applicatio
 
 export default async function ApplicationsPage() {
   const t = await getTranslations('dashboard.applications');
+  const d = await getTranslations('dashboard');
   
   const apps = await applicationRepository.list();
   
@@ -24,6 +25,9 @@ export default async function ApplicationsPage() {
     edit_app: t('edit_app'),
     delete_confirm: t('delete_confirm'),
     no_apps: t('no_apps'),
+    controlConsole: d('control_console'),
+    menuApplications: d('menu.applications'),
+    backToDashboard: d('back_to_dashboard'),
     form: {
       name: t('form.name'),
       description: t('form.description'),
