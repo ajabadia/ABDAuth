@@ -65,7 +65,9 @@ async function seedSatellite() {
       clientId: clientIdGov,
       clientSecret: 'abdgov-industrial-super-secret-key-2026',
       redirectUris: [
-        'http://localhost:3500/api/auth/federated/callback'
+        'http://localhost:3500/api/auth/federated/callback',
+        'http://localhost:3600/api/auth/federated/callback',
+        'https://abd-logs.vercel.app/api/auth/federated/callback'
       ],
       active: true,
       updatedAt: new Date(),
