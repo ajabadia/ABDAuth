@@ -14,3 +14,11 @@ build
 abd-audit-results.log
 lint/
 .vercel
+
+# IDE ignores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+secretos/
