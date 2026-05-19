@@ -68,11 +68,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 font-sans relative overflow-hidden transition-colors duration-300">
+    <main className="flex min-h-screen flex-col items-center justify-center p-6 bg-background text-foreground selection:bg-primary/30 overflow-hidden relative" role="main">
       {brandingCss && (
         <style id="tenant-branding-gateway" dangerouslySetInnerHTML={{ __html: brandingCss }} />
       )}
-      <div className="bg-grain" />
+      
+      {/* 🏗️ Atmosphere & Grid */}
+      <div className="absolute inset-0 z-0 bg-industrial-grid mask-industrial-fade opacity-50 pointer-events-none" />
+      
+      {/* 🛰️ Glow Effect */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-primary/5 dark:bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
 
       {/* 🛠️ Accessibility Controls */}
       <div className="absolute top-6 right-6 flex items-center gap-3 z-50">
@@ -107,6 +112,6 @@ export default function LoginPage() {
         demoPass={t('demo_pass')}
         footerText={t('footer_text')}
       />
-    </div>
+    </main>
   );
 }
