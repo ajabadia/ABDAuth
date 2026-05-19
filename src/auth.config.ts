@@ -2,6 +2,16 @@ import type { NextAuthConfig } from 'next-auth';
 import type { UserRole } from '@/lib/schemas/auth';
 import type { IndustrialUser } from '@/types/auth';
 
+// 🛡️ Safe-guard: On Vercel, prevent localhost environment variables from leaking into NextAuth url resolver
+if (process.env.VERCEL) {
+  if (process.env.AUTH_URL?.includes('localhost')) {
+    delete process.env.AUTH_URL;
+  }
+  if (process.env.NEXTAUTH_URL?.includes('localhost')) {
+    delete process.env.NEXTAUTH_URL;
+  }
+}
+
 /**
  * 🔒 Auth.js Configuration (Edge-Compatible)
  * This file contains the configuration that can run on the Edge runtime.
