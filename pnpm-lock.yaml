@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@abd/styles':
         specifier: github:ajabadia/ABDStyles#main
-        version: https://codeload.github.com/ajabadia/ABDStyles/tar.gz/88d315b7d1e759f1da1fa36bb0797bf84ddf77f9
+        version: https://codeload.github.com/ajabadia/ABDStyles/tar.gz/68f7d5da930ecc06124c301b6c70dad299489d80(lucide-react@1.16.0(react@19.2.6))(react@19.2.6)
       '@radix-ui/react-label':
         specifier: ^2.1.8
         version: 2.1.8(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -114,9 +114,12 @@ importers:
 
 packages:
 
-  '@abd/styles@https://codeload.github.com/ajabadia/ABDStyles/tar.gz/88d315b7d1e759f1da1fa36bb0797bf84ddf77f9':
-    resolution: {tarball: https://codeload.github.com/ajabadia/ABDStyles/tar.gz/88d315b7d1e759f1da1fa36bb0797bf84ddf77f9}
+  '@abd/styles@https://codeload.github.com/ajabadia/ABDStyles/tar.gz/68f7d5da930ecc06124c301b6c70dad299489d80':
+    resolution: {tarball: https://codeload.github.com/ajabadia/ABDStyles/tar.gz/68f7d5da930ecc06124c301b6c70dad299489d80}
     version: 1.0.0
+    peerDependencies:
+      lucide-react: ^0.46.0
+      react: ^19.0.0
 
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -2593,10 +2596,19 @@ packages:
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
 
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+
   zod@4.4.3:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
 
 snapshots:
+
+  '@abd/styles@https://codeload.github.com/ajabadia/ABDStyles/tar.gz/68f7d5da930ecc06124c301b6c70dad299489d80(lucide-react@1.16.0(react@19.2.6))(react@19.2.6)':
+    dependencies:
+      lucide-react: 1.16.0(react@19.2.6)
+      react: 19.2.6
+      zod: 3.25.76
 
   '@alloc/quick-lru@5.2.0': {}
 
@@ -5204,5 +5216,7 @@ snapshots:
   zod-validation-error@4.0.2(zod@4.4.3):
     dependencies:
       zod: 4.4.3
+
+  zod@3.25.76: {}
 
   zod@4.4.3: {}
