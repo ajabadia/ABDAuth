@@ -49,12 +49,13 @@ export default async function DashboardLayout({
 
       <TacticalSidebar user={user} logoUrl={logoUrl} locale={locale} />
 
-      <main className="min-h-screen bg-background text-foreground pt-24 pb-6 px-6 md:px-12 md:pb-12 lg:pl-[368px] lg:pt-12 lg:pr-12 lg:pb-12 selection:bg-primary/30 relative z-10" role="main">
-        <div className="max-w-7xl mx-auto flex flex-col gap-10">
-          <header className="flex justify-end">
-            <SystemSettings />
-          </header>
+      {/* ⚙️ Floating System Settings Trigger (Top-Right) */}
+      <div className="fixed top-6 right-6 z-40">
+        <SystemSettings />
+      </div>
 
+      <main className="min-h-screen bg-background text-foreground pt-24 pb-12 px-6 md:px-12 selection:bg-primary/30 relative z-10" role="main">
+        <div className="max-w-7xl mx-auto flex flex-col gap-10">
           {children}
           
           <footer className="mt-auto pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4 opacity-30">

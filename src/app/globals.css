@@ -36,21 +36,4 @@
   }
 }
 
-@media (min-width: 1024px) {
-  /* 🧭 Dock the TacticalSidebar on desktop */
-  aside {
-    transform: translateX(0) !important;
-    box-shadow: none !important;
-  }
-  
-  /* 🔘 Hide the mobile/desktop toggle button since the sidebar is docked */
-  button[aria-label="Toggle Tactical Menu"] {
-    display: none !important;
-  }
-  
-  /* ✖️ Hide the close button inside the sidebar on desktop */
-  aside button[aria-label="Close"] {
-    display: none !important;
-  }
-}
 
