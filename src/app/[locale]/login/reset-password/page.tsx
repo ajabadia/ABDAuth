@@ -73,7 +73,7 @@ export default function ResetPasswordPage() {
 
       {/* 🛠️ Accessibility Controls */}
       <div className="absolute top-6 right-6 flex items-center gap-3 z-50">
-        <SystemSettings />
+        <SystemSettings isAuthenticated={false} />
       </div>
       
       {/* 🛡️ Header Branding */}

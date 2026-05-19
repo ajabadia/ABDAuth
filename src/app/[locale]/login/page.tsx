@@ -81,7 +81,7 @@ export default function LoginPage() {
 
       {/* 🛠️ Accessibility Controls */}
       <div className="absolute top-6 right-6 flex items-center gap-3 z-50">
-        <SystemSettings />
+        <SystemSettings isAuthenticated={false} />
       </div>
       
       {/* 🛡️ Branding Header */}

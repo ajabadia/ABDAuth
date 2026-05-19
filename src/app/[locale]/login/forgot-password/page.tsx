@@ -42,7 +42,7 @@ export default function ForgotPasswordPage() {
       <div className="bg-grain" />
 
       <div className="absolute top-6 right-6 flex items-center gap-3 z-50">
-        <SystemSettings />
+        <SystemSettings isAuthenticated={false} />
       </div>
       
       <div className="mb-12 flex flex-col items-center animate-in slide-in-from-top duration-700">

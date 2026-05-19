@@ -19,9 +19,10 @@ interface MfaSetupContainerProps {
   };
   isMandatory: boolean;
   needsSync: boolean;
+  isAuthenticated: boolean;
 }
 
-export function MfaSetupContainer({ t, isMandatory, needsSync }: MfaSetupContainerProps) {
+export function MfaSetupContainer({ t, isMandatory, needsSync, isAuthenticated }: MfaSetupContainerProps) {
   const router = useRouter();
 
   React.useEffect(() => {
@@ -49,7 +50,7 @@ export function MfaSetupContainer({ t, isMandatory, needsSync }: MfaSetupContain
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6">
       <div className="fixed top-6 right-6 z-50">
-        <SystemSettings />
+        <SystemSettings isAuthenticated={isAuthenticated} />
       </div>
 
       <div className="w-full max-w-2xl space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">

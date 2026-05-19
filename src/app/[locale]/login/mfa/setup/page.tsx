@@ -39,6 +39,7 @@ export default async function MfaSetupPage() {
       t={translations} 
       isMandatory={isCurrentlyEnforced} 
       needsSync={needsSync}
+      isAuthenticated={!!session}
     />
   );
 }

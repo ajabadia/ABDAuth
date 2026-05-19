@@ -11,7 +11,7 @@ import { SystemSettings as SharedSystemSettings } from "@abd/styles";
  * Wraps the shared, unificated SystemSettings from @abd/styles.
  * Injects local next-auth, next-intl, next-themes hooks and translations dynamically.
  */
-export function SystemSettings() {
+export function SystemSettings({ isAuthenticated }: { isAuthenticated?: boolean }) {
   const t = useTranslations("settings");
   const { theme, setTheme } = useTheme();
   const { status } = useSession();
@@ -23,13 +23,15 @@ export function SystemSettings() {
     router.replace(pathname, { locale: newLocale });
   };
 
+  const isAuth = isAuthenticated !== undefined ? isAuthenticated : (status === "authenticated");
+
   return (
     <SharedSystemSettings
       locale={locale}
       onLocaleChange={handleLocaleChange}
       theme={theme}
       onThemeChange={setTheme}
-      isAuthenticated={status === "authenticated"}
+      isAuthenticated={isAuth}
       onLogin={() => signIn()}
       onLogout={() => signOut({ callbackUrl: "/" })}
       versionSignature="ABD_IDENTITY_V1.0"

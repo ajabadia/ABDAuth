@@ -51,7 +51,7 @@ export default async function DashboardLayout({
 
       {/* ⚙️ Floating System Settings Trigger (Top-Right) */}
       <div className="fixed top-6 right-6 z-40">
-        <SystemSettings />
+        <SystemSettings isAuthenticated={!!session} />
       </div>
 
       <main className="min-h-screen bg-background text-foreground pt-24 pb-12 px-6 md:px-12 selection:bg-primary/30 relative z-10" role="main">

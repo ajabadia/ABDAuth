@@ -31,7 +31,7 @@ export default async function RootPage() {
 
       {/* 🛠️ System Settings Console */}
       <div className="absolute top-6 right-6 z-50">
-        <SystemSettings />
+        <SystemSettings isAuthenticated={!!session} />
       </div>
 
       {/* 📟 Main Console Screen */}
