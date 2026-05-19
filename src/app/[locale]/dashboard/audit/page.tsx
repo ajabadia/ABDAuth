@@ -1,101 +1,30 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { auditRepository } from "@/lib/repositories/AuditRepository";
-import { ShieldAlert, ShieldCheck, Info, Clock, User as UserIcon } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
-import { PageHeader } from "@/components/ui/industrial/PageHeader";
-import type { AuditLog } from "@/lib/schemas/audit";
-import type { IndustrialSession } from "@/types/auth";
 
 /**
- * 📜 Audit Log Visual Panel
+ * 📜 Audit Log Redirect
+ * Redirects dynamically to the centralized audit logging service (ABDLogs)
  */
-export default async function AuditPage() {
+export default async function AuditPage({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const session = await auth();
-  const t = await getTranslations('dashboard.audit');
-  const d = await getTranslations('dashboard');
-
   if (!session) redirect("/login");
 
-  const user = session.user as unknown as IndustrialSession;
+  const { locale } = await params;
 
-  // 🔌 Fetching filtered logs (Security handled by Repository)
-  const logs = await auditRepository.listForCurrentSession(user);
+  // 🔍 Derive central logs audit URL dynamically
+  const logsServiceUrl = process.env.LOGS_SERVICE_URL || 'http://localhost:3600/api/logs';
+  let logsAuditUrl = '';
+  try {
+    const logsOrigin = new URL(logsServiceUrl).origin;
+    logsAuditUrl = `${logsOrigin}/${locale}/admin/audit`;
+  } catch (err) {
+    console.error("Failed to parse LOGS_SERVICE_URL:", err);
+    logsAuditUrl = `http://localhost:3600/${locale}/admin/audit`;
+  }
 
-  const formatDate = (dateInput: unknown): string => {
-    try {
-      if (!dateInput) return '---';
-      const d = new Date(dateInput as string | number | Date);
-      if (isNaN(d.getTime())) return '---';
-      return d.toISOString().replace('T', ' ').split('.')[0];
-    } catch {
-      return '---';
-    }
-  };
-
-  return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      <PageHeader 
-        title={t('title')}
-        subtitle={`${t('subtitle')} • SOC2_COMPLIANCE_MONITOR`}
-        breadcrumb={`${d('control_console')} • ${d('menu.audit')}`}
-        icon={ShieldCheck}
-        backHref="/dashboard"
-        backAriaLabel={d('back_to_dashboard')}
-      />
-
-      <div className="bg-card border border-border rounded-none shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-muted/50 border-b border-border">
-                <th className="px-4 py-3 text-[9px] font-black text-muted-foreground uppercase tracking-widest">{t('table.timestamp')}</th>
-                <th className="px-4 py-3 text-[9px] font-black text-muted-foreground uppercase tracking-widest">{t('table.event')}</th>
-                <th className="px-4 py-3 text-[9px] font-black text-muted-foreground uppercase tracking-widest">{t('table.actor')}</th>
-                <th className="px-4 py-3 text-[9px] font-black text-muted-foreground uppercase tracking-widest">{t('table.status')}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border/50">
-              {logs.map((log: AuditLog) => (
-                <tr key={log._id?.toString()} className="hover:bg-muted/20 transition-colors">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2 text-[10px] font-mono font-bold">
-                      <Clock size={12} className="text-muted-foreground" />
-                      {formatDate(log.timestamp)}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-[10px] font-bold">{log.event}</td>
-                  <td className="px-4 py-3 text-[10px]">
-                    <div className="flex items-center gap-2">
-                      <UserIcon size={12} className="text-primary" />
-                      {log.actorEmail || log.actorId}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3">
-                    <StatusBadge status={log.status} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    SUCCESS: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-    FAILURE: "bg-red-500/10 text-red-500 border-red-500/20",
-    WARNING: "bg-amber-500/10 text-amber-500 border-amber-500/20",
-    INFO: "bg-primary/10 text-primary border-primary/20",
-  };
-  const Icon = status === 'SUCCESS' ? ShieldCheck : status === 'FAILURE' ? ShieldAlert : Info;
-  return (
-    <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-none border ${styles[status] || styles.INFO}`}>
-      <Icon size={10} />
-      <span className="text-[8px] font-black uppercase tracking-widest">{status}</span>
-    </div>
-  );
+  redirect(logsAuditUrl);
 }

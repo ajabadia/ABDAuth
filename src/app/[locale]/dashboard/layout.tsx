@@ -43,11 +43,22 @@ export default async function DashboardLayout({
     }
   }
 
+  // 🔍 Derive central logs audit URL dynamically
+  const logsServiceUrl = process.env.LOGS_SERVICE_URL || 'http://localhost:3600/api/logs';
+  let logsAuditUrl = '';
+  try {
+    const logsOrigin = new URL(logsServiceUrl).origin;
+    logsAuditUrl = `${logsOrigin}/${locale}/admin/audit`;
+  } catch (err) {
+    console.error("Failed to parse LOGS_SERVICE_URL:", err);
+    logsAuditUrl = `http://localhost:3600/${locale}/admin/audit`;
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary/30 transition-colors duration-300">
       <div className="bg-grain" />
 
-      <TacticalSidebar user={user} logoUrl={logoUrl} locale={locale} />
+      <TacticalSidebar user={user} logoUrl={logoUrl} locale={locale} logsAuditUrl={logsAuditUrl} />
 
       {/* ⚙️ Floating System Settings Trigger (Top-Right) */}
       <div className="fixed top-6 right-6 z-40">

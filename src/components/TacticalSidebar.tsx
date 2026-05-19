@@ -17,6 +17,7 @@ interface TacticalSidebarProps {
   user: NavUser;
   logoUrl?: string | null;
   locale: string;
+  logsAuditUrl: string;
 }
 
 /**
@@ -24,7 +25,7 @@ interface TacticalSidebarProps {
  * Wraps the central TacticalSidebar component from @abd/styles,
  * passing local links, icons, next-intl translations, routing Link, and signOut.
  */
-export function TacticalSidebar({ user, logoUrl, locale }: TacticalSidebarProps) {
+export function TacticalSidebar({ user, logoUrl, locale, logsAuditUrl }: TacticalSidebarProps) {
   const t = useTranslations("dashboard.menu");
   const common = useTranslations("common");
   const pathname = usePathname();
@@ -43,7 +44,7 @@ export function TacticalSidebar({ user, logoUrl, locale }: TacticalSidebarProps)
   }
 
   if (user.role === "SUPER_ADMIN" || user.role === "ADMIN") {
-    links.push({ href: "/dashboard/audit", label: t("audit"), icon: <ScrollText size={14} /> });
+    links.push({ href: logsAuditUrl, label: t("audit"), icon: <ScrollText size={14} /> });
   }
 
   links.push({ href: "/dashboard/security", label: t("security"), icon: <Key size={14} /> });
@@ -68,8 +69,18 @@ export function TacticalSidebar({ user, logoUrl, locale }: TacticalSidebarProps)
   );
 }
 
-const CustomLink = ({ href, onClick, className, children }: { href: string; onClick?: () => void; className?: string; children: React.ReactNode }) => (
-  <Link href={href} onClick={onClick} className={className}>
-    {children}
-  </Link>
-);
+const CustomLink = ({ href, onClick, className, children }: { href: string; onClick?: () => void; className?: string; children: React.ReactNode }) => {
+  const isExternal = href.startsWith("http://") || href.startsWith("https://");
+  if (isExternal) {
+    return (
+      <a href={href} onClick={onClick} className={className}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} onClick={onClick} className={className}>
+      {children}
+    </Link>
+  );
+};
