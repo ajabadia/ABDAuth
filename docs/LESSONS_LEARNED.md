@@ -110,5 +110,10 @@ Este documento registra los retos técnicos superados y las decisiones arquitect
 - **Phase Detection**: Use `process.env.NEXT_PHASE` to return a mock/resolved promise during compilation, allowing the build to pass without a real database connection.
 - **Result**: Decoupled infrastructure that is resilient to CI/CD environmental constraints.
 
+## 📦 13. The PNPM Strict Dependency Trap (Module Resolution)
+**Issue**: Standardizing cryptographic helper logic (e.g. JWT signing using `jose`) into shared services (`SsoService`) can lead to build failures under strict package managers (like `pnpm` used by Vercel) if dependencies are imported directly but not declared in `package.json`. In local dev, this may pass if transitive dependencies are hoisted, but fails under pnpm's strict dependency graph.
+**Solution**: Always declare imports (such as `jose`) explicitly in `package.json`'s `dependencies`, even if they are transitively required by other libraries (like `next-auth`).
+
 ---
 *Estado de la Documentación: Sincronizado*
+**Date**: 05/19/2026 | **Certified by**: Antigravity AI
