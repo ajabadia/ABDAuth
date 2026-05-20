@@ -14,6 +14,27 @@ export async function GET(req: Request) {
   const redirectUri = searchParams.get('redirect_uri');
   const state = searchParams.get('state') || '';
   const tenantParam = searchParams.get('tenant') || '';
+  const errorParam = searchParams.get('error');
+
+  // Prevent infinite authorization/redirect loops if the client app reports an error
+  if (errorParam) {
+    const errorMap: Record<string, string> = {
+      'app_not_allowed': 'APPLICATION_NOT_LICENSED',
+      'unauthorized_tenant_access': 'UNAUTHORIZED_TENANT_ACCESS',
+    };
+    const mappedError = errorMap[errorParam] || errorParam.toUpperCase();
+    const dashboardUrl = new URL('/dashboard', req.url);
+    dashboardUrl.searchParams.set('error', mappedError);
+    
+    if (clientId) {
+      const app = await applicationRepository.findByClientId(clientId);
+      if (app) {
+        dashboardUrl.searchParams.set('app', app.slug || app.name);
+      }
+    }
+    
+    return NextResponse.redirect(dashboardUrl);
+  }
 
   if (!clientId || !redirectUri) {
     return NextResponse.json({ error: 'Missing client_id or redirect_uri' }, { status: 400 });

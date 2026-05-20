@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
 import { federatedCodeRepository, type FederatedCode } from '@/lib/repositories/FederatedCodeRepository';
+import { type UserTenantMembership } from '@/lib/schemas/user';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { type SafeFilter } from '@/lib/repositories/BaseRepository';
@@ -76,17 +77,30 @@ export async function POST(req: Request) {
 
     const tenant = await tenantRepository.findByTenantId(user.tenantId);
 
+    // Resolve membership details
+    const isSuperAdmin = user.role === 'SUPER_ADMIN';
+    const membership = user.tenants?.find((t: UserTenantMembership) => t.tenantId === user.tenantId);
+    const role = membership?.role || user.role;
+    const permissions = membership?.appPermissions || [];
+    
+    const tenantAllowedApps = tenant?.allowedApps || [];
+    const userAllowedApps = membership?.allowedApps || [];
+    const resolvedAllowedApps = (isSuperAdmin || role === 'owner' || role === 'admin')
+      ? tenantAllowedApps
+      : tenantAllowedApps.filter((app: string) => userAllowedApps.includes(app));
+
     // 5. Generate cryptographically signed JWT via SsoService
     const token = await SsoService.generateToken({
       sub: user._id?.toString() || '',
       email: user.email,
       name: user.name,
       surname: user.surname || '',
-      role: user.role,
+      role,
       tenantId: user.tenantId,
-      permissions: [],
+      permissions,
       dbPrefix: tenant?.dbPrefix || 'default',
       isolationStrategy: tenant?.isolationStrategy || 'COLLECTION_PREFIX',
+      allowedApps: resolvedAllowedApps,
     });
 
     // 6. Build Industrial Response (JWT + auxiliary user data)

@@ -129,6 +129,20 @@ export async function PUT(request: Request) {
 
     await userRepository.update(_id, updateData);
 
+    // 🛡️ Audit log target update event
+    await auditRepository.create({
+      timestamp: new Date(),
+      event: 'USER_UPDATED',
+      actorId: user!.id,
+      actorEmail: user!.email,
+      tenantId: user!.tenantId,
+      status: 'SUCCESS',
+      metadata: {
+        targetUserId: _id,
+        updatedFields: Object.keys(payload)
+      }
+    });
+
     // 🗝️ Critical: If admin is editing THEMSELVES, synchronize the session
     if (_id === user!.id) {
       const { unstable_update } = await import('@/auth');

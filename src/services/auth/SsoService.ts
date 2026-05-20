@@ -17,6 +17,7 @@ export interface SsoPayload {
   permissions: string[];
   dbPrefix: string;
   isolationStrategy: string;
+  allowedApps: string[];
 }
 
 /**
@@ -64,6 +65,7 @@ export class SsoService {
       permissions: payload.permissions,
       dbPrefix: payload.dbPrefix,
       isolationStrategy: payload.isolationStrategy,
+      allowedApps: payload.allowedApps,
     })
       .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
       .setIssuedAt()
@@ -113,8 +115,9 @@ export class SsoService {
     }
 
     // 3. Verify App License / Allowance for Tenant
-    const isAppAllowed = tenant.allowedApps?.includes(appId);
-    if (!isAppAllowed) {
+    const tenantAllowedApps = tenant.allowedApps || [];
+    const isTenantLicensed = tenantAllowedApps.includes(appId);
+    if (!isTenantLicensed) {
       await this.audit('SSO_HANDSHAKE_DENIED', auditMeta, { appId, reason: 'APPLICATION_NOT_LICENSED' });
       return { success: false, errorType: 'APPLICATION_NOT_LICENSED' };
     }
@@ -126,9 +129,19 @@ export class SsoService {
       return { success: false, errorType: 'APPLICATION_INACTIVE' };
     }
 
-    // 5. Resolve Roles and Fine-Grained Permissions
+    // 5. Resolve Roles, Permissions and allowedApps for this user session
     const role = membership?.role || dbUser.role;
     const permissions = membership?.appPermissions || [];
+    const userAllowedApps = membership?.allowedApps || [];
+    const resolvedAllowedApps = (isSuperAdmin || role === 'owner' || role === 'admin')
+      ? tenantAllowedApps
+      : tenantAllowedApps.filter(a => userAllowedApps.includes(a));
+
+    // For normal users, verify they are licensed for this specific app
+    if (!isSuperAdmin && role !== 'owner' && role !== 'admin' && !userAllowedApps.includes(appId)) {
+      await this.audit('SSO_HANDSHAKE_DENIED', auditMeta, { appId, reason: 'USER_NOT_LICENSED_FOR_APP' });
+      return { success: false, errorType: 'APPLICATION_NOT_LICENSED' };
+    }
 
     // 6. Generate outgoing Signed SSO JWT
     const token = await this.generateToken({
@@ -141,6 +154,7 @@ export class SsoService {
       permissions,
       dbPrefix: tenant?.dbPrefix || 'default',
       isolationStrategy: tenant?.isolationStrategy || 'COLLECTION_PREFIX',
+      allowedApps: resolvedAllowedApps,
     });
 
     // 7. Resolve Destination URL with Tenant sub-domain pattern injection

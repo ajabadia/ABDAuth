@@ -1,5 +1,6 @@
 import { BaseRepository, type SafeFilter } from './BaseRepository';
 import { LogsClient } from '@/lib/logs-client';
+import { type AuditAuthOps } from '@/lib/schemas/audit';
 
 /**
  * 🛡️ AuditAuthOpsRepository
@@ -14,7 +15,7 @@ export class AuditAuthOpsRepository extends BaseRepository<any> {
   /**
    * 📡 Redirect writes to central ABDLogs service
    */
-  override async create(data: any): Promise<string> {
+  override async create(data: Partial<AuditAuthOps>): Promise<string> {
     try {
       await LogsClient.log({
         tenantId: data.tenantId || 'SYSTEM',

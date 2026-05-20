@@ -14,6 +14,7 @@ export const UserTenantMembershipSchema = z.object({
   role: z.enum(['owner', 'admin', 'student']).default('student'),
   status: z.enum(['active', 'suspended']).default('active'),
   appPermissions: z.array(z.string()).default([]),
+  allowedApps: z.array(z.string()).default([]),
 });
 
 export type UserTenantMembership = z.infer<typeof UserTenantMembershipSchema>;

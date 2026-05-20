@@ -36,6 +36,7 @@ async function seedSatellite() {
       description: 'Official industrial audit and quiz satellite.',
       clientId: clientIdQuiz,
       clientSecret: 'abdquiz-industrial-super-secret-key-2026',
+      slug: 'quiz',
       redirectUris: [
         'http://localhost:3300/api/auth/federated/callback',
         'https://quiz.abd.vercel.app/api/auth/federated/callback'
@@ -64,6 +65,7 @@ async function seedSatellite() {
       description: 'Official tenant governance console.',
       clientId: clientIdGov,
       clientSecret: 'abdgov-industrial-super-secret-key-2026',
+      slug: 'gobernanza',
       redirectUris: [
         'http://localhost:3500/api/auth/federated/callback',
         'https://abd-tenant-gobernance.vercel.app/api/auth/federated/callback'
@@ -92,6 +94,7 @@ async function seedSatellite() {
       description: 'Official centralized logging and auditing console.',
       clientId: clientIdLogs,
       clientSecret: 'abdlogs-industrial-super-secret-key-2026',
+      slug: 'logs',
       redirectUris: [
         'http://localhost:3600/api/auth/federated/callback',
         'https://abd-logs.vercel.app/api/auth/federated/callback'

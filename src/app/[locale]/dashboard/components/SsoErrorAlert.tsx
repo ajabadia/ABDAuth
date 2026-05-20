@@ -3,11 +3,18 @@ import { ShieldAlert } from "lucide-react";
 
 interface SsoErrorAlertProps {
   error: string;
+  app?: string;
   t: (key: string) => string;
 }
 
-export function SsoErrorAlert({ error, t }: SsoErrorAlertProps) {
+export function SsoErrorAlert({ error, app, t }: SsoErrorAlertProps) {
   const isKnownError = ['SELECT_TENANT_REQUIRED', 'APPLICATION_NOT_LICENSED', 'UNAUTHORIZED_TENANT_ACCESS', 'APPLICATION_INACTIVE'].includes(error);
+  
+  let errorMessage = isKnownError ? t(`errors.${error}`) : t('errors.DEFAULT');
+  if (error === 'APPLICATION_NOT_LICENSED' && app) {
+    errorMessage = `${errorMessage} [App ID: ${app}]`;
+  }
+
   return (
     <div className="p-4 border border-destructive/15 bg-destructive/5 rounded-sm flex items-start gap-3 w-full text-destructive font-mono text-[10px] font-black uppercase tracking-wider animate-in fade-in duration-300" role="alert">
       <ShieldAlert size={16} className="shrink-0 animate-pulse mt-0.5" />
@@ -16,7 +23,7 @@ export function SsoErrorAlert({ error, t }: SsoErrorAlertProps) {
           SYSTEM_SSO_FAULT // ERR_CODE: {error}
         </div>
         <div>
-          {isKnownError ? t(`errors.${error}`) : t('errors.DEFAULT')}
+          {errorMessage}
         </div>
       </div>
     </div>

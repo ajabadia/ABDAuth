@@ -23,11 +23,11 @@ export default async function DashboardPage({
   searchParams
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; app?: string }>;
 }) {
   const session = await auth();
   const { locale } = await params;
-  const { error } = await searchParams;
+  const { error, app } = await searchParams;
   const t = await getTranslations('dashboard');
 
   if (!session) {
@@ -76,7 +76,7 @@ export default async function DashboardPage({
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      {error && <SsoErrorAlert error={error} t={t} />}
+      {error && <SsoErrorAlert error={error} app={app} t={t} />}
 
       {!user.mfaEnabled && (
         <MfaPromotion 

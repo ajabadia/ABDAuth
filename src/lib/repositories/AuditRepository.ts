@@ -1,6 +1,7 @@
 import { TenantAwareRepository } from './TenantAwareRepository';
 import type { IndustrialSession } from '@/types/auth';
 import { LogsClient } from '@/lib/logs-client';
+import { type AuditLog } from '@/lib/schemas/audit';
 
 /**
  * 🛡️ AuditRepository
@@ -25,12 +26,12 @@ export class AuditRepository extends TenantAwareRepository<any> {
   /**
    * 📡 Redirect writes to central ABDLogs service
    */
-  override async create(data: any): Promise<string> {
+  override async create(data: Partial<AuditLog>): Promise<string> {
     try {
       await LogsClient.log({
         tenantId: data.tenantId || 'SYSTEM',
         action: data.event || 'UNKNOWN_EVENT',
-        entityType: this.mapEventToEntityType(data.event),
+        entityType: this.mapEventToEntityType(data.event || ''),
         entityId: data.actorId || 'SYSTEM',
         userId: data.actorId || 'SYSTEM',
         userEmail: data.actorEmail || 'system@abdlogs.local',

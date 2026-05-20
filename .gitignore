@@ -13,3 +13,4 @@ build
 # Audit Artifacts
 abd-audit-results.log
 lint/
+.vercel
