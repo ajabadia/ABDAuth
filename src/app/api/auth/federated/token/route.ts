@@ -101,6 +101,7 @@ export async function POST(req: Request) {
       dbPrefix: tenant?.dbPrefix || 'default',
       isolationStrategy: tenant?.isolationStrategy || 'COLLECTION_PREFIX',
       allowedApps: resolvedAllowedApps,
+      groups: membership?.groupIds || [],
     });
 
     // 6. Build Industrial Response (JWT + auxiliary user data)

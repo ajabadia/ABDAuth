@@ -43,9 +43,26 @@ export async function POST(request: Request) {
     const payload = await request.json();
 
     // 🛡️ Security Enforcement
+    const targetTenantId = user!.role === 'SUPER_ADMIN' ? payload.tenantId : user!.tenantId;
+    let initialTenants = payload.tenants || [];
+    if (initialTenants.length === 0 && targetTenantId) {
+      initialTenants = [{
+        tenantId: targetTenantId,
+        role: payload.role === 'ADMIN' ? 'admin' : (payload.role === 'SUPER_ADMIN' ? 'owner' : 'student'),
+        status: 'active',
+        allowedApps: payload.allowedApps || []
+      }];
+    }
+    const initialTenantIds = Array.from(new Set([
+      targetTenantId,
+      ...initialTenants.map((t: any) => t.tenantId)
+    ].filter(Boolean)));
+
     const newUser = {
       ...payload,
-      tenantId: user!.role === 'SUPER_ADMIN' ? payload.tenantId : user!.tenantId,
+      tenantId: targetTenantId,
+      tenants: initialTenants,
+      tenantIds: initialTenantIds,
       createdAt: new Date(),
       updatedAt: new Date(),
       mfaEnabled: false,
@@ -118,8 +135,39 @@ export async function PUT(request: Request) {
     const { _id, password, ...payload } = await request.json();
     if (!_id) return NextResponse.json({ error: 'User ID required' }, { status: 400 });
 
+    const existingUser = await userRepository.findById(_id);
+    if (!existingUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    // Determine target tenantId and tenants array
+    let finalTenantId = payload.tenantId || existingUser.tenantId;
+    let finalTenants = payload.tenants || existingUser.tenants || [];
+
+    if (user!.role !== 'SUPER_ADMIN') {
+      // Security Enforcement for Tenant Admins
+      finalTenantId = existingUser.tenantId;
+      const adminTenantId = user!.tenantId;
+      const incomingMembership = (payload.tenants || []).find((t: any) => t.tenantId === adminTenantId);
+      const preservedTenants = (existingUser.tenants || []).filter((t: any) => t.tenantId !== adminTenantId);
+      
+      if (incomingMembership) {
+        finalTenants = [...preservedTenants, incomingMembership];
+      } else {
+        finalTenants = existingUser.tenants || [];
+      }
+    }
+
+    const finalTenantIds = Array.from(new Set([
+      finalTenantId,
+      ...finalTenants.map((t: any) => t.tenantId)
+    ].filter(Boolean)));
+
     const updateData: Record<string, unknown> = {
       ...payload,
+      tenantId: finalTenantId,
+      tenants: finalTenants,
+      tenantIds: finalTenantIds,
       updatedAt: new Date(),
     };
 

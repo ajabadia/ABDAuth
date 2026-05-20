@@ -17,7 +17,7 @@ interface UserManagementContainerProps {
 
 export function UserManagementContainer({ t, isSuperAdmin }: UserManagementContainerProps) {
   const [users, setUsers] = useState<IndustrialUserDisplay[]>([]);
-  const [tenants, setTenants] = useState<{ id: string; name: string }[]>([]);
+  const [tenants, setTenants] = useState<{ id: string; name: string; allowedApps?: string[] }[]>([]);
   const [search, setSearch] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<IndustrialUserDisplay | null>(null);
@@ -38,12 +38,15 @@ export function UserManagementContainer({ t, isSuperAdmin }: UserManagementConta
   };
 
   const fetchTenants = async () => {
-    if (!isSuperAdmin) return;
     try {
       const response = await fetch('/api/admin/tenants');
       const data = await response.json();
       if (Array.isArray(data)) {
-        setTenants((data as { tenantId: string, name: string }[]).map((tOrg) => ({ id: tOrg.tenantId, name: tOrg.name })));
+        setTenants((data as { tenantId: string, name: string, allowedApps?: string[] }[]).map((tOrg) => ({ 
+          id: tOrg.tenantId, 
+          name: tOrg.name,
+          allowedApps: tOrg.allowedApps || []
+        })));
       } else {
         setTenants([]);
       }

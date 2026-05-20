@@ -201,7 +201,16 @@
         "governance_policy": "Política de Gobernanza",
         "enforce_mfa": "Obligar MFA",
         "mandatory_onboarding": "Onboarding Obligatorio Activo",
-        "standard_security": "Política de Seguridad Estándar"
+        "standard_security": "Política de Seguridad Estándar",
+        "memberships": "Membresías de Tenant",
+        "add_membership": "Añadir Membresía",
+        "default_tenant": "Tenant por Defecto",
+        "no_memberships": "Sin membresías activas. Añada una para comenzar.",
+        "select_tenant_placeholder": "Seleccionar Tenant...",
+        "membership_role": "Rol en Tenant",
+        "membership_status": "Estado",
+        "allowed_apps": "Aplicaciones Permitidas",
+        "no_apps_for_tenant": "Este Tenant no tiene aplicaciones licenciadas."
       },
       "messages": {
         "save_success": "Operador sincronizado correctamente",

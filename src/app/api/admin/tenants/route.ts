@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { auditRepository } from '@/lib/repositories/AuditRepository';
 import { TenantSchema, type Tenant } from '@/lib/schemas/auth';
-import { validateSuperAdminSession } from '@/lib/utils/api-auth';
+import { validateSuperAdminSession, validateAdminSession } from '@/lib/utils/api-auth';
 
 /**
  * 🏢 Tenants Admin API
  * Orchestrates global organization management. Restricted to SUPER_ADMIN.
  */
 export async function GET() {
-  const { authorized, user, response } = await validateSuperAdminSession();
+  const { authorized, user, response } = await validateAdminSession();
   if (!authorized) return response!;
 
   const tenants = await tenantRepository.listForCurrentSession(user!);

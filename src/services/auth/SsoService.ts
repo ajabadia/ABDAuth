@@ -18,6 +18,7 @@ export interface SsoPayload {
   dbPrefix: string;
   isolationStrategy: string;
   allowedApps: string[];
+  groups?: string[];
 }
 
 /**
@@ -66,6 +67,7 @@ export class SsoService {
       dbPrefix: payload.dbPrefix,
       isolationStrategy: payload.isolationStrategy,
       allowedApps: payload.allowedApps,
+      groups: payload.groups || [],
     })
       .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
       .setIssuedAt()
@@ -155,6 +157,7 @@ export class SsoService {
       dbPrefix: tenant?.dbPrefix || 'default',
       isolationStrategy: tenant?.isolationStrategy || 'COLLECTION_PREFIX',
       allowedApps: resolvedAllowedApps,
+      groups: membership?.groupIds || [],
     });
 
     // 7. Resolve Destination URL with Tenant sub-domain pattern injection

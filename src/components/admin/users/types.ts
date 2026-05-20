@@ -1,5 +1,12 @@
 import type { UserRole } from "@/lib/schemas/auth";
 
+export interface UserTenantMembershipDisplay {
+  tenantId: string;
+  role: 'owner' | 'admin' | 'student';
+  status: 'active' | 'suspended';
+  allowedApps: string[];
+}
+
 export interface IndustrialUserDisplay {
   _id: string;
   email: string;
@@ -7,6 +14,8 @@ export interface IndustrialUserDisplay {
   surname?: string;
   role: UserRole;
   tenantId: string;
+  tenantIds?: string[];
+  tenants?: UserTenantMembershipDisplay[];
   status?: 'ACTIVE' | 'SUSPENDED';
   mfaEnabled?: boolean;
   mfaEnforced?: boolean;
@@ -57,6 +66,15 @@ export interface UserManagementTranslations {
     enforce_mfa: string;
     mandatory_onboarding: string;
     standard_security: string;
+    memberships: string;
+    add_membership: string;
+    default_tenant: string;
+    no_memberships: string;
+    select_tenant_placeholder: string;
+    membership_role: string;
+    membership_status: string;
+    allowed_apps: string;
+    no_apps_for_tenant: string;
   };
   messages: {
     saveSuccess: string;
@@ -73,7 +91,9 @@ export interface IndustrialUserFormValues {
   surname: string;
   role: string;
   tenantId: string;
+  tenants?: UserTenantMembershipDisplay[];
   mfaEnforced: boolean;
 }
 
 export type UserSubmitHandler = (data: IndustrialUserFormValues) => Promise<void>;
+

@@ -8,9 +8,10 @@ import type {
 } from "./types";
 import { IdentitySection } from "./sections/IdentitySection";
 import { GovernanceSection } from "./sections/GovernanceSection";
+import { MembershipsSection } from "./sections/MembershipsSection";
 import { FormActions } from "./sections/FormActions";
 
-// Extender tipos locales para incluir mfaEnforced
+// Extender tipos locales para incluir mfaEnforced y tenants
 interface UserFormValuesExtended extends IndustrialUserFormValues {
   mfaEnforced: boolean;
 }
@@ -20,7 +21,7 @@ type IndustrialAsyncVoid = Promise<void>;
 
 interface UserFormProps {
   initialData?: Partial<IndustrialUserDisplay> & { mfaEnforced?: boolean };
-  tenants: { id: string; name: string }[];
+  tenants: { id: string; name: string; allowedApps?: string[] }[];
   t: UserManagementTranslations;
   isSuperAdmin: boolean;
   onSubmit: (values: UserFormValuesExtended) => IndustrialAsyncVoid;
@@ -28,29 +29,58 @@ interface UserFormProps {
 }
 
 export function UserForm({ initialData, tenants, t, isSuperAdmin, onSubmit, onCancel }: UserFormProps) {
+  const getDefaultTenants = () => {
+    if (initialData?.tenants && initialData.tenants.length > 0) {
+      return initialData.tenants;
+    }
+    if (!initialData?._id && tenants.length > 0) {
+      const defaultId = initialData?.tenantId || tenants[0].id;
+      return [{
+        tenantId: defaultId,
+        role: 'student',
+        status: 'active',
+        allowedApps: []
+      }];
+    }
+    return [];
+  };
+
   const [formData, setFormData] = useState<UserFormValuesExtended>({
     email: initialData?.email || "",
     password: "",
     name: initialData?.name || "",
     surname: initialData?.surname || "",
     role: initialData?.role || "USER",
-    tenantId: initialData?.tenantId || "",
+    tenantId: initialData?.tenantId || (tenants.length > 0 ? tenants[0].id : ""),
+    tenants: getDefaultTenants() as any,
     mfaEnforced: initialData?.mfaEnforced || false,
   });
 
   useEffect(() => {
     if (initialData) {
+      const userTenants = initialData.tenants && initialData.tenants.length > 0
+        ? initialData.tenants
+        : (!initialData._id && tenants.length > 0
+            ? [{
+                tenantId: initialData.tenantId || tenants[0].id,
+                role: 'student',
+                status: 'active',
+                allowedApps: []
+              }]
+            : []);
+
       setFormData(prev => ({
         ...prev,
         email: initialData.email || "",
         name: initialData.name || "",
         surname: initialData.surname || "",
         role: initialData.role || "USER",
-        tenantId: initialData.tenantId || "",
+        tenantId: initialData.tenantId || (tenants.length > 0 ? tenants[0].id : ""),
+        tenants: userTenants as any,
         mfaEnforced: initialData.mfaEnforced || false,
       }));
     }
-  }, [initialData]);
+  }, [initialData, tenants]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -69,7 +99,7 @@ export function UserForm({ initialData, tenants, t, isSuperAdmin, onSubmit, onCa
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleManualChange = (name: string, value: string | boolean) => {
+  const handleManualChange = (name: string, value: any) => {
     setFormData(prev => ({ ...prev, [name]: value } as UserFormValuesExtended));
   };
 
@@ -90,6 +120,16 @@ export function UserForm({ initialData, tenants, t, isSuperAdmin, onSubmit, onCa
         onChange={handleManualChange}
       />
 
+      <MembershipsSection 
+        memberships={formData.tenants || []}
+        onChange={(updatedMemberships) => handleManualChange('tenants', updatedMemberships)}
+        defaultTenantId={formData.tenantId}
+        onDefaultTenantChange={(tid) => handleManualChange('tenantId', tid)}
+        tenants={tenants}
+        t={t}
+        isSuperAdmin={isSuperAdmin}
+      />
+
       <FormActions 
         onCancel={onCancel} 
         isSubmitting={isSubmitting} 
@@ -98,3 +138,4 @@ export function UserForm({ initialData, tenants, t, isSuperAdmin, onSubmit, onCa
     </form>
   );
 }
+

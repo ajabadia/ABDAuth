@@ -202,7 +202,16 @@
         "governance_policy": "Governance Policy",
         "enforce_mfa": "Enforce MFA",
         "mandatory_onboarding": "Mandatory Onboarding Active",
-        "standard_security": "Standard Security Policy"
+        "standard_security": "Standard Security Policy",
+        "memberships": "Tenant Memberships",
+        "add_membership": "Add Membership",
+        "default_tenant": "Default Tenant",
+        "no_memberships": "No active memberships. Add one to get started.",
+        "select_tenant_placeholder": "Select Tenant...",
+        "membership_role": "Role in Tenant",
+        "membership_status": "Status",
+        "allowed_apps": "Allowed Applications",
+        "no_apps_for_tenant": "This Tenant has no licensed applications."
       },
       "messages": {
         "save_success": "Operator synchronized successfully",

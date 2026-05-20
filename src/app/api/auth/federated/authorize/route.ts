@@ -2,11 +2,18 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
 import { federatedCodeRepository } from '@/lib/repositories/FederatedCodeRepository';
+import { userRepository } from '@/lib/repositories/UserRepository';
+import { tenantRepository } from '@/lib/repositories/TenantRepository';
+import type { UserTenantMembership } from '@/lib/schemas/user';
+import type { TenantId } from '@/lib/schemas/common';
 import crypto from 'crypto';
 
 /**
  * 📡 Federated Authorization Endpoint
  * Standard: OAuth2-like Authorization Code Flow
+ *
+ * Includes proactive governance checks to enforce tenant membership
+ * and per-user app licensing before emitting the authorization code.
  */
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -86,7 +93,6 @@ export async function GET(req: Request) {
   // 3. Check Session
   const session = await auth();
   if (!session?.user) {
-    // Redirect to login with original return parameters and tenant pre-vesting data
     const loginUrl = new URL('/login', req.url);
     const callback = new URL(req.url);
     
@@ -99,7 +105,60 @@ export async function GET(req: Request) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // 4. Generate Authorization Code
+  // 4. 🛡️ PROACTIVE GOVERNANCE VALIDATION
+  // Resolve the effective tenantId: prefer explicit tenant param, fallback to session default
+  const user = await userRepository.findById(session.user.id || '');
+  const effectiveTenantId = tenantParam || user?.tenantId || '';
+  const appSlug = app.slug || app.name?.toLowerCase() || '';
+  const dashboardUrl = new URL('/dashboard', req.url);
+
+  if (user) {
+    const isSuperAdmin = user.role === 'SUPER_ADMIN';
+
+    if (!isSuperAdmin) {
+      // 4a. Validate global user account status
+      if (user.active === false) {
+        dashboardUrl.searchParams.set('error', 'UNAUTHORIZED_TENANT_ACCESS');
+        dashboardUrl.searchParams.set('app', appSlug);
+        return NextResponse.redirect(dashboardUrl);
+      }
+
+      // 4b. Validate user has an active membership in the target tenant
+      const membership: UserTenantMembership | undefined = user.tenants?.find(
+        (t: UserTenantMembership) => t.tenantId === effectiveTenantId
+      );
+
+      if (!membership || membership.status === 'suspended') {
+        dashboardUrl.searchParams.set('error', 'UNAUTHORIZED_TENANT_ACCESS');
+        dashboardUrl.searchParams.set('app', appSlug);
+        return NextResponse.redirect(dashboardUrl);
+      }
+
+      // 4c. Validate the app is licensed for this tenant
+      const tenant = await tenantRepository.findByTenantId(effectiveTenantId as TenantId);
+      const tenantAllowedApps = tenant?.allowedApps || [];
+
+      if (appSlug && !tenantAllowedApps.includes(appSlug)) {
+        dashboardUrl.searchParams.set('error', 'APPLICATION_NOT_LICENSED');
+        dashboardUrl.searchParams.set('app', appSlug);
+        return NextResponse.redirect(dashboardUrl);
+      }
+
+      // 4d. Validate the app is explicitly allowed for this user
+      // (Admins and owners inherit all tenant apps; students need explicit allowance)
+      const isPrivilegedRole = membership.role === 'admin' || membership.role === 'owner';
+      if (!isPrivilegedRole && appSlug) {
+        const userAllowedApps = membership.allowedApps || [];
+        if (!userAllowedApps.includes(appSlug)) {
+          dashboardUrl.searchParams.set('error', 'APPLICATION_NOT_LICENSED');
+          dashboardUrl.searchParams.set('app', appSlug);
+          return NextResponse.redirect(dashboardUrl);
+        }
+      }
+    }
+  }
+
+  // 5. Generate Authorization Code
   const code = crypto.randomBytes(24).toString('hex');
   await federatedCodeRepository.create({
     code,
@@ -110,11 +169,10 @@ export async function GET(req: Request) {
     used: false,
   });
 
-  // 5. Redirect back to Satellite
+  // 6. Redirect back to Satellite with authorization code
   const target = new URL(redirectUri);
   target.searchParams.set('code', code);
   if (state) target.searchParams.set('state', state);
 
   return NextResponse.redirect(target);
 }
-
