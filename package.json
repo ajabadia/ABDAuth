@@ -7,7 +7,7 @@
     "tsc": "node node_modules/typescript/bin/tsc"
   },
   "dependencies": {
-    "@abd/styles": "github:ajabadia/ABDStyles#main",
+    "@abd/styles": "github:ajabadia/ABDStyles#8b5cb0780a947dcae24c9e48df1506f4aa53367e",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.4",
     "@tailwindcss/postcss": "^4.3.0",
@@ -46,3 +46,4 @@
     "typescript": "6.0.3"
   }
 }
+
