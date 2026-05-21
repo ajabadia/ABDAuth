@@ -74,8 +74,17 @@ export async function POST(req: NextRequest) {
         tenantIds: [tenantId],
         tenants: [newMembership],
         verificationToken: activationToken,
-        role: 'USER'
-      });
+        role: 'USER',
+        telephone: '',
+        position: 'Staff',
+        activeModules: [],
+        mfaEnabled: false,
+        mfaEnforced: false,
+        loginAttempts: 0,
+        preferences: {},
+        createdAt: new Date(),
+        updatedAt: new Date()
+      } as any);
       user = await userRepository.findById(userId);
     } else {
       // User exists, just add membership if not present
