@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { userRepository } from "@/lib/repositories/UserRepository";
-import { applicationRepository } from "@/lib/repositories/ApplicationRepository";
 
 /**
  * 🔒 Session Verification API Endpoint (ABDAuth)
@@ -18,20 +17,11 @@ export async function GET(request: NextRequest) {
 
   // 🛡️ Security Check: Validate authorization header against client secret
   const authHeader = request.headers.get("authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  const expectedSecret = process.env.AUTH_CLIENT_SECRET || "abdquiz-industrial-client-secret";
+
+  if (!authHeader || authHeader !== `Bearer ${expectedSecret}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
-  const clientSecret = authHeader.substring(7); // Extract token from "Bearer "
-  const app = await applicationRepository.findOne({ clientSecret, active: true } as any);
-
-  if (!app) {
-    const expectedSecret = process.env.AUTH_CLIENT_SECRET || "abdquiz-industrial-client-secret";
-    if (clientSecret !== expectedSecret) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-  }
-
 
   try {
     const user = await userRepository.findByEmail(email);

@@ -1,0 +1,310 @@
+{
+  "common": {
+    "brand": "ABDAuth",
+    "industrial_ecosystem": "ABD Industrial Ecosystem © 2026",
+    "soc2_monitoring": "SOC2_TYPE_II_MONITORING"
+  },
+  "landing": {
+    "hero_title": "ABD Industrial Identity Gateway",
+    "hero_subtitle": "La columna vertebral de identidad para el ecosistema ABD. Seguridad federada, aislamiento multitenant y auditoría inmutable.",
+    "cta_login": "Acceso Industrial",
+    "cta_dashboard": "Ir al Dashboard",
+    "features": {
+      "federated": "Identidad Federada",
+      "federated_desc": "Protocolo SSO industrial para todos tus satélites.",
+      "isolation": "Aislamiento Total",
+      "isolation_desc": "Arquitectura Multitenant con bases de datos segregadas.",
+      "security": "Seguridad SOC2",
+      "security_desc": "Monitoreo en tiempo real y registros de auditoría inmutables."
+    },
+    "footer": {
+      "core": "Core: Next.js 16",
+      "auth": "Auth: Industry-Federated"
+    }
+  },
+  "login": {
+    "subtitle": "Gestor de Identidad Industrial",
+    "mfa_setup": {
+      "title": "Seguridad Obligatoria",
+      "description": "Tu cuenta requiere Autenticación Multi-Factor (2FA) para acceder a los sistemas protegidos. Configúralo ahora para continuar.",
+      "cancel_logout": "Cancelar y cerrar sesión"
+    },
+    "email_label": "Identity_Principal (Email)",
+    "email_placeholder": "usuario@ejemplo.com",
+    "password_label": "Auth_Secret (Contraseña)",
+    "password_placeholder": "••••••••",
+    "button": "Autenticar Sistema",
+    "error_invalid": "Credenciales no autorizadas",
+    "error_generic": "Error crítico de conexión",
+    "shield_badge": "Certificado SOC2 Tipo II",
+    "demo_title": "Credenciales de Laboratorio",
+    "demo_user": "ajabadia@gmail.com",
+    "demo_pass": "11111111",
+    "footer_text": "Sistema de Identidad Certificado v1.0",
+    "mfa": {
+      "title": "Verificación de Identidad",
+      "subtitle": "Segundo Factor Requerido",
+      "description": "Introduzca el código de seguridad generado por su aplicación TOTP para autorizar el acceso.",
+      "placeholder": "000 000",
+      "button": "Verificar y Acceder",
+      "error_invalid": "Código de verificación no válido",
+      "back_to_login": "Volver al inicio de sesión"
+    },
+    "forgot_password": "¿Olvidó su contraseña?",
+    "forgot_password_link": "¿Olvidó su contraseña?",
+    "request_reset": {
+      "title": "Recuperar Acceso",
+      "subtitle": "Protocolo de Restauración de Identidad",
+      "description": "Introduzca su Identity_Principal (Email) para recibir un enlace de recuperación de alta prioridad.",
+      "button": "Enviar Enlace de Rescate",
+      "success": "Si el sistema reconoce la identidad, se enviará un enlace de restauración en breve.",
+      "back_to_login": "Regresar al terminal de acceso"
+    },
+    "reset_password": {
+      "title": "Restaurar Secreto",
+      "subtitle": "Actualización de Credenciales de Seguridad",
+      "new_password_label": "Nueva Contraseña Industrial",
+      "confirm_password_label": "Confirmar Nueva Contraseña",
+      "button": "Confirmar Restauración",
+      "success": "Identidad restaurada correctamente. Redirigiendo...",
+      "error_invalid_token": "El token de restauración no es válido o ha expirado"
+    }
+  },
+  "settings": {
+    "title": "Ajustes de Sistema",
+    "language": "Idioma",
+    "theme": "Tema",
+    "theme_light": "Claro",
+    "theme_dark": "Oscuro",
+    "theme_system": "Sistema",
+    "close": "Cerrar",
+    "logout": "Cerrar Sesión",
+    "login": "Iniciar Sesión"
+  },
+  "dashboard": {
+    "control_console": "Consola de Control",
+    "back_to_dashboard": "Volver al panel",
+    "welcome": "Bienvenido",
+    "subtitle": "Gestión de Identidad Industrial",
+    "errors": {
+      "SELECT_TENANT_REQUIRED": "Seleccione una organización activa para iniciar sesión en la aplicación.",
+      "APPLICATION_NOT_LICENSED": "La aplicación no está licenciada para la organización seleccionada.",
+      "UNAUTHORIZED_TENANT_ACCESS": "Acceso no autorizado a la organización seleccionada.",
+      "APPLICATION_INACTIVE": "La aplicación seleccionada está fuera de línea o inactiva.",
+      "DEFAULT": "Error al realizar el enlace SSO con la aplicación satélite."
+    },
+    "status_online": "Sistema_En_Línea",
+    "promotion": {
+      "mfa_title": "Mejore su Seguridad Industrial",
+      "mfa_desc": "Su cuenta actualmente solo está protegida por contraseña. Active el segundo factor para cumplir con los estándares SOC2.",
+      "mfa_cta": "Configurar 2FA",
+      "mfa_badge": "SOC2_REQUERIDO"
+    },
+    "logout": "Cerrar Sesión",
+    "common": {
+      "industrial_ecosystem": "ABD Industrial Ecosystem © 2026",
+      "soc2_monitoring": "SOC2_TYPE_II_MONITORING"
+    },
+    "menu": {
+      "overview": "Resumen",
+      "users": "Identidades",
+      "tenants": "Organizaciones",
+      "applications": "Satélites",
+      "audit": "Auditoría",
+      "security": "Seguridad",
+      "settings": "Ajustes"
+    },
+    "applications": {
+      "title": "Ecosistema de Satélites",
+      "subtitle": "REGISTRO DE APLICACIONES FEDERADAS",
+      "add_app": "Registrar App",
+      "new_app": "Nuevo Satélite",
+      "edit_app": "Editar Satélite",
+      "delete_confirm": "PELIGRO: ¿Terminar federación del satélite?",
+      "no_apps": "No se detectan señales de satélites en órbita",
+      "form": {
+        "name": "Nombre de la Aplicación",
+        "placeholder_name": "Ej. ABDQuiz",
+        "description": "Descripción Funcional",
+        "placeholder_description": "Portal de formación industrial",
+        "redirect_uris": "URIs de Redirección Autorizadas",
+        "placeholder_uri": "https://myapp.com/api/auth/callback",
+        "add_uri_btn": "Añadir URI",
+        "client_id": "Client ID (Auto-generado)",
+        "client_secret": "Client Secret (Confidencial)",
+        "hover_reveal": "Pase el ratón para revelar secreto",
+        "save": "Persistir Satélite",
+        "create": "Crear Aplicación",
+        "cancel": "Abortar"
+      },
+      "cards": {
+        "active": "CONECTADO",
+        "inactive": "OFFLINE",
+        "client_credentials": "Credenciales de Cliente",
+        "authorized_uris": "URIs Autorizadas"
+      }
+    },
+    "jwt": {
+      "title": "Token de Identidad Industrial",
+      "v1_certified": "v1.0_certificado",
+      "standard_protocol": "Standard_Credentials",
+      "sub": "Sujeto (ID)",
+      "email": "Email_Principal",
+      "role": "Rol_Sistema",
+      "org": "Contexto_Org",
+      "mfa_status": "Estado_MFA",
+      "protocol": "Protocolo_Auth"
+    },
+    "users": {
+      "title": "Usuarios",
+      "subtitle": "Gestión de operadores y administradores",
+      "add_user": "Nuevo Usuario",
+      "edit_user": "Editar Usuario",
+      "search_placeholder": "Buscar identidad...",
+      "columns": {
+        "user": "Usuario",
+        "role": "Rol",
+        "tenant": "Organización",
+        "status": "Estado",
+        "mfa": "MFA",
+        "actions": "Acciones"
+      },
+      "mfa": {
+        "enabled": "2FA ACTIVO",
+        "disabled": "SIN 2FA",
+        "reset": "Resetear MFA",
+        "reset_confirm": "¿Está seguro de que desea resetear el MFA para este usuario?",
+        "reset_success": "MFA reseteado correctamente",
+        "reset_error": "Error al resetear MFA"
+      },
+      "roles": {
+        "SUPER_ADMIN": "Super Administrador",
+        "ADMIN": "Administrador de Tenant",
+        "USER": "Operador",
+        "TECHNICAL": "Técnico"
+      },
+      "status": {
+        "active": "Activo",
+        "suspended": "Suspendido",
+        "pending": "Pendiente"
+      },
+      "form": {
+        "email": "Correo Electrónico",
+        "password": "Contraseña",
+        "role": "Rol Industrial",
+        "tenant": "Asignación de Tenant",
+        "save": "Guardar Operador",
+        "cancel": "Cancelar",
+        "name": "Nombre",
+        "surname": "Apellidos",
+        "core_identity": "Identidad Principal",
+        "governance_policy": "Política de Gobernanza",
+        "enforce_mfa": "Obligar MFA",
+        "mandatory_onboarding": "Onboarding Obligatorio Activo",
+        "standard_security": "Política de Seguridad Estándar",
+        "memberships": "Membresías de Tenant",
+        "add_membership": "Añadir Membresía",
+        "default_tenant": "Tenant por Defecto",
+        "no_memberships": "Sin membresías activas. Añada una para comenzar.",
+        "select_tenant_placeholder": "Seleccionar Tenant...",
+        "membership_role": "Rol en Tenant",
+        "membership_status": "Estado",
+        "allowed_apps": "Aplicaciones Permitidas",
+        "no_apps_for_tenant": "Este Tenant no tiene aplicaciones licenciadas."
+      },
+      "messages": {
+        "save_success": "Operador sincronizado correctamente",
+        "save_error": "Error al persistir identidad"
+      }
+    },
+    "tenants": {
+      "title": "Gestión de Tenants",
+      "subtitle": "Administración de ecosistemas aislados",
+      "new_tenant": "Nuevo Tenant",
+      "edit_tenant": "Editar Organización",
+      "register_tenant": "Registrar Nuevo Tenant",
+      "industry": "Industria",
+      "database": "Base de Datos",
+      "orchestrator_version": "Orquestador de Tenants v1.1",
+      "industries": {
+        "industrial": "Industrial",
+        "energy": "Energía",
+        "logistics": "Logística",
+        "security": "Seguridad"
+      },
+      "name_label": "Nombre Organización",
+      "id_label": "ID del Tenant",
+      "isolation_label": "Estrategia de Aislamiento",
+      "status_label": "Estado Operativo",
+      "actions": {
+        "edit": "Editar Configuración",
+        "delete": "Desactivar",
+        "save": "Guardar Configuración",
+        "cancel": "Cancelar"
+      },
+      "confirm_delete": "¿Está seguro de que desea desactivar esta organización?"
+    },
+    "audit": {
+      "title": "Registro de Auditoría",
+      "subtitle": "Monitorización de seguridad inmutable",
+      "table": {
+        "timestamp": "Marca de Tiempo",
+        "event": "Evento",
+        "actor": "Actor",
+        "status": "Resultado"
+      }
+    },
+    "security": {
+      "title": "Gobernanza de Seguridad",
+      "description": "Gestione su identidad industrial y controle sus sesiones activas.",
+      "mfa": {
+        "title": "Autenticación Multi-Factor (2FA)",
+        "subtitle": "Gobernanza Standard TOTP",
+        "status_active": "PROTEGIDO",
+        "status_inactive": "VULNERABLE",
+        "info_active": "Tu cuenta está protegida con autenticación de dos factores. Se requerirá un código de seguridad para cada inicio de sesión.",
+        "info_inactive": "Añade una capa extra de seguridad a tu identidad industrial. Activa el MFA para protegerte contra accesos no autorizados.",
+        "enable": "Activar 2FA",
+        "disable": "Desactivar 2FA",
+        "setup_title": "Configurar Autenticación Industrial",
+        "setup_step1": "1. Escanee este código QR con su aplicación de autenticación (Google Authenticator, Authy, etc).",
+        "setup_step2": "2. Introduzca el código de 6 dígitos generado por la aplicación.",
+        "manual_key": "Clave Manual",
+        "verify_btn": "Verificar y Activar",
+        "backup_codes_title": "Códigos de Recuperación",
+        "backup_codes_desc": "Guarde estos códigos en un lugar seguro. Solo se mostrarán una vez.",
+        "mandatory_notice": "Seguridad obligatoria activa por política de organización.",
+        "copy_codes": "Copiar Códigos",
+        "done_btn": "He guardado los códigos",
+        "cancel": "Cancelar",
+        "redirecting_notice": "Redirigiendo al dashboard en 3s..."
+      },
+      "sessions": {
+        "title": "Sesiones Activas",
+        "subtitle": "Gobernanza de Acceso Activo",
+        "current": "Sesión Actual",
+        "revoke": "Revocar Acceso",
+        "revoke_all": "Cerrar todas las sesiones remotas",
+        "no_sessions": "No hay otras sesiones detectadas",
+        "device_unknown": "Dispositivo Desconocido",
+        "last_active": "Última actividad",
+        "browser_on_os": "{browser} en {os}",
+        "browser_unknown": "Navegador desconocido",
+        "os_unknown": "Sistema operativo desconocido"
+      },
+      "password": {
+        "title": "Cambiar Contraseña",
+        "subtitle": "Actualización de Secretos Auth",
+        "current_label": "Contraseña Actual",
+        "new_label": "Nueva Contraseña",
+        "confirm_label": "Confirmar Nueva Contraseña",
+        "button": "Actualizar Contraseña",
+        "success": "Contraseña actualizada correctamente",
+        "error_current": "La contraseña actual es incorrecta",
+        "error_match": "Las contraseñas no coinciden",
+        "error_length": "La contraseña debe tener al menos 8 caracteres",
+        "error_update": "Error al actualizar contraseña"
+      }
+    }
+  }
+}
