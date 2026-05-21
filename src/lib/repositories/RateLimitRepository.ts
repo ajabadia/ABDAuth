@@ -8,15 +8,30 @@ export class RateLimitRepository extends BaseRepository<RateLimit> {
 
   async increment(key: string, ttlSeconds: number): Promise<number> {
     const collection = await this.getCollection();
-    const result = await collection.findOneAndUpdate(
-      { key },
-      { 
-        $inc: { points: 1 },
-        $setOnInsert: { expireAt: new Date(Date.now() + ttlSeconds * 1000) }
-      },
-      { upsert: true, returnDocument: 'after' }
-    );
-    return result?.points || 0;
+    const now = new Date();
+    
+    const doc = await collection.findOne({ key } as any);
+    
+    if (!doc || new Date(doc.expireAt) < now) {
+      const result = await collection.findOneAndUpdate(
+        { key },
+        { 
+          $set: { 
+            points: 1, 
+            expireAt: new Date(Date.now() + ttlSeconds * 1000) 
+          }
+        },
+        { upsert: true, returnDocument: 'after' }
+      );
+      return result?.points || 1;
+    } else {
+      const result = await collection.findOneAndUpdate(
+        { key },
+        { $inc: { points: 1 } },
+        { returnDocument: 'after' }
+      );
+      return result?.points || (doc.points + 1);
+    }
   }
 
   async get(key: string): Promise<RateLimit | null> {
