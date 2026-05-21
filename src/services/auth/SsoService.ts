@@ -19,6 +19,8 @@ export interface SsoPayload {
   isolationStrategy: string;
   allowedApps: string[];
   groups?: string[];
+  /** 🔐 Central session ID for back-channel SLO validation */
+  sessionId?: string;
 }
 
 /**
@@ -68,6 +70,8 @@ export class SsoService {
       isolationStrategy: payload.isolationStrategy,
       allowedApps: payload.allowedApps,
       groups: payload.groups || [],
+      // 🔐 Back-channel SLO: embed central session ID in satellite token
+      ...(payload.sessionId ? { sessionId: payload.sessionId } : {}),
     })
       .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
       .setIssuedAt()

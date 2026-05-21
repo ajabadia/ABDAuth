@@ -51,7 +51,27 @@ export async function POST(req: Request) {
     }
 
     if (rawCode.used) {
-      return NextResponse.json({ error: 'Code already used' }, { status: 400 });
+      const gracePeriodMs = 15000; // 15-second resilience grace window
+      const usedTime = rawCode.usedAt ? new Date(rawCode.usedAt).getTime() : 0;
+      const wasUsedRecently = usedTime > 0 && (Date.now() - usedTime < gracePeriodMs);
+
+      // eslint-disable-next-line no-console
+      console.log('[AUTH_TOKEN_DUPLICATE_CHECK]', {
+        code,
+        clientId: rawCode.clientId,
+        used: rawCode.used,
+        usedAt: rawCode.usedAt,
+        usedTime,
+        now: Date.now(),
+        diffMs: Date.now() - usedTime,
+        wasUsedRecently,
+      });
+
+      if (!wasUsedRecently) {
+        return NextResponse.json({ error: 'Code already used' }, { status: 400 });
+      }
+      // eslint-disable-next-line no-console
+      console.log(`[AUTH_TOKEN_GRACE_WINDOW] Allowing double-request token exchange for code: ${code}`);
     }
 
     if (rawCode.clientId !== client_id) {
@@ -102,6 +122,8 @@ export async function POST(req: Request) {
       isolationStrategy: tenant?.isolationStrategy || 'COLLECTION_PREFIX',
       allowedApps: resolvedAllowedApps,
       groups: membership?.groupIds || [],
+      // 🔐 Back-channel SLO: propagate central session ID into the satellite token
+      sessionId: rawCode.sessionId || undefined,
     });
 
     // 6. Build Industrial Response (JWT + auxiliary user data)

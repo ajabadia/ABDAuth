@@ -13,6 +13,9 @@ export const FederatedCodeSchema = z.object({
   redirectUri: z.string(),
   expiresAt: z.date(),
   used: z.boolean().default(false),
+  usedAt: z.date().optional(),
+  /** 🔐 Central session ID for back-channel SLO verification */
+  sessionId: z.string().optional(),
 });
 
 export type FederatedCode = z.infer<typeof FederatedCodeSchema>;
@@ -30,7 +33,7 @@ class FederatedCodeRepository extends BaseRepository<FederatedCode> {
   }
 
   async markAsUsed(id: string | ObjectId): Promise<void> {
-    await this.update(id, { used: true });
+    await this.update(id, { used: true, usedAt: new Date() } as any);
   }
 }
 

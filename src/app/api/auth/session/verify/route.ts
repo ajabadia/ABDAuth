@@ -2,15 +2,20 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { userRepository } from "@/lib/repositories/UserRepository";
 import { applicationRepository } from "@/lib/repositories/ApplicationRepository";
+import { SessionService } from "@/services/auth/SessionService";
 
 /**
  * 🔒 Session Verification API Endpoint (ABDAuth)
  * Validates if a user's federated identity is active and healthy in vivo.
  * Secured via bearer token using client secret to prevent database discovery.
+ *
+ * Supports back-channel SLO: if sessionId is provided, validates against
+ * the persistent sessions DB to detect remotely revoked sessions.
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const email = searchParams.get("email");
+  const sessionId = searchParams.get("sessionId");
 
   if (!email) {
     return NextResponse.json({ error: "Missing email parameter" }, { status: 400 });
@@ -47,6 +52,15 @@ export async function GET(request: NextRequest) {
 
     if (user.lockoutUntil && new Date(user.lockoutUntil) > new Date()) {
       return NextResponse.json({ active: false, reason: "ACCOUNT_LOCKED" });
+    }
+
+    // 🔐 Back-channel SLO: validate persistent session if sessionId was provided
+    if (sessionId) {
+      const tenantIdToValidate = user.role === "SUPER_ADMIN" ? "GLOBAL" : user.tenantId;
+      const isSessionActive = await SessionService.validateSession(sessionId, tenantIdToValidate);
+      if (!isSessionActive) {
+        return NextResponse.json({ active: false, reason: "SESSION_REVOKED" });
+      }
     }
 
     // Account is completely active and healthy!

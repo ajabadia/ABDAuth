@@ -6,6 +6,7 @@ import { userRepository } from '@/lib/repositories/UserRepository';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import type { UserTenantMembership } from '@/lib/schemas/user';
 import type { TenantId } from '@/lib/schemas/common';
+import type { IndustrialUser } from '@/types/auth';
 import crypto from 'crypto';
 
 /**
@@ -160,6 +161,8 @@ export async function GET(req: Request) {
 
   // 5. Generate Authorization Code
   const code = crypto.randomBytes(24).toString('hex');
+  // 🔐 Propagate central session ID for back-channel SLO
+  const centralUser = session.user as unknown as IndustrialUser;
   await federatedCodeRepository.create({
     code,
     clientId,
@@ -167,6 +170,7 @@ export async function GET(req: Request) {
     redirectUri,
     expiresAt: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes industrial TTL
     used: false,
+    sessionId: centralUser.sessionId || undefined,
   });
 
   // 6. Redirect back to Satellite with authorization code
