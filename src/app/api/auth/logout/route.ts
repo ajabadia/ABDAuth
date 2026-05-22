@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   // 🛰️ Dynamically resolve registered satellite applications from MongoDB
   let logoutUrls: string[] = [];
   try {
-    const apps = await applicationRepository.list({ active: true } as any);
+    const apps = await applicationRepository.list({ active: true } as Record<string, unknown>);
     logoutUrls = apps.flatMap(app => {
       // Filter redirectUris matching the current environment (local vs production)
       const matchingUris = (app.redirectUris || []).filter((uri: string) => {

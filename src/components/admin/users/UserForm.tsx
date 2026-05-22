@@ -52,7 +52,7 @@ export function UserForm({ initialData, tenants, t, isSuperAdmin, onSubmit, onCa
     surname: initialData?.surname || "",
     role: initialData?.role || "USER",
     tenantId: initialData?.tenantId || (tenants.length > 0 ? tenants[0].id : ""),
-    tenants: getDefaultTenants() as any,
+    tenants: getDefaultTenants() as never,
     mfaEnforced: initialData?.mfaEnforced || false,
   });
 
@@ -76,7 +76,7 @@ export function UserForm({ initialData, tenants, t, isSuperAdmin, onSubmit, onCa
         surname: initialData.surname || "",
         role: initialData.role || "USER",
         tenantId: initialData.tenantId || (tenants.length > 0 ? tenants[0].id : ""),
-        tenants: userTenants as any,
+        tenants: userTenants as never,
         mfaEnforced: initialData.mfaEnforced || false,
       }));
     }
@@ -99,7 +99,7 @@ export function UserForm({ initialData, tenants, t, isSuperAdmin, onSubmit, onCa
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleManualChange = (name: string, value: any) => {
+  const handleManualChange = (name: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [name]: value } as UserFormValuesExtended));
   };
 

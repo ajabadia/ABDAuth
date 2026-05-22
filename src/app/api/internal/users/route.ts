@@ -27,9 +27,9 @@ export async function GET(req: NextRequest) {
   try {
     const users = await userRepository.findByTenantId(tenantId);
     return NextResponse.json({ data: users });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[IAM API] GET /internal/users Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }
 
@@ -84,16 +84,16 @@ export async function POST(req: NextRequest) {
         preferences: {},
         createdAt: new Date(),
         updatedAt: new Date()
-      } as any);
+      } as Parameters<typeof userRepository.create>[0]);
       user = await userRepository.findById(userId);
     } else {
       // User exists, just add membership if not present
-      const hasMembership = user.tenants.find((t: any) => t.tenantId === tenantId);
+      const hasMembership = user.tenants.find((t: { tenantId: string }) => t.tenantId === tenantId);
       if (!hasMembership) {
         await userRepository.update(user._id!.toString(), {
           $push: { tenants: newMembership },
           $addToSet: { tenantIds: tenantId }
-        } as any);
+        } as Record<string, unknown>);
       }
     }
 
@@ -102,9 +102,9 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ data: user, message: isNewUser ? 'User created and invited' : 'User added to tenant' }, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[IAM API] POST /internal/users Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }
 
@@ -127,22 +127,22 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const tenantIndex = user.tenants.findIndex((t: any) => t.tenantId === tenantId);
+    const tenantIndex = user.tenants.findIndex((t: { tenantId: string }) => t.tenantId === tenantId);
     if (tenantIndex === -1) {
       return NextResponse.json({ error: 'User does not belong to this tenant' }, { status: 404 });
     }
 
-    const updateQuery: any = {};
+    const updateQuery: Record<string, unknown> = {};
     if (updates.status) updateQuery[`tenants.${tenantIndex}.status`] = updates.status;
     if (updates.role) updateQuery[`tenants.${tenantIndex}.role`] = updates.role;
     if (updates.allowedApps) updateQuery[`tenants.${tenantIndex}.allowedApps`] = updates.allowedApps;
     if (updates.groupIds) updateQuery[`tenants.${tenantIndex}.groupIds`] = updates.groupIds;
 
-    await userRepository.update(user._id!.toString(), { $set: updateQuery } as any);
+    await userRepository.update(user._id!.toString(), { $set: updateQuery } as Record<string, unknown>);
 
     return NextResponse.json({ message: 'User membership updated' });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[IAM API] PATCH /internal/users Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

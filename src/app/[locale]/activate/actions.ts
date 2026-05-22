@@ -14,7 +14,7 @@ export async function activateAccountAction(formData: FormData) {
 
   try {
     // Find user by verificationToken
-    const users = await userRepository.list({ verificationToken: token } as any);
+    const users = await userRepository.list({ verificationToken: token } as Record<string, unknown>);
     if (users.length === 0) {
       return { error: 'Token inválido o expirado' };
     }
@@ -35,7 +35,7 @@ export async function activateAccountAction(formData: FormData) {
       $unset: {
         verificationToken: ""
       }
-    } as any);
+    } as Record<string, unknown>);
 
     return { success: true };
   } catch (error) {

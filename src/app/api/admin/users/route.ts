@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     }
     const initialTenantIds = Array.from(new Set([
       targetTenantId,
-      ...initialTenants.map((t: any) => t.tenantId)
+      ...initialTenants.map((t: { tenantId: string }) => t.tenantId)
     ].filter(Boolean)));
 
     const newUser = {
@@ -148,8 +148,8 @@ export async function PUT(request: Request) {
       // Security Enforcement for Tenant Admins
       finalTenantId = existingUser.tenantId;
       const adminTenantId = user!.tenantId;
-      const incomingMembership = (payload.tenants || []).find((t: any) => t.tenantId === adminTenantId);
-      const preservedTenants = (existingUser.tenants || []).filter((t: any) => t.tenantId !== adminTenantId);
+      const incomingMembership = (payload.tenants || []).find((t: { tenantId: string }) => t.tenantId === adminTenantId);
+      const preservedTenants = (existingUser.tenants || []).filter((t: { tenantId: string }) => t.tenantId !== adminTenantId);
       
       if (incomingMembership) {
         finalTenants = [...preservedTenants, incomingMembership];
@@ -160,7 +160,7 @@ export async function PUT(request: Request) {
 
     const finalTenantIds = Array.from(new Set([
       finalTenantId,
-      ...finalTenants.map((t: any) => t.tenantId)
+      ...finalTenants.map((t: { tenantId: string }) => t.tenantId)
     ].filter(Boolean)));
 
     const updateData: Record<string, unknown> = {

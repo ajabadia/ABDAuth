@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
   }
 
   const clientSecret = authHeader.substring(7); // Extract token from "Bearer "
-  const app = await applicationRepository.findOne({ clientSecret, active: true } as any);
+  const app = await applicationRepository.findOne({ clientSecret, active: true } as Record<string, unknown>);
 
   if (!app) {
     const expectedSecret = process.env.AUTH_CLIENT_SECRET || "abdquiz-industrial-client-secret";

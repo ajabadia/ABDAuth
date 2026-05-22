@@ -10,7 +10,7 @@ export class RateLimitRepository extends BaseRepository<RateLimit> {
     const collection = await this.getCollection();
     const now = new Date();
     
-    const doc = await collection.findOne({ key } as any);
+    const doc = await collection.findOne({ key } as Record<string, unknown>);
     
     if (!doc || new Date(doc.expireAt) < now) {
       const result = await collection.findOneAndUpdate(

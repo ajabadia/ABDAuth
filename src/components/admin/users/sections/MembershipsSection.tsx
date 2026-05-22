@@ -177,7 +177,7 @@ export function MembershipsSection({
                         value={membership.role}
                         onChange={(e) =>
                           handleUpdateMembership(membership.tenantId, {
-                            role: e.target.value as any,
+                            role: e.target.value as "owner" | "admin" | "student",
                           })
                         }
                         className="bg-muted/10 border border-border/40 text-[10px] font-bold py-1 px-2 focus:outline-none rounded-none text-foreground uppercase tracking-wider"

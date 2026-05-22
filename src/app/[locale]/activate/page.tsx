@@ -58,7 +58,7 @@ export default function ActivatePage() {
           router.push(`/login`);
         }, 1500);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError("Ocurrió un error inesperado");
       toast.error("Error al activar");
     } finally {

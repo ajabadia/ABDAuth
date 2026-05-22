@@ -33,7 +33,7 @@ class FederatedCodeRepository extends BaseRepository<FederatedCode> {
   }
 
   async markAsUsed(id: string | ObjectId): Promise<void> {
-    await this.update(id, { used: true, usedAt: new Date() } as any);
+    await this.update(id, { used: true, usedAt: new Date() } as Record<string, unknown>);
   }
 }
 
