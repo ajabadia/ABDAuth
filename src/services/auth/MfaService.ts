@@ -66,7 +66,7 @@ export class MfaService {
     await userRepository.updateMfaStatus(userId, true);
 
     // 5. Audit the event
-    await this.logEvent(userId, 'MFA_ENABLED');
+    this.logEvent(userId, 'MFA_ENABLED');
 
     return { success: true, backupCodes: rawBackupCodes };
   }
@@ -92,7 +92,7 @@ export class MfaService {
       });
 
       if (result.valid) {
-        await this.logEvent(userId, 'MFA_VERIFY_SUCCESS', { method: 'TOTP' });
+        this.logEvent(userId, 'MFA_VERIFY_SUCCESS', { method: 'TOTP' });
         return true;
       }
     }
@@ -106,7 +106,7 @@ export class MfaService {
         const updatedCodes = backupCodes.filter((_, index) => index !== i);
         await mfaRepository.updateBackupCodes(userId, updatedCodes);
         
-        await this.logEvent(userId, 'MFA_VERIFY_SUCCESS', { method: 'BACKUP_CODE' });
+        this.logEvent(userId, 'MFA_VERIFY_SUCCESS', { method: 'BACKUP_CODE' });
         return true;
       }
     }
@@ -117,16 +117,22 @@ export class MfaService {
   /**
    * 🛡️ Helper to log successful events asynchronously to audit repository
    */
-  private static async logEvent(userId: string, event: z.infer<typeof AuditEventSchema>, metadata?: Record<string, unknown>) {
-    const user = await userRepository.findById(userId);
-    await auditRepository.create({
-      timestamp: new Date(),
-      event,
-      actorId: userId,
-      actorEmail: user?.email,
-      tenantId: user?.tenantId || 'SYSTEM',
-      status: 'SUCCESS',
-      metadata
+  private static logEvent(userId: string, event: z.infer<typeof AuditEventSchema>, metadata?: Record<string, unknown>) {
+    Promise.resolve().then(async () => {
+      try {
+        const user = await userRepository.findById(userId);
+        await auditRepository.create({
+          timestamp: new Date(),
+          event,
+          actorId: userId,
+          actorEmail: user?.email,
+          tenantId: user?.tenantId || 'SYSTEM',
+          status: 'SUCCESS',
+          metadata
+        });
+      } catch (err) {
+        console.error('[MfaService] Background logEvent failed:', err);
+      }
     });
   }
 
@@ -136,7 +142,7 @@ export class MfaService {
   static async disable(userId: string): Promise<void> {
     await mfaRepository.disable(userId);
     await userRepository.updateMfaStatus(userId, false);
-    await this.logEvent(userId, 'MFA_DISABLED');
+    this.logEvent(userId, 'MFA_DISABLED');
   }
 
   /**

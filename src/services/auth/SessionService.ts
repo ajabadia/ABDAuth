@@ -37,7 +37,7 @@ export class SessionService {
     // Validate with Zod
     const validated = UserSessionSchema.parse(newSession);
 
-    return await sessionRepository.create(validated as unknown as UserSession);
+    return await sessionRepository.create(validated as UserSession);
   }
 
   /**
@@ -48,7 +48,7 @@ export class SessionService {
       const session = await sessionRepository.findOne({ 
         _id: new ObjectId(sessionId),
         tenantId: tenantId as TenantId,
-        expiresAt: { $gt: new Date() } as unknown as { $gt: Date }
+        expiresAt: { $gt: new Date() }
       });
 
       if (session) {
@@ -57,7 +57,8 @@ export class SessionService {
         return true;
       }
       return false;
-    } catch {
+    } catch (error) {
+      console.error('[SessionService] Validation error:', error);
       return false;
     }
   }
@@ -90,8 +91,8 @@ export class SessionService {
     await sessionRepository.deleteMany({
       userId,
       tenantId: tenantId as TenantId,
-      _id: { $ne: new ObjectId(currentSessionId) }
-    } as unknown as UserSession);
+      _id: { $ne: new ObjectId(currentSessionId) } as unknown as string
+    } as unknown as Partial<UserSession>);
   }
 
   /**

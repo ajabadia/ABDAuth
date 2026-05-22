@@ -44,17 +44,17 @@ async function main() {
     const audits = await auditRepository.list({});
     // Sort in memory by timestamp descending and take the last 15
     const recentAudits = audits
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+      .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
       .slice(0, 15);
 
     console.log('\n--- RECENT AUDIT LOGS ---');
     for (const log of recentAudits) {
       console.log({
-        timestamp: log.timestamp,
-        event: log.event,
-        actorEmail: log.actorEmail,
-        status: log.status,
-        metadata: log.metadata,
+        timestamp: log.createdAt,
+        event: log.action,
+        actorEmail: log.userEmail,
+        status: (log.changedFields || {}).status,
+        metadata: log.changedFields,
       });
     }
   } catch (error) {

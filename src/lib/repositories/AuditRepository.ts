@@ -1,14 +1,14 @@
 import { TenantAwareRepository } from './TenantAwareRepository';
 import type { IndustrialSession } from '@/types/auth';
 import { LogsClient } from '@/lib/logs-client';
-import { type AuditLog } from '@/lib/schemas/audit';
+import { type AuditLog, type AuditAuthOps } from '@/lib/schemas/audit';
 
 /**
  * 🛡️ AuditRepository
  * Immutable repository for security event logging.
  * Migrated to centralize writes to ABDLogs and query from central_audit_logs.
  */
-export class AuditRepository extends TenantAwareRepository<any> {
+export class AuditRepository extends TenantAwareRepository<AuditAuthOps> {
   constructor() {
     super('central_audit_logs', 'LOGS');
   }
@@ -51,16 +51,16 @@ export class AuditRepository extends TenantAwareRepository<any> {
   /**
    * 📋 List logs for the current session context from central_audit_logs
    */
-  async listForCurrentSession(session: IndustrialSession): Promise<any[]> {
+  async listForCurrentSession(session: IndustrialSession): Promise<AuditLog[]> {
     const results = await this.listForSession(session, { appId: 'auth' });
     
     // Map back to the expected legacy AuditLog schema for frontend compatibility
     const mapped = results.map(doc => {
       const changedFields = (doc.changedFields || {}) as Record<string, any>;
       return {
-        _id: doc._id,
-        timestamp: doc.createdAt || doc.timestamp || new Date(),
-        event: doc.action,
+        _id: doc._id?.toString(),
+        timestamp: doc.createdAt || new Date(),
+        event: doc.action as unknown as AuditLog['event'],
         actorId: doc.userId,
         actorEmail: doc.userEmail,
         tenantId: doc.tenantId,
@@ -68,10 +68,10 @@ export class AuditRepository extends TenantAwareRepository<any> {
         userAgent: doc.userAgent,
         metadata: changedFields,
         status: changedFields.status || 'INFO'
-      };
+      } as AuditLog;
     });
 
-    return mapped.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()).slice(0, 100);
+    return mapped.sort((a, b) => (b.timestamp?.getTime() || 0) - (a.timestamp?.getTime() || 0)).slice(0, 100);
   }
 }
 

@@ -8,7 +8,9 @@ import type { EntityId, TenantId } from '@/lib/schemas/common';
 import type { IndustrialUser } from '@/types/auth';
 
 export async function authorizeUser(credentials: Record<string, any> | undefined): Promise<IndustrialUser | null> {
-  console.log("[AUTHORIZE_USER] Called with:", credentials ? { email: credentials.email, hasPassword: !!credentials.password } : "undefined");
+  if (process.env.NODE_ENV === 'development') {
+    console.log("[AUTHORIZE_USER] Called for email:", credentials?.email);
+  }
   const parsedCredentials = z
     .object({ email: z.string().email(), password: z.string().min(6), tenantId: z.string().optional() })
     .safeParse(credentials);
@@ -17,7 +19,9 @@ export async function authorizeUser(credentials: Record<string, any> | undefined
     const { email, password, tenantId: requestedTenantId } = parsedCredentials.data;
     
     const user = await userRepository.findByEmail(email);
-    console.log("[AUTHORIZE_USER] User lookup in MongoDB:", user ? { id: user._id, email: user.email, role: user.role, active: user.active } : "NULL");
+    if (process.env.NODE_ENV === 'development') {
+      console.log("[AUTHORIZE_USER] User lookup in MongoDB:", user ? `Found (Active: ${user.active})` : "NULL");
+    }
     if (!user) {
       await auditRepository.create({
         timestamp: new Date(),
@@ -50,7 +54,7 @@ export async function authorizeUser(credentials: Record<string, any> | undefined
     }
 
     const passwordsMatch = await bcrypt.compare(password, user.password);
-    console.log("[AUTHORIZE_USER] Bcrypt compare result:", passwordsMatch);
+    // Bcrypt compare result hidden for security
     if (passwordsMatch) {
       // Reset attempts on success
       if (user.loginAttempts > 0 || user.lockoutUntil) {
@@ -79,15 +83,16 @@ export async function authorizeUser(credentials: Record<string, any> | undefined
         activeTenantId = user.tenantId;
       }
 
-      // Fetch tenant configuration for DB prefix unless GLOBAL
-      let dbPrefix = 'default';
-      let isolationStrategy = 'COLLECTION_PREFIX';
+      let dbPrefix = '';
+      let isolationStrategy = '';
       
       if (activeTenantId !== 'GLOBAL') {
         const tenant = await tenantRepository.findByTenantId(activeTenantId);
-        if (tenant) {
+        if (tenant && tenant.dbPrefix) {
           dbPrefix = tenant.dbPrefix;
           isolationStrategy = tenant.isolationStrategy;
+        } else {
+          throw new Error('TENANT_NOT_FOUND_OR_MISSING_PREFIX');
         }
       } else {
         dbPrefix = 'global_';
@@ -119,9 +124,11 @@ export async function authorizeUser(credentials: Record<string, any> | undefined
         mfaEnabled: !!user.mfaEnabled,
         mfaEnforced: !!user.mfaEnforced,
         mfa_verified: false,
-      } as unknown as IndustrialUser;
+      } as IndustrialUser;
     } else {
-      console.log("[AUTHORIZE_USER] Password mismatch. Incrementing login attempts.");
+      if (process.env.NODE_ENV === 'development') {
+        console.log("[AUTHORIZE_USER] Password mismatch. Incrementing login attempts.");
+      }
       // Increment attempts on failure
       const newAttempts = (user.loginAttempts || 0) + 1;
       const updateData: Partial<IndustrialUser> = { loginAttempts: newAttempts };

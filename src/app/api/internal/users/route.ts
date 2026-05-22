@@ -3,6 +3,7 @@ import { userRepository } from '@/lib/repositories/UserRepository';
 import { inviteService } from '@/lib/services/inviteService';
 import { randomBytes } from 'crypto';
 import type { UserTenantMembership } from '@/lib/schemas/user';
+import { checkApiSecurity } from '@/lib/utils/api-security';
 
 function authenticateInternal(req: NextRequest) {
   const apiKey = req.headers.get('x-internal-iam-key');
@@ -34,6 +35,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const secError = checkApiSecurity(req);
+  if (secError) return secError;
+
   if (!authenticateInternal(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -109,6 +113,9 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
+  const secError = checkApiSecurity(req);
+  if (secError) return secError;
+
   if (!authenticateInternal(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

@@ -29,7 +29,9 @@ export class InviteService {
           </div>
         `
       });
-      console.log(`[IAM] Activation email sent to ${email} for tenant ${tenantId}`);
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[IAM] Activation email sent for tenant ${tenantId}`);
+      }
     } catch (error) {
       console.error('[IAM] Error sending activation email:', error);
       // In development, we don't fail if Resend is not configured, just log

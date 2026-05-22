@@ -51,16 +51,16 @@ export abstract class BaseRepository<T extends Document> {
   async list(filter: SafeFilter<T> = {}): Promise<T[]> {
     const col = await this.getCollection();
     const cursor = col.find(filter);
-    return (await cursor.toArray()) as unknown as T[];
+    return (await cursor.toArray()) as T[];
   }
 
   async create(data: OptionalUnlessRequiredId<T>): Promise<string> {
     const col = await this.getCollection();
     const doc = {
-      createdAt: new Date(),
-      timestamp: new Date(),
-      ...data
-    } as unknown as OptionalUnlessRequiredId<T>;
+      ...data,
+      createdAt: data.createdAt || new Date(),
+      timestamp: data.timestamp || new Date(),
+    } as OptionalUnlessRequiredId<T>;
     const result = await col.insertOne(doc);
     return result.insertedId.toString();
   }
@@ -94,7 +94,7 @@ export abstract class BaseRepository<T extends Document> {
   async softDelete(id: string | ObjectId): Promise<boolean> {
     const col = await this.getCollection();
     const query = { _id: id } as Filter<T>;
-    const update = { $set: { active: false, updatedAt: new Date() } } as unknown as UpdateFilter<T>;
+    const update = { $set: { active: false, updatedAt: new Date() } as unknown as Partial<T> } as UpdateFilter<T>;
     
     const result = await col.updateOne(query, update);
     return result.modifiedCount > 0;

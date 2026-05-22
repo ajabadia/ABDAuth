@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { auditRepository } from '@/lib/repositories/AuditRepository';
 import { TenantSchema } from '@/lib/schemas/auth';
+import { checkApiSecurity } from '@/lib/utils/api-security';
 import type { IndustrialSession } from '@/types/auth';
 import { ObjectId } from 'mongodb';
 
@@ -14,6 +15,9 @@ export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const secError = checkApiSecurity(request);
+  if (secError) return secError;
+
   const session = await auth();
   const user = session?.user as unknown as IndustrialSession;
 
@@ -57,6 +61,9 @@ export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const secError = checkApiSecurity(_request);
+  if (secError) return secError;
+
   const session = await auth();
   const user = session?.user as unknown as IndustrialSession;
 

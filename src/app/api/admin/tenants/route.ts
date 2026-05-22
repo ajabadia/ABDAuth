@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
+import { checkApiSecurity } from '@/lib/utils/api-security';
 import { auditRepository } from '@/lib/repositories/AuditRepository';
 import { TenantSchema, type Tenant } from '@/lib/schemas/auth';
 import { validateSuperAdminSession, validateAdminSession } from '@/lib/utils/api-auth';
@@ -16,12 +17,15 @@ export async function GET() {
   return NextResponse.json(tenants);
 }
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
+  const secError = checkApiSecurity(req);
+  if (secError) return secError;
+
   const { authorized, user, response } = await validateSuperAdminSession();
   if (!authorized) return response!;
 
   try {
-    const body = await request.json();
+    const body = await req.json();
     const validatedData = TenantSchema.parse({
       ...body,
       createdAt: new Date(),

@@ -56,22 +56,26 @@ export async function POST(req: Request) {
       const wasUsedRecently = usedTime > 0 && (Date.now() - usedTime < gracePeriodMs);
 
       // eslint-disable-next-line no-console
-      console.log('[AUTH_TOKEN_DUPLICATE_CHECK]', {
-        code,
-        clientId: rawCode.clientId,
-        used: rawCode.used,
-        usedAt: rawCode.usedAt,
-        usedTime,
-        now: Date.now(),
-        diffMs: Date.now() - usedTime,
-        wasUsedRecently,
-      });
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[AUTH_TOKEN_DUPLICATE_CHECK]', {
+          code,
+          clientId: rawCode.clientId,
+          used: rawCode.used,
+          usedAt: rawCode.usedAt,
+          usedTime,
+          now: Date.now(),
+          diffMs: Date.now() - usedTime,
+          wasUsedRecently,
+        });
+      }
 
       if (!wasUsedRecently) {
         return NextResponse.json({ error: 'Code already used' }, { status: 400 });
       }
       // eslint-disable-next-line no-console
-      console.log(`[AUTH_TOKEN_GRACE_WINDOW] Allowing double-request token exchange for code: ${code}`);
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[AUTH_TOKEN_GRACE_WINDOW] Allowing double-request token exchange`);
+      }
     }
 
     if (rawCode.clientId !== client_id) {

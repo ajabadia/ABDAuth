@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
   const redirectUri = searchParams.get('redirect_uri') || searchParams.get('callbackUrl') || 'http://localhost:3400';
 
   // 🛰️ Determine the execution environment from the requester's origin
-  const isLocalEnvironment = redirectUri.includes('localhost') || redirectUri.includes('127.0.0.1');
+  const isLocalEnvironment = process.env.NODE_ENV !== 'production';
 
   // 🛰️ Dynamically resolve registered satellite applications from MongoDB
   let logoutUrls: string[] = [];

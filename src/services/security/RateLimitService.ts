@@ -23,6 +23,16 @@ export class RateLimitService {
     const headerList = await headers();
     const forwarded = headerList.get('x-forwarded-for');
     if (forwarded) return forwarded.split(',')[0].trim();
-    return '127.0.0.1'; // Fallback
+    
+    const realIp = headerList.get('x-real-ip');
+    if (realIp) return realIp.trim();
+    
+    if (process.env.NODE_ENV === 'development') {
+      return '127.0.0.1'; // Local dev is fine
+    }
+    
+    // In production, if we can't find an IP, return a random UUID so we don't block all users
+    // under a single '127.0.0.1' bucket. We should ideally log this anomaly.
+    return `unknown-${crypto.randomUUID()}`;
   }
 }

@@ -113,19 +113,26 @@ export class SsoService {
       return { success: false, errorType: 'UNAUTHORIZED_TENANT_ACCESS' };
     }
 
-    // 2. Verify Tenant Active Status
-    const tenant = await tenantRepository.findByTenantId(tenantId as TenantId);
-    if (!tenant || !tenant.active) {
-      await this.audit('SSO_HANDSHAKE_DENIED', auditMeta, { appId, reason: 'TENANT_INACTIVE_OR_NOT_FOUND' });
-      return { success: false, errorType: 'TENANT_INACTIVE' };
+    // 2. Verify Tenant Active Status (Skip for GLOBAL)
+    let tenant = null;
+    let tenantAllowedApps: string[] = [];
+    
+    if (tenantId !== 'GLOBAL') {
+      tenant = await tenantRepository.findByTenantId(tenantId as TenantId);
+      if (!tenant || !tenant.active || !tenant.dbPrefix) {
+        await this.audit('SSO_HANDSHAKE_DENIED', auditMeta, { appId, reason: 'TENANT_INACTIVE_OR_MISSING_PREFIX' });
+        return { success: false, errorType: 'TENANT_INACTIVE' };
+      }
+      tenantAllowedApps = tenant.allowedApps || [];
     }
 
-    // 3. Verify App License / Allowance for Tenant
-    const tenantAllowedApps = tenant.allowedApps || [];
-    const isTenantLicensed = tenantAllowedApps.includes(appId);
-    if (!isTenantLicensed) {
-      await this.audit('SSO_HANDSHAKE_DENIED', auditMeta, { appId, reason: 'APPLICATION_NOT_LICENSED' });
-      return { success: false, errorType: 'APPLICATION_NOT_LICENSED' };
+    // 3. Verify App License / Allowance for Tenant (Skip for GLOBAL)
+    if (tenantId !== 'GLOBAL') {
+      const isTenantLicensed = tenantAllowedApps.includes(appId);
+      if (!isTenantLicensed) {
+        await this.audit('SSO_HANDSHAKE_DENIED', auditMeta, { appId, reason: 'APPLICATION_NOT_LICENSED' });
+        return { success: false, errorType: 'APPLICATION_NOT_LICENSED' };
+      }
     }
 
     // 4. Find Application Details
@@ -158,8 +165,8 @@ export class SsoService {
       tenantId,
       role,
       permissions,
-      dbPrefix: tenant?.dbPrefix || 'default',
-      isolationStrategy: tenant?.isolationStrategy || 'COLLECTION_PREFIX',
+      dbPrefix: tenantId === 'GLOBAL' ? 'global_' : tenant!.dbPrefix,
+      isolationStrategy: tenantId === 'GLOBAL' ? 'COLLECTION_PREFIX' : (tenant!.isolationStrategy || 'COLLECTION_PREFIX'),
       allowedApps: resolvedAllowedApps,
       groups: membership?.groupIds || [],
     });

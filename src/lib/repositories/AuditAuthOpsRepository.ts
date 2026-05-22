@@ -7,7 +7,7 @@ import { type AuditAuthOps } from '@/lib/schemas/audit';
  * Persistence repository for local auth operations and SSO logs.
  * Migrated to centralize writes to ABDLogs and query from central_audit_logs.
  */
-export class AuditAuthOpsRepository extends BaseRepository<any> {
+export class AuditAuthOpsRepository extends BaseRepository<AuditAuthOps> {
   constructor() {
     super('central_audit_logs', 'LOGS');
   }
@@ -40,8 +40,8 @@ export class AuditAuthOpsRepository extends BaseRepository<any> {
   /**
    * 📋 List operational logs filtered by tenantId from central_audit_logs
    */
-  async findByTenantId(tenantId: string): Promise<any[]> {
-    const query: SafeFilter<any> = { tenantId, appId: 'auth' };
+  async findByTenantId(tenantId: string): Promise<AuditAuthOps[]> {
+    const query: SafeFilter<AuditAuthOps> = { tenantId, appId: 'auth' } as SafeFilter<AuditAuthOps>;
     const results = await this.list(query);
     return results.sort((a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0));
   }
@@ -49,8 +49,8 @@ export class AuditAuthOpsRepository extends BaseRepository<any> {
   /**
    * 📋 List operational logs for a user from central_audit_logs
    */
-  async findByUserId(userId: string): Promise<any[]> {
-    const query: SafeFilter<any> = { userId, appId: 'auth' };
+  async findByUserId(userId: string): Promise<AuditAuthOps[]> {
+    const query: SafeFilter<AuditAuthOps> = { userId, appId: 'auth' } as SafeFilter<AuditAuthOps>;
     const results = await this.list(query);
     return results.sort((a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0));
   }
