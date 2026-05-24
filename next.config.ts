@@ -6,6 +6,7 @@ const withNextIntl = createNextIntlPlugin(
 );
 
 const nextConfig: NextConfig = {
+  transpilePackages: ['@abd/ecosystem-widgets', '@abd/styles', '@abd/satellite-sdk'],
   /* industrial config */
 };
 

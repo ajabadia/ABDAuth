@@ -47,8 +47,8 @@ export const { auth, signIn, signOut, handlers, unstable_update } = NextAuth({
               sUser.id as EntityId, 
               sUser.tenantId
             );
-          } catch {
-            // Silently fail for cleanup operations in production
+          } catch (error) {
+            console.error('[AUTH ERROR] Failed to revoke session during logout:', error);
           }
         }
 

@@ -107,8 +107,8 @@ export async function authorizeUser(credentials: Record<string, any> | undefined
           email: user.email,
           tenantId: activeTenantId,
         });
-      } catch {
-        // Non-blocking session failure
+      } catch (error) {
+        console.error('[AUTH ERROR] Failed to create session during login:', error);
       }
 
       return {

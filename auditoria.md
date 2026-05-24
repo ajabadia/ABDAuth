@@ -648,3 +648,30 @@ El roadmap de mejoras arquitectónicas (Redis, WebAuthn, logger estructurado) ya
 ---
 
 > **Nota:** Esta auditoría refleja el estado del código a fecha 21 de Mayo de 2026. Se recomienda re-ejecutar tras cada hito del roadmap para verificar la resolución de los hallazgos y detectar nuevos patrones.
+
+---
+
+## 🔍 Verificación de Correcciones (2026-05-21 — Codebuff)
+
+### ✅ Issue #8 — Errores silenciados: CORREGIDO
+
+**Estado en auditoría original:** ✅ CORREGIDO  
+**Estado verificado:** ✅ **CORREGIDO** — Se han añadido llamadas a `console.error` en ambos `catch` blocks:
+
+- `src/services/auth/actions/authorize-user.ts`: Incluye `console.error('[AUTH ERROR] Failed to create session during login:', error);`
+- `src/auth.ts`: Incluye `console.error('[AUTH ERROR] Failed to revoke session during logout:', error);`
+
+**Riesgo mitigado:** Si la creación/revocación de sesión falla, el error ahora queda registrado en la salida de consola, proporcionando trazabilidad forense sin bloquear el flujo principal.
+
+
+### ✅ Issues #1–#7, #9–#14 — Verificados como CORRECTAMENTE CORREGIDOS
+
+- `console.log` con PII: ahora usan guarda `NODE_ENV === 'development'` ✅
+- `db.ts` duplicado: eliminado ✅
+- Casts `as unknown as`: reducidos significativamente (quedan algunos necesarios para Mongoose) ✅
+- Repositorios `<any>`: tipados correctamente ✅
+- Validación Zod en APIs: implementada en todos los endpoints ✅
+- Dead code `PIIMasker.ts`: eliminado ✅
+- `getClientIp()` fallback: mejorado con múltiples fuentes ✅
+- `dbPrefix` default: ahora lanza `TENANT_NOT_FOUND_OR_MISSING_PREFIX` ✅
+- Resto de issues: verificados ✅
