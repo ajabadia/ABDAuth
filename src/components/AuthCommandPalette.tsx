@@ -4,7 +4,7 @@ import React from 'react';
 import { useRouter, usePathname } from '@/i18n/routing';
 import { useLocale } from 'next-intl';
 import { signOut } from 'next-auth/react';
-import { CommandPalette, Command } from '@abd/styles';
+import { CommandPalette, type Command } from '@abd/ecosystem-widgets';
 import { LayoutDashboard, Users, Shield, Building2, Key, Globe, LogOut, Settings } from 'lucide-react';
 
 export function AuthCommandPalette() {
@@ -113,7 +113,6 @@ export function AuthCommandPalette() {
     <CommandPalette
       commands={commands}
       placeholder={locale === 'es' ? 'Escribe un comando o busca...' : 'Type a command or search...'}
-      triggerElementId="command-palette-trigger"
     />
   );
 }

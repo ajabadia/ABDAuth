@@ -4,9 +4,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "node node_modules/eslint/bin/eslint.js src",
-    "tsc": "node node_modules/typescript/bin/tsc"
+    "tsc": "node node_modules/typescript/bin/tsc",
+    "test": "vitest run"
   },
   "dependencies": {
+    "@abd/ecosystem-widgets": "file:../ABDEcosystemWidgets",
     "@abd/styles": "github:ajabadia/ABDStyles#main",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.4",
@@ -43,7 +45,7 @@
     "eslint-config-next": "^16.2.6",
     "postcss": "^8.5.14",
     "tailwindcss": "^4.3.0",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "vitest": "^4.1.7"
   }
 }
-

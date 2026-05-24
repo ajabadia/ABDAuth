@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/routing";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { SystemSettings as SharedSystemSettings } from "@abd/styles";
+import { SystemSettings as SharedSystemSettings } from "@abd/ecosystem-widgets";
 
 /**
  * 🛠️ SystemSettings (Client Wrapper)
@@ -35,17 +35,6 @@ export function SystemSettings({ isAuthenticated }: { isAuthenticated?: boolean 
       onLogin={() => signIn()}
       onLogout={() => signOut({ callbackUrl: "/" })}
       versionSignature="ABD_IDENTITY_V1.0"
-      translations={{
-        title: t("title"),
-        close: t("close"),
-        language: t("language"),
-        theme: t("theme"),
-        themeLight: t("theme_light"),
-        themeDark: t("theme_dark"),
-        themeSystem: t("theme_system"),
-        logout: t("logout"),
-        login: t("login"),
-      }}
     />
   );
 }

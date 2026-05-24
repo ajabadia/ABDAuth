@@ -523,11 +523,11 @@ Implementación ligera con `opossum` o un helper casero con contador de fallos.
 - ✅ `admin.spec.ts` — CRUD de usuarios, tenants, aplicaciones
 - ✅ `security_governance.spec.ts` — Rate limiting, lockout, sesiones
 
-### Carencias detectadas
-- ❌ Sin tests unitarios (Jest/Vitest)
-- ❌ Sin tests de integración para `SsoService.performSsoHandshake`
-- ❌ Sin tests de los repositorios (UserRepository, SessionRepository, etc.)
-- ❌ Sin tests del middleware `proxy.ts`
+### Cobertura de Tests Unitarios e Integración (Vitest)
+- ✅ Tests unitarios configurados vía Vitest (`vitest.config.ts`)
+- ✅ Tests de integración para `SsoService.performSsoHandshake` (`SsoService.test.ts` — Cobertura completa de lógicas de licencia, estado e ID)
+- ✅ Tests de repositorios (`UserRepository.test.ts`, `SessionRepository.test.ts` — Validación de aislamiento de Tenant y normalizaciones)
+- ✅ Tests del middleware `proxy.ts` (`proxy.test.ts` — Cobertura de redirecciones por roles, i18n, y MFA)
 
 ---
 
