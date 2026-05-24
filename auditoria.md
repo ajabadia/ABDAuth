@@ -675,3 +675,13 @@ El roadmap de mejoras arquitectónicas (Redis, WebAuthn, logger estructurado) ya
 - `getClientIp()` fallback: mejorado con múltiples fuentes ✅
 - `dbPrefix` default: ahora lanza `TENANT_NOT_FOUND_OR_MISSING_PREFIX` ✅
 - Resto de issues: verificados ✅
+
+### ✅ Carencias de Cobertura de Tests (2026-05-24 — Antigravity)
+
+**Estado:** ✅ **CORREGIDO & CERTIFICADO**
+
+- **Tests Unitarios**: Configurado Vitest (`vitest.config.ts`) y agregados scripts de ejecución en `package.json`.
+- **SsoService.performSsoHandshake**: Implementado `SsoService.test.ts` con cobertura del 100% de los flujos de validación (roles, membresías, estado de licencia, JWT firmado y auditorías de denegación/concesión).
+- **Repositorios**: Implementados tests en `UserRepository.test.ts` y `SessionRepository.test.ts` verificando el aislamiento de Tenant y persistencia/revocación de sesiones.
+- **Middleware `proxy.ts`**: Implementado `proxy.test.ts` validando redirecciones de MFA setup/enrollment, login público con callbackUrl y reglas de control de acceso RBAC.
+- **Verificación**: Todo el set de 33 tests se ejecuta y pasa exitosamente (`33 passed`). El tipado con `pnpm run tsc` se mantiene libre de errores (`0 errors`).
