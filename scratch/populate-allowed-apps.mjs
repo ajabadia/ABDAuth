@@ -34,12 +34,12 @@ async function main() {
 
     // Step 1: Fix application slugs
     console.log('\n🔧 Step 1: Fixing application slugs...');
-    const apps = await db.collection('Applications').find({}).toArray();
+    const apps = await db.collection('applications').find({}).toArray();
     
     for (const app of apps) {
       const slug = SLUG_MAP[app.name];
       if (slug && !app.slug) {
-        await db.collection('Applications').updateOne(
+        await db.collection('applications').updateOne(
           { _id: app._id },
           { $set: { slug, updatedAt: new Date() } }
         );
@@ -52,7 +52,7 @@ async function main() {
     }
 
     // Step 2: Collect all active slugs
-    const updatedApps = await db.collection('Applications').find({ active: true }).toArray();
+    const updatedApps = await db.collection('applications').find({ active: true }).toArray();
     const activeSlugs = updatedApps.filter(a => a.slug).map(a => a.slug);
     console.log(`\n📋 Active slugs: ${JSON.stringify(activeSlugs)}`);
 
@@ -76,7 +76,7 @@ async function main() {
       console.log(`  - ${t.tenantId} (${t.name}) | allowedApps: ${JSON.stringify(t.allowedApps)}`);
     }
 
-    const finalApps = await db.collection('Applications').find({}).toArray();
+    const finalApps = await db.collection('applications').find({}).toArray();
     console.log('\n🛰️ Applications:');
     for (const a of finalApps) {
       console.log(`  - ${a.name} | slug: ${a.slug} | active: ${a.active}`);

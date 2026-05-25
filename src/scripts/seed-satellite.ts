@@ -39,7 +39,10 @@ async function seedSatellite() {
       slug: 'quiz',
       redirectUris: [
         'http://localhost:3300/api/auth/federated/callback',
-        'https://quiz.abd.vercel.app/api/auth/federated/callback'
+        'http://localhost:3300',
+        'https://quiz.abd.vercel.app/api/auth/federated/callback',
+        'https://abd-quiz.vercel.app/api/auth/federated/callback',
+        'https://abd-quiz.vercel.app'
       ],
       active: true,
       updatedAt: new Date(),
@@ -68,7 +71,9 @@ async function seedSatellite() {
       slug: 'gobernanza',
       redirectUris: [
         'http://localhost:3500/api/auth/federated/callback',
-        'https://abd-tenant-gobernance.vercel.app/api/auth/federated/callback'
+        'http://localhost:3500',
+        'https://abd-tenant-gobernance.vercel.app/api/auth/federated/callback',
+        'https://abd-tenant-gobernance.vercel.app'
       ],
       active: true,
       updatedAt: new Date(),
@@ -97,7 +102,9 @@ async function seedSatellite() {
       slug: 'logs',
       redirectUris: [
         'http://localhost:3600/api/auth/federated/callback',
-        'https://abd-logs.vercel.app/api/auth/federated/callback'
+        'http://localhost:3600',
+        'https://abd-logs.vercel.app/api/auth/federated/callback',
+        'https://abd-logs.vercel.app'
       ],
       active: true,
       updatedAt: new Date(),

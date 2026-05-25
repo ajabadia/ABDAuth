@@ -7,7 +7,7 @@ import type { Application } from '@/lib/schemas/auth';
  */
 class ApplicationRepository extends BaseRepository<Application> {
   constructor() {
-    super('Applications', 'AUTH');
+    super('applications', 'AUTH');
   }
 
   /**
