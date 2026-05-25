@@ -69,7 +69,7 @@ describe('SsoService.performSsoHandshake', () => {
       tenantIds: [],
       tenants: [],
     };
-    vi.mocked(userRepository.findById).mockResolvedValue(mockUser as any);
+    vi.mocked(userRepository.findById).mockResolvedValue(mockUser as unknown as any);
 
     const result = await SsoService.performSsoHandshake(defaultParams);
 
@@ -89,7 +89,7 @@ describe('SsoService.performSsoHandshake', () => {
       role: 'USER',
       tenantId: 'tenant-1',
     };
-    vi.mocked(userRepository.findById).mockResolvedValue(mockUser as any);
+    vi.mocked(userRepository.findById).mockResolvedValue(mockUser as unknown as any);
     vi.mocked(tenantRepository.findByTenantId).mockResolvedValue(null); // Tenant not found
 
     const result = await SsoService.performSsoHandshake(defaultParams);
@@ -111,8 +111,8 @@ describe('SsoService.performSsoHandshake', () => {
       dbPrefix: 't1_',
       allowedApps: ['other-app'], // quiz-app is not licensed
     };
-    vi.mocked(userRepository.findById).mockResolvedValue(mockUser as any);
-    vi.mocked(tenantRepository.findByTenantId).mockResolvedValue(mockTenant as any);
+    vi.mocked(userRepository.findById).mockResolvedValue(mockUser as unknown as any);
+    vi.mocked(tenantRepository.findByTenantId).mockResolvedValue(mockTenant as unknown as any);
 
     const result = await SsoService.performSsoHandshake(defaultParams);
 
@@ -132,8 +132,8 @@ describe('SsoService.performSsoHandshake', () => {
       dbPrefix: 't1_',
       allowedApps: ['quiz-app'],
     };
-    vi.mocked(userRepository.findById).mockResolvedValue(mockUser as any);
-    vi.mocked(tenantRepository.findByTenantId).mockResolvedValue(mockTenant as any);
+    vi.mocked(userRepository.findById).mockResolvedValue(mockUser as unknown as any);
+    vi.mocked(tenantRepository.findByTenantId).mockResolvedValue(mockTenant as unknown as any);
     vi.mocked(applicationRepository.findOne).mockResolvedValue(null); // App not found
 
     const result = await SsoService.performSsoHandshake(defaultParams);
@@ -165,9 +165,9 @@ describe('SsoService.performSsoHandshake', () => {
       slug: 'quiz-app',
       active: true,
     };
-    vi.mocked(userRepository.findById).mockResolvedValue(mockUser as any);
-    vi.mocked(tenantRepository.findByTenantId).mockResolvedValue(mockTenant as any);
-    vi.mocked(applicationRepository.findOne).mockResolvedValue(mockApp as any);
+    vi.mocked(userRepository.findById).mockResolvedValue(mockUser as unknown as any);
+    vi.mocked(tenantRepository.findByTenantId).mockResolvedValue(mockTenant as unknown as any);
+    vi.mocked(applicationRepository.findOne).mockResolvedValue(mockApp as unknown as any);
 
     const result = await SsoService.performSsoHandshake(defaultParams);
 
@@ -201,9 +201,9 @@ describe('SsoService.performSsoHandshake', () => {
       urlPattern: 'https://{tenant}.quiz.abd.com/sso-login',
     };
 
-    vi.mocked(userRepository.findById).mockResolvedValue(mockUser as any);
-    vi.mocked(tenantRepository.findByTenantId).mockResolvedValue(mockTenant as any);
-    vi.mocked(applicationRepository.findOne).mockResolvedValue(mockApp as any);
+    vi.mocked(userRepository.findById).mockResolvedValue(mockUser as unknown as any);
+    vi.mocked(tenantRepository.findByTenantId).mockResolvedValue(mockTenant as unknown as any);
+    vi.mocked(applicationRepository.findOne).mockResolvedValue(mockApp as unknown as any);
 
     const result = await SsoService.performSsoHandshake(defaultParams);
 

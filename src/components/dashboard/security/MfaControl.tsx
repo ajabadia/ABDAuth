@@ -89,6 +89,40 @@ export function MfaControl({ isActive, isMandatory = false, initialStep = 'IDLE'
     }
   };
 
+  const handleRegisterPasskey = async () => {
+    setLoading(true);
+    try {
+      const { startRegistration } = await import('@simplewebauthn/browser');
+      const { 
+        generatePasskeyRegistrationOptionsAction, 
+        verifyPasskeyRegistrationAction 
+      } = await import('@/services/auth/security-actions');
+
+      const options = await generatePasskeyRegistrationOptionsAction();
+      const regResponse = await startRegistration({ optionsJSON: options });
+      const result = await verifyPasskeyRegistrationAction(regResponse);
+
+      if (result.success) {
+        setEnabled(true);
+        toast.success(t('status_active'));
+        onComplete?.();
+      } else {
+        toast.error(result.error || 'Failed to verify passkey registration');
+      }
+    } catch (err) {
+      const errorName = (err as Error)?.name;
+      if (errorName === 'NotAllowedError') {
+        toast.error('Biometric registration was cancelled');
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('[Passkey Registration Error]', err);
+        toast.error('Biometric registration failed');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCopyCodes = () => {
     navigator.clipboard.writeText(recoveryCodes.join('\n'));
     toast.success(t('copy_codes'));
@@ -109,6 +143,7 @@ export function MfaControl({ isActive, isMandatory = false, initialStep = 'IDLE'
               t={t}
               onStartSetup={handleStartSetup}
               onDisable={handleDisable}
+              onRegisterPasskey={handleRegisterPasskey}
               onComplete={onComplete}
             />
           )}

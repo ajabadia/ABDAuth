@@ -44,6 +44,18 @@ The `MfaService` implements industrial-grade Multi-Factor Authentication using t
 3. **Verify**: Standard verification during login flow.
 4. **Disable**: Atomic removal of MFA config and user flag update.
 
+### 🔑 Biometric WebAuthn (Passkeys)
+- **Passwordless Flow**: Users can register passkeys (TouchID, FaceID, Windows Hello) using the FIDO2 standard.
+- **Verification Engine**: Handles registration and authentication ceremonies powered by `@simplewebauthn/server` and `@simplewebauthn/browser`.
+- **Transient Challenge Cache**: WebAuthn challenges are temporarily stored in `webauthn_challenges` with a 5-minute MongoDB TTL index to prevent state discrepancies in serverless hosts.
+- **Biometric Bypass Token**: Successful passkey authentication issues a transient 30-second single-use JWT signed with `AUTH_JWT_SECRET` to securely bypass credentials verification.
+
+### ⏳ MFA Grace Period (Onboarding Bypass)
+- **Permissive Flow**: When `mfaEnforced` is active but `mfaEnabled` is false, the user enters a grace period countdown rather than immediate lockouts.
+- **Thresholds**: Defaults to a countdown of **3 logins** or a deadline of **7 days** since enforcement started.
+- **Automatic Enforcement**: The grace period status is checked dynamically during every session validation. Once expired or the login counter hits zero, the user is strictly redirected to `/login/mfa/setup`.
+- **Audit Logging**: Grace bypass events are audited under the `MFA_GRACE_BYPASS` event.
+
 ---
 
 ## 🛰️ Telemetry Integration

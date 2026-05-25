@@ -33,7 +33,15 @@ export default auth((req) => {
     
     // 2. Mandatory Enrollment (if enforced but not yet enabled)
     if (user?.mfaEnforced && !user?.mfaEnabled) {
-      return NextResponse.redirect(new URL(`/${locale}/login/mfa/setup`, req.url));
+      const graceActive = !!user?.mfaGracePeriodActive;
+      const loginsRemaining = user?.mfaGraceLoginsRemaining ?? 0;
+      const isBypassed = !!user?.mfaGraceBypassed;
+
+      if (graceActive && loginsRemaining > 0 && isBypassed) {
+        // Allowed to bypass setup for this session
+      } else {
+        return NextResponse.redirect(new URL(`/${locale}/login/mfa/setup`, req.url));
+      }
     }
   }
 

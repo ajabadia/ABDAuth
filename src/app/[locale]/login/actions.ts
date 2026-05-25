@@ -6,6 +6,7 @@ import { AuthError } from "next-auth";
 export async function loginAction(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const passkeyBypassToken = formData.get('passkeyBypassToken') as string;
 
   if (process.env.NODE_ENV === 'development') {
     console.log("[LOGIN_ACTION_START] Login attempt started.");
@@ -31,6 +32,7 @@ export async function loginAction(formData: FormData) {
     await signIn("credentials", {
       email,
       password,
+      passkeyBypassToken,
       redirect: false, // Handle redirect in the client or via throw
     });
     

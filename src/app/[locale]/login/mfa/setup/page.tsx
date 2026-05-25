@@ -34,12 +34,19 @@ export default async function MfaSetupPage() {
     cancel_logout: t('cancel_logout'),
   };
 
+  const mfaGracePeriodActive = dbUser?.mfaGracePeriodActive ?? false;
+  const mfaGraceLoginsRemaining = dbUser?.mfaGraceLoginsRemaining ?? 0;
+  const mfaGraceExpiresAt = dbUser?.mfaGraceExpiresAt ? new Date(dbUser.mfaGraceExpiresAt).toLocaleDateString(locale) : '';
+
   return (
     <MfaSetupContainer 
       t={translations} 
       isMandatory={isCurrentlyEnforced} 
       needsSync={needsSync}
       isAuthenticated={!!session}
+      mfaGracePeriodActive={mfaGracePeriodActive}
+      mfaGraceLoginsRemaining={mfaGraceLoginsRemaining}
+      mfaGraceExpiresAt={mfaGraceExpiresAt}
     />
   );
 }

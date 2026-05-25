@@ -27,7 +27,9 @@
     "mfa_setup": {
       "title": "Mandatory Security",
       "description": "Your account requires Multi-Factor Authentication (2FA) to access protected systems. Set it up now to continue.",
-      "cancel_logout": "Cancel and sign out"
+      "cancel_logout": "Cancel and sign out",
+      "grace_banner": "ACTIVE GRACE PERIOD: You have {count} permitted bypass logins remaining. Deadline: {expiry}.",
+      "skip_grace": "SKIP FOR NOW ({count} LEFT)"
     },
     "email_label": "Identity_Principal (Email)",
     "email_placeholder": "user@example.com",
@@ -36,7 +38,9 @@
     "button": "Authenticate System",
     "error_invalid": "Unauthorized credentials",
     "error_generic": "Critical connection failure",
+    "error_email_required": "Please enter your Identity Principal (email)",
     "shield_badge": "SOC2 Type II Certified",
+    "passkey_login_btn": "Sign In with Passkey",
     "demo_title": "Lab Credentials",
     "demo_user": "ajabadia@gmail.com",
     "demo_pass": "11111111",
@@ -263,6 +267,7 @@
         "subtitle": "Standard TOTP Governance",
         "status_active": "PROTECTED",
         "status_inactive": "VULNERABLE",
+        "register_passkey": "Register Passkey",
         "info_active": "Your account is protected with two-factor authentication. A security code will be required for each login.",
         "info_inactive": "Add an extra layer of security to your industrial identity. Enable MFA to protect against unauthorized access.",
         "enable": "Enable 2FA",

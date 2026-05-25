@@ -6,6 +6,12 @@
 - **Zero-Noise Compliance**: 6-Phase Audit PASSED (Era 11). System certified for production.
 - **Production Deployment**: STABLE. Deployed at https://abd-auth.vercel.app with build-time environmental shielding.
 
+## 🗓️ 2026-05-25 (Hito 5.6: Período de Gracia MFA & WebAuthn / Passkeys)
+- [x] **MFA Grace Period Countdown**: Implemented dynamic grace period verification in the credentials authorization layer (`authorize-user.ts`) and middleware (`proxy.ts`). Users can bypass mandatory MFA setup with a countdown (3 logins default) and expiration date (7 days default) before strict enforcement kicks in.
+- [x] **WebAuthn Passkey Registration & Login**: Integrated biometric passwordless login (FaceID, TouchID, Windows Hello) using `@simplewebauthn/server` and `@simplewebauthn/browser`. Includes a client-side biometric login terminal on `LoginForm.tsx` and registration options in the dashboard security module (`MfaControl.tsx`).
+- [x] **MongoDB Challenge Storage**: Designed a transient collections schema in `ChallengeRepository.ts` utilizing MongoDB TTL indexes (5-minute eviction) to safely handle WebAuthn challenges in stateless serverless environments.
+- [x] **Purity Auditing**: Remediated all `any` usages and verified the 6-phase certification pipeline (`scripts/abd-audit.ps1`), achieving the **SYSTEM CERTIFIED - ERA 11 COMPLIANT** status with 38/38 vitest tests passing.
+
 ## 🗓️ 2026-05-19 (Visual System Centralization & Header Standardization)
 - [x] **Shared CSS Library Integration**: Integrated `@abd/styles` via local module imports and resolved Next.js 16/Turbopack import path resolution and Tailwind CSS v4 color theme mapping in `globals.css`.
 - [x] **Header Alignment**: Standardized all panel headers using `STYLE_GUIDE.md` specifications (Variante A for Main Dashboard, Variante B with aseptic back buttons for Users, Satellites, Audit, and Security).

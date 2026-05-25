@@ -22,6 +22,7 @@ export const AuditEventSchema = z.enum([
   'TENANT_DELETED',
   'PASSWORD_CHANGE',
   'PASSWORD_CHANGE_REQUEST',
+  'MFA_GRACE_BYPASS',
 ]);
 
 export const AuditLogSchema = z.object({

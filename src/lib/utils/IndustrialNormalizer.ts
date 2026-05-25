@@ -10,6 +10,10 @@ export class IndustrialNormalizer {
     if (!raw) return raw as unknown as User;
     return {
       ...raw,
+      mfaGracePeriodActive: raw.mfaGracePeriodActive !== undefined ? !!raw.mfaGracePeriodActive : false,
+      mfaGraceLoginsRemaining: raw.mfaGraceLoginsRemaining !== undefined ? Number(raw.mfaGraceLoginsRemaining) : 0,
+      mfaGraceExpiresAt: raw.mfaGraceExpiresAt ? new Date(raw.mfaGraceExpiresAt as string | number | Date) : undefined,
+      lockoutUntil: raw.lockoutUntil ? new Date(raw.lockoutUntil as string | number | Date) : undefined,
       createdAt: raw.createdAt ? new Date(raw.createdAt as string | number | Date) : new Date(),
       updatedAt: raw.updatedAt ? new Date(raw.updatedAt as string | number | Date) : undefined
     } as unknown as User;

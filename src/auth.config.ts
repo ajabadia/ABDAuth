@@ -34,6 +34,10 @@ export const authConfig = {
         token.mfaEnabled = raw.mfaEnabled ?? false;
         token.mfaEnforced = raw.mfaEnforced ?? false;
         token.mfa_verified = raw.mfa_verified ?? false;
+        token.mfaGracePeriodActive = raw.mfaGracePeriodActive ?? false;
+        token.mfaGraceLoginsRemaining = raw.mfaGraceLoginsRemaining ?? 0;
+        token.mfaGraceExpiresAt = raw.mfaGraceExpiresAt;
+        token.mfaGraceBypassed = raw.mfaGraceBypassed ?? false;
         token.surname = raw.surname;
       }
       
@@ -43,6 +47,9 @@ export const authConfig = {
         if (updatedUser.mfa_verified !== undefined) token.mfa_verified = updatedUser.mfa_verified;
         if (updatedUser.mfaEnabled !== undefined) token.mfaEnabled = updatedUser.mfaEnabled;
         if (updatedUser.tenantId !== undefined) token.tenantId = updatedUser.tenantId;
+        if (updatedUser.mfaGraceBypassed !== undefined) token.mfaGraceBypassed = updatedUser.mfaGraceBypassed;
+        if (updatedUser.mfaGracePeriodActive !== undefined) token.mfaGracePeriodActive = updatedUser.mfaGracePeriodActive;
+        if (updatedUser.mfaGraceLoginsRemaining !== undefined) token.mfaGraceLoginsRemaining = updatedUser.mfaGraceLoginsRemaining;
       }
       
       return token;
@@ -58,6 +65,10 @@ export const authConfig = {
         u.mfaEnabled = token.mfaEnabled as boolean;
         u.mfaEnforced = token.mfaEnforced as boolean;
         u.mfa_verified = token.mfa_verified as boolean;
+        u.mfaGracePeriodActive = token.mfaGracePeriodActive as boolean;
+        u.mfaGraceLoginsRemaining = token.mfaGraceLoginsRemaining as number;
+        u.mfaGraceExpiresAt = token.mfaGraceExpiresAt as string | undefined;
+        u.mfaGraceBypassed = token.mfaGraceBypassed as boolean;
         u.surname = token.surname as string;
       }
       return session;

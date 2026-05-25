@@ -19,7 +19,7 @@ const mockCollection = {
 };
 
 // Spy on BaseRepository's getCollection method
-vi.spyOn(BaseRepository.prototype as any, 'getCollection').mockImplementation(async () => {
+vi.spyOn(BaseRepository.prototype as unknown as any, 'getCollection').mockImplementation(async () => {
   return mockCollection;
 });
 

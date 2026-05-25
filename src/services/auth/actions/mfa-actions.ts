@@ -147,3 +147,51 @@ export async function syncMfaEnforcementAction() {
 
   return { success: true };
 }
+
+/**
+ * 🔓 MFA Grace Period: Skip setup for now
+ */
+export async function skipMfaGraceAction() {
+  const session = await auth();
+  const user = session?.user as IndustrialUser;
+  if (!user) return { success: false, error: "Unauthorized" };
+
+  const dbUser = await userRepository.findById(user.id as EntityId);
+  if (!dbUser || !dbUser.mfaGracePeriodActive) {
+    return { success: false, error: "No active grace period found" };
+  }
+
+  const remainingLogins = Math.max(0, (dbUser.mfaGraceLoginsRemaining ?? 1) - 1);
+  const graceActive = remainingLogins > 0;
+
+  // Update in DB
+  await userRepository.update(user.id as EntityId, {
+    mfaGraceLoginsRemaining: remainingLogins,
+    mfaGracePeriodActive: graceActive,
+    updatedAt: new Date(),
+  });
+
+  // Audit this bypass
+  const { auditRepository } = await import('@/lib/repositories/AuditRepository');
+  await auditRepository.create({
+    timestamp: new Date(),
+    event: 'MFA_GRACE_BYPASS',
+    actorId: user.id,
+    actorEmail: user.email,
+    tenantId: user.tenantId || 'SYSTEM',
+    status: 'SUCCESS',
+    metadata: { remainingLogins }
+  });
+
+  // Update session state
+  await unstable_update({
+    user: {
+      ...user,
+      mfaGraceBypassed: true,
+      mfaGracePeriodActive: graceActive,
+      mfaGraceLoginsRemaining: remainingLogins
+    }
+  });
+
+  return { success: true, remainingLogins };
+}

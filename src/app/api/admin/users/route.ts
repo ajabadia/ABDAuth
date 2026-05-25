@@ -67,6 +67,9 @@ export async function POST(request: Request) {
       updatedAt: new Date(),
       mfaEnabled: false,
       active: false, // Pending activation
+      mfaGracePeriodActive: !!payload.mfaEnforced,
+      mfaGraceLoginsRemaining: payload.mfaEnforced ? 3 : 0,
+      mfaGraceExpiresAt: payload.mfaEnforced ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) : undefined,
     };
 
     if (user!.role !== 'SUPER_ADMIN' && newUser.role === 'SUPER_ADMIN') {
@@ -170,6 +173,18 @@ export async function PUT(request: Request) {
       tenantIds: finalTenantIds,
       updatedAt: new Date(),
     };
+
+    if (payload.mfaEnforced !== undefined) {
+      if (payload.mfaEnforced && !existingUser.mfaEnforced && !existingUser.mfaEnabled) {
+        updateData.mfaGracePeriodActive = true;
+        updateData.mfaGraceLoginsRemaining = 3;
+        updateData.mfaGraceExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      } else if (!payload.mfaEnforced) {
+        updateData.mfaGracePeriodActive = false;
+        updateData.mfaGraceLoginsRemaining = 0;
+        updateData.mfaGraceExpiresAt = null;
+      }
+    }
 
     if (password) {
       updateData.password = await bcrypt.hash(password, 10);

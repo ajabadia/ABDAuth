@@ -12,11 +12,19 @@ export async function authorizeUser(credentials: Record<string, any> | undefined
     console.log("[AUTHORIZE_USER] Called for email:", credentials?.email);
   }
   const parsedCredentials = z
-    .object({ email: z.string().email(), password: z.string().min(6), tenantId: z.string().optional() })
+    .object({
+      email: z.string().email(),
+      password: z.string().min(6).optional(),
+      passkeyBypassToken: z.string().optional(),
+      tenantId: z.string().optional()
+    })
+    .refine(data => data.password || data.passkeyBypassToken, {
+      message: "Either password or passkeyBypassToken must be provided"
+    })
     .safeParse(credentials);
 
   if (parsedCredentials.success) {
-    const { email, password, tenantId: requestedTenantId } = parsedCredentials.data;
+    const { email, password, passkeyBypassToken, tenantId: requestedTenantId } = parsedCredentials.data;
     
     const user = await userRepository.findByEmail(email);
     if (process.env.NODE_ENV === 'development') {
@@ -53,9 +61,36 @@ export async function authorizeUser(credentials: Record<string, any> | undefined
       throw new Error('ACCOUNT_INACTIVE');
     }
 
-    const passwordsMatch = await bcrypt.compare(password, user.password);
-    // Bcrypt compare result hidden for security
-    if (passwordsMatch) {
+    let isBypassOrPasswordValid = false;
+
+    if (passkeyBypassToken) {
+      try {
+        const { jwtVerify } = await import('jose');
+        const secret = new TextEncoder().encode(process.env.AUTH_JWT_SECRET || 'secret');
+        const { payload } = await jwtVerify(passkeyBypassToken, secret);
+        
+        if (payload.email === email && payload.passkeyLogin) {
+          isBypassOrPasswordValid = true;
+        } else {
+          throw new Error('INVALID_BYPASS_TOKEN');
+        }
+      } catch (err) {
+        await auditRepository.create({
+          timestamp: new Date(),
+          event: 'LOGIN_FAILURE',
+          actorId: user._id?.toString() || 'UNKNOWN',
+          actorEmail: email,
+          tenantId: user.tenantId,
+          status: 'FAILURE',
+          metadata: { reason: 'INVALID_BYPASS_TOKEN' }
+        });
+        return null;
+      }
+    } else {
+      isBypassOrPasswordValid = await bcrypt.compare(password!, user.password);
+    }
+
+    if (isBypassOrPasswordValid) {
       // Reset attempts on success
       if (user.loginAttempts > 0 || user.lockoutUntil) {
         await userRepository.update(user._id as EntityId, {
@@ -111,6 +146,27 @@ export async function authorizeUser(credentials: Record<string, any> | undefined
         console.error('[AUTH ERROR] Failed to create session during login:', error);
       }
 
+      let mfaGracePeriodActive = !!user.mfaGracePeriodActive;
+      let mfaGraceLoginsRemaining = user.mfaGraceLoginsRemaining ?? 0;
+      const mfaGraceExpiresAt = user.mfaGraceExpiresAt;
+
+      if (mfaGracePeriodActive) {
+        const now = new Date();
+        if (mfaGraceExpiresAt && new Date(mfaGraceExpiresAt) < now) {
+          mfaGracePeriodActive = false;
+          await userRepository.update(user._id as EntityId, {
+            mfaGracePeriodActive: false,
+            updatedAt: now,
+          });
+        } else if (mfaGraceLoginsRemaining <= 0) {
+          mfaGracePeriodActive = false;
+          await userRepository.update(user._id as EntityId, {
+            mfaGracePeriodActive: false,
+            updatedAt: now,
+          });
+        }
+      }
+
       return {
         id: user._id?.toString() || '',
         sessionId: sessionId,
@@ -124,6 +180,10 @@ export async function authorizeUser(credentials: Record<string, any> | undefined
         mfaEnabled: !!user.mfaEnabled,
         mfaEnforced: !!user.mfaEnforced,
         mfa_verified: false,
+        mfaGracePeriodActive,
+        mfaGraceLoginsRemaining,
+        mfaGraceExpiresAt: mfaGraceExpiresAt ? new Date(mfaGraceExpiresAt).toISOString() : undefined,
+        mfaGraceBypassed: false,
       } as IndustrialUser;
     } else {
       if (process.env.NODE_ENV === 'development') {

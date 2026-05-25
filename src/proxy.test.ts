@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // 1. Mock internal auth module first before importing proxy
 vi.mock('./auth', () => {
   return {
-    auth: (middlewareFn: any) => {
+    auth: (middlewareFn: unknown) => {
       // Direct pass-through so we can test the raw middleware function
       return middlewareFn;
     },
@@ -51,8 +51,8 @@ const mockIntlMiddlewareResult = { status: 200, intl: true };
 // Retrieve the actual mock function instantiated inside proxy.ts
 const mockIntlMiddleware = vi.mocked(createMiddleware).mock.results[0].value;
 
-const runProxy = async (req: any): Promise<any> => {
-  return (proxy as any)(req);
+const runProxy = async (req: unknown) => {
+  return (proxy as unknown as any)(req);
 };
 
 describe('proxy.ts Middleware', () => {
@@ -60,7 +60,7 @@ describe('proxy.ts Middleware', () => {
     vi.clearAllMocks();
   });
 
-  const makeReq = (pathname: string, authData: any = null, queryParams: string = '') => {
+  const makeReq = (pathname: string, authData: unknown = null, queryParams = '') => {
     const baseUrl = 'http://localhost:3400';
     const urlStr = `${baseUrl}${pathname}${queryParams}`;
     return {
@@ -69,7 +69,7 @@ describe('proxy.ts Middleware', () => {
         pathname,
       },
       auth: authData,
-    } as any;
+    } as unknown as any;
   };
 
   describe('Locale & Landing Page Rules', () => {

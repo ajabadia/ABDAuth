@@ -37,7 +37,8 @@ ABDAuth is the certified identity provider (IdP) designed to manage authenticati
 - **i18n**: next-intl (Locale-prefixed routing with industrial switcher)
 - **UI Architecture**: Premium Cyber-Industrial Entry Portal + Aseptic Dashboard.
 
-- **MFA Hardening**: Industrial TOTP implementation with functional API (otplib v13), alphanumeric recovery codes, and session rescue protocols.
+- **MFA Hardening**: Multi-Factor Authentication suite combining industrial TOTP (otplib v13), recovery codes, and biometric WebAuthn (Passkeys, FaceID, TouchID, Windows Hello) powered by `@simplewebauthn`.
+- **MFA Grace Period**: Permissive onboarding countdown (3 logins / 7 days) allowing temporary bypass of mandatory MFA enrollment before strict blocking.
 - **Audit Compliance**: Verified via `abd-audit.ps1` (6-phase certification pipeline).
 - **Self-Service Governance**: Industrialized password management and security telemetry visualization.
 - **Proactive Governance**: Integrated security recommendation system for non-mandatory users.

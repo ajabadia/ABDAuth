@@ -27,7 +27,9 @@
     "mfa_setup": {
       "title": "Seguridad Obligatoria",
       "description": "Tu cuenta requiere Autenticación Multi-Factor (2FA) para acceder a los sistemas protegidos. Configúralo ahora para continuar.",
-      "cancel_logout": "Cancelar y cerrar sesión"
+      "cancel_logout": "Cancelar y cerrar sesión",
+      "grace_banner": "PERÍODO DE GRACIA ACTIVO: Quedan {count} accesos permitidos sin configurar. Fecha límite: {expiry}.",
+      "skip_grace": "OMITIR POR AHORA (Quedan {count})"
     },
     "email_label": "Identity_Principal (Email)",
     "email_placeholder": "usuario@ejemplo.com",
@@ -36,7 +38,9 @@
     "button": "Autenticar Sistema",
     "error_invalid": "Credenciales no autorizadas",
     "error_generic": "Error crítico de conexión",
+    "error_email_required": "Por favor, introduce tu email principal",
     "shield_badge": "Certificado SOC2 Tipo II",
+    "passkey_login_btn": "Iniciar con Llave de Paso",
     "demo_title": "Credenciales de Laboratorio",
     "demo_user": "ajabadia@gmail.com",
     "demo_pass": "11111111",
@@ -262,6 +266,7 @@
         "subtitle": "Gobernanza Standard TOTP",
         "status_active": "PROTEGIDO",
         "status_inactive": "VULNERABLE",
+        "register_passkey": "Registrar Llave de Paso",
         "info_active": "Tu cuenta está protegida con autenticación de dos factores. Se requerirá un código de seguridad para cada inicio de sesión.",
         "info_inactive": "Añade una capa extra de seguridad a tu identidad industrial. Activa el MFA para protegerte contra accesos no autorizados.",
         "enable": "Activar 2FA",

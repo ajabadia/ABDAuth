@@ -7,8 +7,9 @@ import { ShieldAlert, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { signOut } from 'next-auth/react';
 import { SystemSettings } from '@/components/ui/SystemSettings';
+import { useTranslations } from 'next-intl';
 
-import { syncMfaEnforcementAction } from '@/services/auth/security-actions';
+import { syncMfaEnforcementAction, skipMfaGraceAction } from '@/services/auth/security-actions';
 import { toast } from 'sonner';
 
 interface MfaSetupContainerProps {
@@ -20,10 +21,23 @@ interface MfaSetupContainerProps {
   isMandatory: boolean;
   needsSync: boolean;
   isAuthenticated: boolean;
+  mfaGracePeriodActive?: boolean;
+  mfaGraceLoginsRemaining?: number;
+  mfaGraceExpiresAt?: string;
 }
 
-export function MfaSetupContainer({ t, isMandatory, needsSync, isAuthenticated }: MfaSetupContainerProps) {
+export function MfaSetupContainer({ 
+  t, 
+  isMandatory, 
+  needsSync, 
+  isAuthenticated,
+  mfaGracePeriodActive,
+  mfaGraceLoginsRemaining = 0,
+  mfaGraceExpiresAt = ''
+}: MfaSetupContainerProps) {
   const router = useRouter();
+  const skipTranslations = useTranslations('login.mfa_setup');
+  const [skipping, setSkipping] = React.useState(false);
 
   React.useEffect(() => {
     if (needsSync) {
@@ -47,6 +61,24 @@ export function MfaSetupContainer({ t, isMandatory, needsSync, isAuthenticated }
     router.refresh();
   };
 
+  const handleSkip = async () => {
+    setSkipping(true);
+    try {
+      const result = await skipMfaGraceAction();
+      if (result.success) {
+        toast.success(skipTranslations('skip_grace', { count: result.remainingLogins ?? 0 }));
+        router.push('/dashboard');
+        router.refresh();
+      } else {
+        toast.error(result.error || 'Failed to skip MFA');
+      }
+    } catch {
+      toast.error('Failed to process grace period request');
+    } finally {
+      setSkipping(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6">
       <div className="fixed top-6 right-6 z-50">
@@ -65,6 +97,23 @@ export function MfaSetupContainer({ t, isMandatory, needsSync, isAuthenticated }
             {t.description}
           </p>
         </div>
+
+        {mfaGracePeriodActive && mfaGraceLoginsRemaining > 0 && (
+          <div className="bg-amber-500/5 border border-amber-500/20 p-5 rounded-none space-y-3 animate-in fade-in duration-500">
+            <p className="text-[11px] font-mono text-amber-500 tracking-wider text-center uppercase font-black">
+              {skipTranslations('grace_banner', { count: mfaGraceLoginsRemaining, expiry: mfaGraceExpiresAt })}
+            </p>
+            <div className="flex justify-center">
+              <Button
+                onClick={handleSkip}
+                disabled={skipping}
+                className="bg-amber-500 hover:bg-amber-600 text-black rounded-none uppercase font-mono font-black text-[9px] tracking-[0.2em] h-10 px-6 active:scale-[0.98] transition-all shadow-none"
+              >
+                {skipping ? 'Sincronizando...' : skipTranslations('skip_grace', { count: mfaGraceLoginsRemaining })}
+              </Button>
+            </div>
+          </div>
+        )}
 
         <div className="bg-card rounded-sm border border-border shadow-none overflow-hidden">
           <MfaControl 

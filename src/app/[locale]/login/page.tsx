@@ -67,6 +67,66 @@ export default function LoginPage() {
     }
   };
 
+  const handlePasskeyLogin = async () => {
+    if (!email) {
+      setError(t('error_email_required'));
+      toast.error(t('error_email_required'));
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const { startAuthentication } = await import('@simplewebauthn/browser');
+      const { 
+        generatePasskeyAuthenticationOptionsAction, 
+        verifyPasskeyAuthenticationAction 
+      } = await import('@/services/auth/security-actions');
+
+      const options = await generatePasskeyAuthenticationOptionsAction(email);
+      const authResponse = await startAuthentication({ optionsJSON: options });
+      const verification = await verifyPasskeyAuthenticationAction(email, authResponse);
+
+      if (verification.success && verification.bypassToken) {
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('passkeyBypassToken', verification.bypassToken);
+
+        const result = await loginAction(formData);
+
+        if (result?.error) {
+          setError(t('error_invalid'));
+          toast.error(t('error_invalid'));
+        } else {
+          toast.success(common('brand'), {
+            description: "Acceso biométrico concedido. Sincronizando..."
+          });
+          const params = new URLSearchParams(window.location.search);
+          const callbackUrl = params.get('callbackUrl');
+          if (callbackUrl) {
+            window.location.href = callbackUrl;
+          } else {
+            router.push('/dashboard');
+          }
+        }
+      } else {
+        setError(verification.error || t('error_invalid'));
+        toast.error(verification.error || t('error_invalid'));
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error && (err.message === 'NEXT_REDIRECT' || (err as { digest?: string }).digest?.includes('NEXT_REDIRECT'))) {
+        return;
+      }
+      // eslint-disable-next-line no-console
+      console.error('[Passkey Login Flow Error]', err);
+      setError(t('error_generic'));
+      toast.error(t('error_generic'));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 bg-background text-foreground selection:bg-primary/30 overflow-hidden relative" role="main">
       {brandingCss && (
@@ -102,6 +162,7 @@ export default function LoginPage() {
         error={error}
         onSubmit={handleSubmit}
         onForgotPassword={() => router.push('/login/forgot-password')}
+        onPasskeyLogin={handlePasskeyLogin}
         t={t}
       />
 

@@ -10,6 +10,7 @@ interface LoginFormProps {
   error: string;
   onSubmit: (e: React.FormEvent) => void;
   onForgotPassword: () => void;
+  onPasskeyLogin?: () => void;
   t: (key: string) => string;
 }
 
@@ -22,6 +23,7 @@ export function LoginForm({
   error,
   onSubmit,
   onForgotPassword,
+  onPasskeyLogin,
   t
 }: LoginFormProps) {
   return (
@@ -60,7 +62,7 @@ export function LoginForm({
               onChange={(e) => setPassword(e.target.value)}
               placeholder={t('password_placeholder')}
               className="w-full bg-secondary/30 border-border border rounded-none h-10 pl-10 pr-4 text-xs focus:ring-1 focus:ring-primary/30 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/30 text-foreground font-sans"
-              required
+              required={!onPasskeyLogin}
             />
           </div>
           <div className="flex justify-end pt-1">
@@ -90,6 +92,18 @@ export function LoginForm({
         >
           {isLoading ? <Loader2 size={16} className="animate-spin text-primary-foreground" /> : <><ArrowRight size={14} /> {t('button')}</>}
         </button>
+
+        {onPasskeyLogin && (
+          <button 
+            type="button"
+            onClick={onPasskeyLogin}
+            disabled={isLoading}
+            className="w-full bg-secondary/30 hover:bg-secondary/50 text-foreground border border-border text-[10px] font-mono uppercase tracking-widest font-black py-3 rounded-none active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
+          >
+            <Lock size={14} className="text-primary animate-pulse" />
+            {t('passkey_login_btn')}
+          </button>
+        )}
       </form>
 
       <div className="p-4 bg-secondary/20 border-t border-border flex items-center justify-center gap-2">

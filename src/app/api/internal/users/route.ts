@@ -84,11 +84,13 @@ export async function POST(req: NextRequest) {
         activeModules: [],
         mfaEnabled: false,
         mfaEnforced: false,
+        mfaGracePeriodActive: false,
+        mfaGraceLoginsRemaining: 0,
         loginAttempts: 0,
         preferences: {},
         createdAt: new Date(),
         updatedAt: new Date()
-      } as Parameters<typeof userRepository.create>[0]);
+      });
       user = await userRepository.findById(userId);
     } else {
       // User exists, just add membership if not present

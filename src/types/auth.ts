@@ -19,6 +19,10 @@ export interface IndustrialUser {
   mfaEnabled: boolean;
   mfaEnforced: boolean;
   mfa_verified: boolean;
+  mfaGracePeriodActive?: boolean;
+  mfaGraceLoginsRemaining?: number;
+  mfaGraceExpiresAt?: string;
+  mfaGraceBypassed?: boolean;
   active?: boolean;
   loginAttempts?: number;
   lockoutUntil?: Date;

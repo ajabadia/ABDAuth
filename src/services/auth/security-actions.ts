@@ -41,3 +41,29 @@ export async function revokeAllOtherSessionsAction() {
 export async function changePasswordAction(currentPass: string, newPass: string) {
   return password.changePasswordAction(currentPass, newPass);
 }
+
+export async function skipMfaGraceAction() {
+  return mfa.skipMfaGraceAction();
+}
+
+export async function generatePasskeyRegistrationOptionsAction() {
+  const passkeys = await import("./actions/passkey-actions");
+  return passkeys.generatePasskeyRegistrationOptionsAction();
+}
+
+import type { RegistrationResponseJSON, AuthenticationResponseJSON } from '@simplewebauthn/server';
+
+export async function verifyPasskeyRegistrationAction(response: RegistrationResponseJSON) {
+  const passkeys = await import("./actions/passkey-actions");
+  return passkeys.verifyPasskeyRegistrationAction(response);
+}
+
+export async function generatePasskeyAuthenticationOptionsAction(email: string) {
+  const passkeys = await import("./actions/passkey-actions");
+  return passkeys.generatePasskeyAuthenticationOptionsAction(email);
+}
+
+export async function verifyPasskeyAuthenticationAction(email: string, response: AuthenticationResponseJSON) {
+  const passkeys = await import("./actions/passkey-actions");
+  return passkeys.verifyPasskeyAuthenticationAction(email, response);
+}

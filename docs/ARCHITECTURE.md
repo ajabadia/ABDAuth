@@ -76,6 +76,13 @@ Para mantener los archivos de modelos por debajo del límite estructural de 150 
 1. **Desacoplamiento de Esquemas**: Se han dividido los esquemas centrales en subarchivos específicos por dominio (`user.ts`, `tenant.ts`, `session.ts`, `application.ts`).
 2. **Patrón Barrel Export**: El archivo central `src/lib/schemas/auth.ts` actúa como un concentrador que reexporta todos los esquemas individuales. Esto previene romper importaciones preexistentes a lo largo de la aplicación y respeta el principio DRY.
 
+## 9. Robustecimiento Biométrico & Desafíos WebAuthn (Hito 5.6)
+Para soportar el inicio de sesión passwordless de alta seguridad:
+1. **Verificación FIDO2/WebAuthn**: Integración de `@simplewebauthn` en el IdP central.
+2. **Almacenamiento de Desafíos**: Los desafíos (`challenges`) de registro/autenticación se persisten de forma temporal en la colección `webauthn_challenges` en MongoDB.
+3. **Estrategia de Expiración (TTL)**: Dado el entorno serverless y distribuido de Next.js, se impone un índice de expiración TTL de 5 minutos sobre la propiedad `createdAt` de la colección de desafíos. Esto evita la dependencia de almacenamiento en memoria (que fallaría en balanceadores de carga) y previene la acumulación de datos obsoletos.
+4. **Validación de Bypass Central**: El flujo biométrico expide un token JWT firmado de un solo uso y validez de 30 segundos (`passkeyBypassToken`) que el proveedor de credenciales verifica para otorgar la sesión del usuario.
+
 ---
 **Firmado:** *Antigravity Architecture Board*
 
