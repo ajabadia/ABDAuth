@@ -1,6 +1,6 @@
 import React from "react";
 import { Sun, Moon, Monitor, Check } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/tailwind";
 
 interface ThemeSelectorProps {
   theme: string | undefined;

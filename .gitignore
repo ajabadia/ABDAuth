@@ -15,6 +15,10 @@ abd-audit-results.log
 lint/
 .vercel
 
+# Playwright Artifacts
+test-results/
+playwright-report/
+
 # IDE ignores
 .vscode/
 .idea/

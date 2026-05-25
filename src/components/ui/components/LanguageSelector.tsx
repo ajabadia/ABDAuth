@@ -1,6 +1,6 @@
 import React from "react";
 import { Languages, Check } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/tailwind";
 
 interface LanguageSelectorProps {
   locale: string;

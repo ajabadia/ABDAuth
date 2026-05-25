@@ -64,9 +64,14 @@ export async function authorizeUser(credentials: Record<string, any> | undefined
     let isBypassOrPasswordValid = false;
 
     if (passkeyBypassToken) {
+      const jwtSecret = process.env.AUTH_JWT_SECRET;
+      if (!jwtSecret) {
+        throw new Error('AUTH_JWT_SECRET is required for passkey bypass');
+      }
+
       try {
         const { jwtVerify } = await import('jose');
-        const secret = new TextEncoder().encode(process.env.AUTH_JWT_SECRET || 'secret');
+        const secret = new TextEncoder().encode(jwtSecret);
         const { payload } = await jwtVerify(passkeyBypassToken, secret);
         
         if (payload.email === email && payload.passkeyLogin) {
