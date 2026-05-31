@@ -15,14 +15,10 @@ export class SecurityService {
     if (!this.encryptionKey) {
       const secret = process.env.ENCRYPTION_SECRET;
       if (!secret) {
-        if (process.env.NODE_ENV === 'production') {
-          throw new AppError('ENCRYPTION_SECRET is missing', 'INTERNAL_ERROR', 500);
-        }
-        // Fallback for dev (32 bytes)
-        this.encryptionKey = crypto.scryptSync('dev-secret-key-abd-auth-2026', 'salt', 32);
-      } else {
-        this.encryptionKey = crypto.scryptSync(secret, 'abd-salt', 32);
+        throw new AppError('ENCRYPTION_SECRET is missing', 'INTERNAL_ERROR', 500);
       }
+      this.encryptionKey = crypto.scryptSync(secret, 'abd-salt', 32);
+
     }
     return this.encryptionKey;
   }

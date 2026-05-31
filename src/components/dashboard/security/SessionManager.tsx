@@ -5,6 +5,8 @@ import { useTranslations, useFormatter, useNow } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Monitor, Loader2, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ConfirmDialog, useConfirmDialog } from '@ajabadia/ecosystem-widgets';
+import { useSessionNotification } from './hooks/useSessionNotification';
 import { revokeSessionAction, revokeAllOtherSessionsAction } from '@/services/auth/security-actions';
 import { SessionItem } from './components/SessionItem';
 
@@ -32,12 +34,7 @@ export function SessionManager({ sessions: initialSessions }: SessionManagerProp
   
   const [sessions, setSessions] = useState(initialSessions);
   const [loadingId, setLoadingId] = useState<string | null>(null);
-  const [notification, setNotification] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
-
-  const notify = (message: string, type: 'success' | 'error' = 'success') => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 3000);
-  };
+  const { notification, notify } = useSessionNotification();
 
   const handleRevoke = async (id?: string) => {
     if (!id) return;
@@ -53,18 +50,23 @@ export function SessionManager({ sessions: initialSessions }: SessionManagerProp
     }
   };
 
-  const handleRevokeOthers = async () => {
-    if (!confirm(t('revoke_all'))) return;
-    setLoadingId('ALL');
-    try {
-      await revokeAllOtherSessionsAction();
-      setSessions(prev => prev.filter(s => s.isCurrent));
-      notify(t('revoke_all'));
-    } catch {
-      notify(t('revoke'), 'error');
-    } finally {
-      setLoadingId(null);
-    }
+  const revokeAllDialog = useConfirmDialog({
+    onConfirm: async () => {
+      setLoadingId('ALL');
+      try {
+        await revokeAllOtherSessionsAction();
+        setSessions(prev => prev.filter(s => s.isCurrent));
+        notify(t('revoke_all'));
+      } catch {
+        notify(t('revoke'), 'error');
+      } finally {
+        setLoadingId(null);
+      }
+    },
+  });
+
+  const handleRevokeOthers = () => {
+    revokeAllDialog.trigger();
   };
 
   return (
@@ -102,9 +104,9 @@ export function SessionManager({ sessions: initialSessions }: SessionManagerProp
             size="sm" 
             className="text-destructive hover:bg-destructive/10 text-[10px] h-9 font-bold uppercase tracking-widest gap-2 rounded-sm"
             onClick={handleRevokeOthers}
-            disabled={loadingId === 'ALL'}
+            disabled={loadingId === 'ALL' || revokeAllDialog.isLoading}
           >
-            {loadingId === 'ALL' ? <Loader2 size={12} className="animate-spin" /> : <LogOut size={14} />}
+            {(loadingId === 'ALL' || revokeAllDialog.isLoading) ? <Loader2 size={12} className="animate-spin" /> : <LogOut size={14} />}
             {t('revoke_all')}
           </Button>
         )}
@@ -131,6 +133,18 @@ export function SessionManager({ sessions: initialSessions }: SessionManagerProp
           )}
         </AnimatePresence>
       </div>
+
+      <ConfirmDialog
+        open={revokeAllDialog.open}
+        title={t('revoke_all') || "REVOCAR SESIONES"}
+        message={t('revoke_all') || "¿Estás seguro de que deseas revocar todas las demás sesiones activas?"}
+        confirmLabel="REVOCAR"
+        cancelLabel="CANCELAR"
+        variant="danger"
+        isLoading={revokeAllDialog.isLoading}
+        onConfirm={revokeAllDialog.confirm}
+        onCancel={revokeAllDialog.cancel}
+      />
     </div>
   );
 }

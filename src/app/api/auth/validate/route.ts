@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { getServerSession } from '@/lib/get-session';
 import { NextResponse } from "next/server";
 import type { IndustrialSession } from "@/types/auth";
 
@@ -10,7 +10,7 @@ import type { IndustrialSession } from "@/types/auth";
  */
 export async function GET() {
   try {
-    const session = await auth();
+    const session = await getServerSession();
 
     if (!session || !session.user) {
       return NextResponse.json(

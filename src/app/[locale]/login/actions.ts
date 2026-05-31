@@ -1,13 +1,12 @@
 'use server'
 
-import { signIn } from "@/auth";
-import { AuthError } from "next-auth";
+import { auth } from "@/lib/auth";
+import { APIError } from "better-auth";
+import { userRepository } from "@/lib/repositories/UserRepository";
 
 export async function loginAction(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
-  const passkeyBypassToken = formData.get('passkeyBypassToken') as string;
-
   if (process.env.NODE_ENV === 'development') {
     console.log("[LOGIN_ACTION_START] Login attempt started.");
   }
@@ -15,7 +14,7 @@ export async function loginAction(formData: FormData) {
   try {
     const { RateLimitService } = await import('@/services/security/RateLimitService');
     const ip = await RateLimitService.getClientIp();
-    
+
     if (process.env.NODE_ENV === 'development') {
       console.log("[LOGIN_ACTION_IP] Client IP:", ip);
     }
@@ -29,29 +28,63 @@ export async function loginAction(formData: FormData) {
       return { error: 'TOO_MANY_REQUESTS' };
     }
 
-    await signIn("credentials", {
-      email,
-      password,
-      passkeyBypassToken,
-      redirect: false, // Handle redirect in the client or via throw
+    // 🛡️ Account Lockout Guard: Check before calling Better Auth
+    const dbUser = await userRepository.findByEmail(email);
+    if (dbUser && dbUser.lockoutUntil && new Date(dbUser.lockoutUntil) > new Date()) {
+      return { error: 'ACCOUNT_LOCKED' };
+    }
+
+    // 🔐 Authenticate via better-auth
+    // nextCookies() plugin handles session cookie automatically
+    await auth.api.signInEmail({
+      body: {
+        email,
+        password,
+      },
     });
-    
+
     if (process.env.NODE_ENV === 'development') {
       console.log("[LOGIN_ACTION_SUCCESS] Signed in successfully.");
     }
+
+    // Success — cookies are set by nextCookies plugin
+    return {};
   } catch (error) {
     console.error("[LOGIN_ACTION_CRITICAL_ERROR]", error);
-    if (error instanceof AuthError) {
-      // 🛡️ Industrial Error Mapping
-      if (error.cause?.err?.message === 'ACCOUNT_LOCKED') return { error: 'ACCOUNT_LOCKED' };
-      if (error.cause?.err?.message === 'ACCOUNT_INACTIVE') return { error: 'ACCOUNT_INACTIVE' };
+
+    // 🔢 Increment login attempts on any authentication failure
+    try {
+      const failedUser = await userRepository.findByEmail(email);
+      if (failedUser) {
+        const newAttempts = (failedUser.loginAttempts || 0) + 1;
+        const updateData: Record<string, unknown> = { loginAttempts: newAttempts };
+        if (newAttempts >= 5) {
+          updateData.lockoutUntil = new Date(Date.now() + 15 * 60 * 1000); // 15 min lockout
+        }
+        await userRepository.update(failedUser._id as string, updateData);
+      }
+    } catch (incrementError) {
+      console.error("[LOGIN_ACTION] Failed to increment login attempts:", incrementError);
+    }
+
+    if (error instanceof APIError) {
+      if (error.status === 403) {
+        const message = error.message?.toLowerCase() || '';
+        if (message.includes('locked') || message.includes('account_locked')) {
+          return { error: 'ACCOUNT_LOCKED' };
+        }
+        if (message.includes('inactive') || message.includes('account_inactive')) {
+          return { error: 'ACCOUNT_INACTIVE' };
+        }
+      }
       return { error: 'Invalid credentials' };
     }
+
     // Re-throw redirect errors so Next.js handles them
     if (error instanceof Error && (error.message === 'NEXT_REDIRECT' || (error as { digest?: string }).digest?.includes('NEXT_REDIRECT'))) {
       throw error;
     }
-    // Handle other errors
+
     return { error: 'Something went wrong' };
   }
 }

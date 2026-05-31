@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { getServerSession } from '@/lib/get-session';
 import { redirect } from "next/navigation";
 
 /**
@@ -9,7 +9,7 @@ export default async function TenantsPage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const session = await auth();
+  const session = await getServerSession();
   const { locale } = await params;
 
   if (!session) {

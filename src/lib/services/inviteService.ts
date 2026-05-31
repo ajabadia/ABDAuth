@@ -1,4 +1,4 @@
-import { getResend } from '../resend-client';
+import { ResendEmailService } from '@ajabadia/satellite-sdk';
 import { AppError } from '../errors';
 
 /**
@@ -8,11 +8,9 @@ import { AppError } from '../errors';
 export class InviteService {
   async sendActivationEmail(email: string, name: string, token: string, tenantId: string) {
     try {
-      const resend = getResend();
-      
       const activateUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/activate?token=${token}&tenantId=${tenantId}`;
       
-      await resend.emails.send({
+      await ResendEmailService.sendEmail({
         from: 'ABDSuite IAM <no-reply@abd-suite.com>', // Update with verified domain if applicable
         to: email,
         subject: 'Activa tu cuenta en ABDSuite',

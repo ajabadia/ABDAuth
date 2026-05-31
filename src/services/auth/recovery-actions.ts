@@ -41,7 +41,7 @@ export async function requestPasswordResetAction(email: string) {
   });
 
   // 4. Send email
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3400';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3400';
   const resetUrl = `${baseUrl}/login/reset-password?token=${token}`;
 
   try {
@@ -83,8 +83,8 @@ export async function resetPasswordAction(token: string, newPass: string) {
   if (!dbUser) return { success: false, error: 'USER_NOT_FOUND' };
 
   // 2. Hash and update password
-  const bcrypt = await import('bcryptjs');
-  const hashedPassword = await bcrypt.hash(newPass, 12);
+  const argon2 = await import('argon2');
+  const hashedPassword = await argon2.hash(newPass);
   
   const updated = await userRepository.update(dbUser._id as EntityId, {
     password: hashedPassword,

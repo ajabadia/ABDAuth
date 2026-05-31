@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "@/i18n/routing";
 import { Shield, Mail, Loader2, ArrowLeft, Send } from "lucide-react";
 import { useTranslations } from 'next-intl';
-import { SystemSettings } from "@/components/ui/SystemSettings";
 import { toast } from "sonner";
 import { requestPasswordResetAction } from "@/services/auth/recovery-actions";
 
@@ -40,10 +39,6 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 font-sans relative overflow-hidden transition-colors duration-300">
       <div className="bg-grain" />
-
-      <div className="absolute top-6 right-6 flex items-center gap-3 z-50">
-        <SystemSettings isAuthenticated={false} />
-      </div>
       
       <div className="mb-12 flex flex-col items-center animate-in slide-in-from-top duration-700">
         <div 

@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { auth } from "@/auth";
+import { getServerSession } from '@/lib/get-session';
 import { SessionService } from "../SessionService";
 import type { IndustrialUser } from "@/types/auth";
 import type { EntityId } from "@/lib/schemas/common";
@@ -10,8 +10,8 @@ import type { EntityId } from "@/lib/schemas/common";
  * 🗝️ Session: Revoke a specific session
  */
 export async function revokeSessionAction(sessionId: string) {
-  const session = await auth();
-  const user = session?.user as IndustrialUser;
+  const s = await getServerSession();
+  const user = s?.user as IndustrialUser;
   if (!user) throw new Error("Unauthorized");
 
   await SessionService.revokeSession(sessionId, user.id as EntityId, user.tenantId);
@@ -22,8 +22,8 @@ export async function revokeSessionAction(sessionId: string) {
  * 🧹 Session: Revoke all other sessions
  */
 export async function revokeAllOtherSessionsAction() {
-  const session = await auth();
-  const user = session?.user as IndustrialUser;
+  const s = await getServerSession();
+  const user = s?.user as IndustrialUser;
   if (!user) throw new Error("Unauthorized");
 
   if (!user.sessionId) throw new Error("Current session ID missing");

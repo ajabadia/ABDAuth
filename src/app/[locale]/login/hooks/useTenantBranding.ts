@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { generateTenantCss } from "@abd/styles";
+import { generateTenantCss } from "@ajabadia/styles";
 
 interface TenantBranding {
   logoUrl?: string | null;

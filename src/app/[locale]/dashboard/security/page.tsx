@@ -2,9 +2,8 @@ import { getTranslations } from 'next-intl/server';
 import { MfaControl } from '@/components/dashboard/security/MfaControl';
 import { PasswordManager } from '@/components/dashboard/security/PasswordManager';
 import { SessionManager } from '@/components/dashboard/security/SessionManager';
-import { auth } from '@/auth';
+import { getServerSession } from '@/lib/get-session';
 import { Key } from 'lucide-react';
-import { MfaService } from '@/services/auth/MfaService';
 import { SessionService } from '@/services/auth/SessionService';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { PageHeader } from "@/components/ui/industrial/PageHeader";
@@ -14,7 +13,7 @@ import type { EntityId } from '@/lib/schemas/common';
 export default async function SecurityPage() {
   const t = await getTranslations('dashboard.security');
   const d = await getTranslations('dashboard');
-  const session = await auth();
+  const session = await getServerSession();
   const user = session?.user as IndustrialUser;
 
   if (!user) return null;
@@ -24,7 +23,7 @@ export default async function SecurityPage() {
   const mfaEnforced = dbUser?.mfaEnforced ?? user.mfaEnforced;
 
   // 🛰️ Data Fetching (Industrial/Server-side)
-  const isMfaActive = await MfaService.isRequired(user.id);
+  const isMfaActive = dbUser?.mfaEnabled ?? false;
   const activeSessions = await SessionService.getUserSessions(user.id as EntityId, user.tenantId);
 
   return (

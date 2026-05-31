@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { getServerSession } from '@/lib/get-session';
 import { redirect } from "next/navigation";
 
 /**
@@ -10,7 +10,7 @@ export default async function AuditPage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const session = await auth();
+  const session = await getServerSession();
   if (!session) redirect("/login");
 
   const { locale } = await params;

@@ -1,27 +1,15 @@
-import { SignJWT } from 'jose';
+import crypto from 'crypto';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
 import { auditAuthOpsRepository } from '@/lib/repositories/AuditAuthOpsRepository';
+import { federatedCodeRepository } from '@/lib/repositories/FederatedCodeRepository';
 import type { TenantId } from '@/lib/schemas/common';
 import type { Application } from '@/lib/schemas/auth';
 import type { SafeFilter } from '@/lib/repositories/BaseRepository';
-
-export interface SsoPayload {
-  sub: string;
-  email: string;
-  name: string;
-  surname: string;
-  tenantId: string;
-  role: string;
-  permissions: string[];
-  dbPrefix: string;
-  isolationStrategy: string;
-  allowedApps: string[];
-  groups?: string[];
-  /** 🔐 Central session ID for back-channel SLO validation */
-  sessionId?: string;
-}
+import { generateToken } from './sso-token';
+export type { SsoPayload } from './types/sso-payload';
+import type { SsoPayload } from './types/sso-payload';
 
 /**
  * 🛰️ SsoService
@@ -29,9 +17,12 @@ export interface SsoPayload {
  * Encapsulates full handshake orchestration.
  */
 export class SsoService {
-  private static getSecretKey(): Uint8Array {
-    const secret = process.env.AUTH_JWT_SECRET || process.env.AUTH_SECRET || 'abd-auth-industrial-fallback-secret-2026';
-    return new TextEncoder().encode(secret);
+  /**
+   * 🗝️ Generate standard signed JWT token
+   * Delegates to the sso-token helper for signing logic.
+   */
+  static async generateToken(payload: SsoPayload): Promise<string> {
+    return generateToken(payload);
   }
 
   private static async audit(
@@ -53,35 +44,11 @@ export class SsoService {
   }
 
   /**
-   * 🗝️ Generate standard signed JWT token
-   * Valid for 2 hours (per DISENO_SSO_TENANTS.md spec)
-   */
-  static async generateToken(payload: SsoPayload): Promise<string> {
-    const secret = this.getSecretKey();
-    return await new SignJWT({
-      sub: payload.sub,
-      email: payload.email,
-      name: payload.name,
-      surname: payload.surname,
-      tenantId: payload.tenantId,
-      role: payload.role,
-      permissions: payload.permissions,
-      dbPrefix: payload.dbPrefix,
-      isolationStrategy: payload.isolationStrategy,
-      allowedApps: payload.allowedApps,
-      groups: payload.groups || [],
-      // 🔐 Back-channel SLO: embed central session ID in satellite token
-      ...(payload.sessionId ? { sessionId: payload.sessionId } : {}),
-    })
-      .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
-      .setIssuedAt()
-      .setExpirationTime('2h')
-      .sign(secret);
-  }
-
-  /**
    * 🔌 Perform Federated SSO Handshake Verification
    * Validates active session memberships, licenses, application states, and triggers audit logging.
+   * Returns an authorization code (via redirectUrl) instead of embedding the JWT in the URL,
+   * which prevents token leakage in server logs, browser history, and referrer headers.
+   * The code is exchanged for a JWT via the server-side /api/auth/federated/token endpoint.
    */
   static async performSsoHandshake(params: {
     appId: string;
@@ -90,6 +57,13 @@ export class SsoService {
     userEmail: string;
     userName: string;
     userSurname?: string;
+    /**
+     * The satellite's callback URL (e.g. https://app.example.com/api/auth/federated/callback).
+     * The authorization code will be appended as ?code=xxx&state=/
+     */
+    redirectUri: string;
+    /** 🔐 Central session ID for back-channel SLO propagation */
+    sessionId?: string;
     ipAddress?: string;
     userAgent?: string;
   }): Promise<{ success: boolean; redirectUrl?: string; errorType?: string }> {
@@ -156,31 +130,26 @@ export class SsoService {
       return { success: false, errorType: 'APPLICATION_NOT_LICENSED' };
     }
 
-    // 6. Generate outgoing Signed SSO JWT
-    const token = await this.generateToken({
-      sub: userId,
-      email: userEmail,
-      name: userName,
-      surname: userSurname || '',
-      tenantId,
-      role,
-      permissions,
-      dbPrefix: tenantId === 'GLOBAL' ? 'global_' : tenant!.dbPrefix,
-      isolationStrategy: tenantId === 'GLOBAL' ? 'COLLECTION_PREFIX' : (tenant!.isolationStrategy || 'COLLECTION_PREFIX'),
-      allowedApps: resolvedAllowedApps,
-      groups: membership?.groupIds || [],
+    // 6. Generate short-lived authorization code (instead of embedding JWT in URL)
+    const code = crypto.randomBytes(24).toString('hex');
+    await federatedCodeRepository.create({
+      code,
+      clientId: app.clientId,
+      userId: params.userId,
+      redirectUri: params.redirectUri,
+      expiresAt: new Date(Date.now() + 5 * 60 * 1000), // 5-minute TTL
+      used: false,
+      sessionId: params.sessionId,
     });
 
-    // 7. Resolve Destination URL with Tenant sub-domain pattern injection
-    const targetPattern = app.urlPattern || app.redirectUris[0];
-    const destinationUrl = targetPattern.replace('{tenant}', tenantId);
-
-    const redirectTarget = new URL(destinationUrl);
-    redirectTarget.searchParams.set('token', token);
+    // 7. Redirect to satellite's callback with code (JWT will be exchanged server-side via POST)
+    const callbackUrl = new URL(params.redirectUri);
+    callbackUrl.searchParams.set('code', code);
+    callbackUrl.searchParams.set('state', '/');
 
     // 8. Audit Handshake Success
-    await this.audit('SSO_HANDSHAKE_GRANTED', auditMeta, { appId, destinationUrl });
+    await this.audit('SSO_HANDSHAKE_GRANTED', auditMeta, { appId, callbackUrl: params.redirectUri });
 
-    return { success: true, redirectUrl: redirectTarget.toString() };
+    return { success: true, redirectUrl: callbackUrl.toString() };
   }
 }

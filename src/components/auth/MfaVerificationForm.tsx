@@ -6,14 +6,22 @@ import { motion } from 'framer-motion';
 import { ShieldCheck, Loader2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { verifyMfaLoginAction } from '@/services/auth/security-actions';
-import { signOut } from 'next-auth/react';
+import { authClient } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
 
+/**
+ * 🔐 MFA Verification Form
+ * Uses authClient.twoFactor.verifyTotp() for TOTP verification and
+ * authClient.twoFactor.verifyBackupCode() for backup codes.
+ * Sign-out uses authClient.signOut() — better-auth handles session cleanup.
+ */
 export function MfaVerificationForm() {
   const t = useTranslations('login.mfa');
+  const router = useRouter();
   const [token, setToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [usingBackupCode, setUsingBackupCode] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,12 +31,24 @@ export function MfaVerificationForm() {
     setError(null);
 
     try {
-      const result = await verifyMfaLoginAction(token);
-      if (!result?.success) {
-        setError(t('error_invalid'));
+      if (usingBackupCode) {
+        const { error: verifyError } = await authClient.twoFactor.verifyBackupCode({ code: token });
+        if (verifyError) {
+          setError(verifyError.message || t('error_invalid'));
+          return;
+        }
+      } else {
+        const { error: verifyError } = await authClient.twoFactor.verifyTotp({ code: token });
+        if (verifyError) {
+          setError(verifyError.message || t('error_invalid'));
+          return;
+        }
       }
+
+      // ✅ Successful verification — redirect to dashboard
+      router.push('/dashboard');
+      router.refresh();
     } catch (err: unknown) {
-      // 🛡️ Next.js redirects throw an error that should not be handled as a failure
       if (err instanceof Error && err.message === 'NEXT_REDIRECT') throw err;
       setError(t('error_invalid'));
     } finally {
@@ -59,11 +79,17 @@ export function MfaVerificationForm() {
           <div className="space-y-2">
             <Input
               type="text"
-              placeholder={t('placeholder')}
+              placeholder={usingBackupCode ? t('backup_placeholder') || 'XXXX-XXXXXX' : t('placeholder')}
               className="h-14 text-center text-2xl font-mono tracking-[0.2em] bg-muted/20 border-border rounded-sm focus:ring-primary/20 transition-all uppercase shadow-none"
-              maxLength={12}
+              maxLength={usingBackupCode ? 12 : 8}
               value={token}
-              onChange={(e) => setToken(e.target.value.replace(/[^A-Za-z0-9]/g, ''))}
+              onChange={(e) => {
+                if (usingBackupCode) {
+                  setToken(e.target.value.toUpperCase());
+                } else {
+                  setToken(e.target.value.replace(/\D/g, '').slice(0, 6));
+                }
+              }}
               autoFocus
               required
               disabled={loading}
@@ -83,19 +109,31 @@ export function MfaVerificationForm() {
           <Button 
             type="submit" 
             className="w-full h-12 bg-primary text-primary-foreground hover:opacity-95 rounded-none font-mono font-black text-[9px] uppercase tracking-[0.2em] transition-all shadow-none border border-primary/30 active:scale-95"
-            disabled={loading || token.length < 1}
+            disabled={loading || token.length < (usingBackupCode ? 6 : 1)}
           >
             {loading ? <Loader2 className="animate-spin mr-2" size={14} /> : null}
-            {t('button')}
+            {usingBackupCode ? t('verify_backup') || 'Verify Backup Code' : t('button')}
           </Button>
         </form>
 
-        <div className="pt-2">
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              setUsingBackupCode(!usingBackupCode);
+              setToken('');
+              setError(null);
+            }}
+            className="text-[10px] font-mono font-black uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors py-1 underline underline-offset-4 decoration-dotted"
+          >
+            {usingBackupCode ? t('use_totp') || 'Use authenticator app' : t('use_backup') || 'Use backup code'}
+          </button>
+
           <button 
             type="button"
             aria-label={t('back_to_login')}
-            onClick={() => signOut({ callbackUrl: '/login' })}
-            className="w-full flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors py-2"
+            onClick={async () => { await authClient.signOut(); window.location.href = '/login'; }}
+            className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors py-1"
           >
             <ArrowLeft size={14} />
             {t('back_to_login')}

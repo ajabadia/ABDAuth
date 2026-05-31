@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs';
+import * as argon2 from 'argon2';
 
 /**
  * 🔑 Generates 8 unique alphanumeric backup codes (10 characters each)
@@ -15,6 +15,6 @@ export function generateBackupCodes(): string[] {
  */
 export async function hashBackupCodes(codes: string[]): Promise<string[]> {
   return await Promise.all(
-    codes.map(code => bcrypt.hash(code, 10))
+    codes.map(code => argon2.hash(code))
   );
 }

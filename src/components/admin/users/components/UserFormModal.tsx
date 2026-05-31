@@ -1,6 +1,6 @@
 import React from "react";
 import { Plus } from "lucide-react";
-import { IndustrialModalHeader } from "@/components/ui/industrial/ModalHeader";
+import { IndustrialModalHeader } from "@ajabadia/ecosystem-widgets";
 import { UserForm } from "../UserForm";
 import type { IndustrialUserDisplay, UserManagementTranslations, IndustrialUserFormValues } from "../types";
 

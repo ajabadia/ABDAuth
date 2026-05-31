@@ -1,4 +1,4 @@
-import { getResend } from '@/lib/resend-client';
+import { ResendEmailService } from '@ajabadia/satellite-sdk';
 import {
   getPasswordResetHtml,
   getVerificationEmailHtml,
@@ -21,10 +21,9 @@ export class EmailService {
     resetUrl: string;
   }): Promise<void> {
     const { to, userName, resetUrl } = params;
-    const resend = getResend();
     const html = getPasswordResetHtml(userName, resetUrl);
 
-    await resend.emails.send({
+    await ResendEmailService.sendEmail({
       from: this.FROM,
       to,
       subject: '🔑 Restablecer Contraseña - ABDAuth',
@@ -41,10 +40,9 @@ export class EmailService {
     verificationUrl: string;
   }): Promise<void> {
     const { to, userName, verificationUrl } = params;
-    const resend = getResend();
     const html = getVerificationEmailHtml(userName, verificationUrl);
 
-    await resend.emails.send({
+    await ResendEmailService.sendEmail({
       from: this.FROM,
       to,
       subject: '🛡️ Activación de Cuenta - ABDAuth',
@@ -62,10 +60,9 @@ export class EmailService {
     details?: string;
   }): Promise<void> {
     const { to, userName, event, details } = params;
-    const resend = getResend();
     const html = getSecurityAlertHtml(userName, event, details);
 
-    await resend.emails.send({
+    await ResendEmailService.sendEmail({
       from: this.FROM,
       to,
       subject: `🛡️ Alerta: ${event} - ABDAuth`,

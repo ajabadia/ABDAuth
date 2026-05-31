@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { getServerSession } from "@/lib/get-session";
 import { redirect } from "@/i18n/routing";
 import { LayoutDashboard } from "lucide-react";
 import { getTranslations } from 'next-intl/server';
@@ -6,14 +6,13 @@ import type { IndustrialSession } from "@/types/auth";
 import { userRepository } from "@/lib/repositories/UserRepository";
 import { tenantRepository } from "@/lib/repositories/TenantRepository";
 import { applicationRepository } from "@/lib/repositories/ApplicationRepository";
-import { TenantSelector } from "./components/TenantSelector";
 import { AppLauncherGrid } from "./components/AppLauncherGrid";
 import { MfaPromotion } from "@/components/dashboard/MfaPromotion";
 import { PageHeader } from "@/components/ui/industrial/PageHeader";
 import { TokenPreview } from "./components/TokenPreview";
 import { StatsPanel } from "./components/StatsPanel";
 import { SsoErrorAlert } from "./components/SsoErrorAlert";
-import { getTenantSelectorTranslations, getAppLauncherTranslations } from "./components/translations";
+import { getAppLauncherTranslations } from "./components/translations";
 import type { TenantId } from "@/lib/schemas/common";
 import type { Application } from "@/lib/schemas/auth";
 import type { SafeFilter } from "@/lib/repositories/BaseRepository";
@@ -25,7 +24,7 @@ export default async function DashboardPage({
   params: Promise<{ locale: string }>;
   searchParams: Promise<{ error?: string; app?: string }>;
 }) {
-  const session = await auth();
+  const session = await getServerSession();
   const { locale } = await params;
   const { error, app } = await searchParams;
   const t = await getTranslations('dashboard');
@@ -36,27 +35,8 @@ export default async function DashboardPage({
   }
 
   const user = session.user as unknown as IndustrialSession;
-  const dbUser = await userRepository.findById(user.id);
-  if (!dbUser) {
-    redirect({ href: '/login', locale });
-    return null;
-  }
 
-  // 1. Fetch user memberships dynamically to check multi-tenancy / context switching
-  let userTenants: Array<{ tenantId: string; name: string; industry?: string; active: boolean }> = [];
-  if (user.role === 'SUPER_ADMIN') {
-    const allDbTenants = await tenantRepository.listForCurrentSession(user);
-    userTenants = [
-      { tenantId: 'GLOBAL', name: 'CONSOLA DEL SISTEMA (GLOBAL)', industry: 'SYSTEM', active: true },
-      ...allDbTenants.map(t => ({ tenantId: t.tenantId, name: t.name, industry: t.industry, active: t.active !== false }))
-    ];
-  } else {
-    const targetTenantIds = Array.from(new Set([dbUser.tenantId, ...(dbUser.tenantIds || []), ...(dbUser.tenants?.map(t => t.tenantId) || [])].filter(Boolean))) as TenantId[];
-    const dbTenants = (await Promise.all(targetTenantIds.map(tid => tenantRepository.findByTenantId(tid)))).filter(Boolean);
-    userTenants = dbTenants.map(t => ({ tenantId: t!.tenantId, name: t!.name, industry: t!.industry, active: t!.active !== false }));
-  }
-
-  // 2. Fetch allowed apps for the currently active tenant
+  // 1. Fetch allowed apps for the currently active tenant
   let allowedApps: Application[] = [];
   if (user.tenantId) {
     if (user.tenantId === 'GLOBAL') {
@@ -70,7 +50,7 @@ export default async function DashboardPage({
   }
 
   // 3. For stats, resolve users/tenants if admin
-  const isAdmin = user.role === 'SUPER_ADMIN' || user.role === 'ADMIN';
+  const isAdmin = user.role === 'SUPER_ADMIN' || user.role === 'ADMIN' || user.role === 'PROFESSOR';
   const allUsers = isAdmin ? await userRepository.listForCurrentSession(user) : [];
   const allTenants = isAdmin ? await tenantRepository.listForCurrentSession(user) : [];
 
@@ -102,15 +82,6 @@ export default async function DashboardPage({
           </div>
         }
       />
-
-      {/* 🏢 Part 1: Tenant Switcher */}
-      {userTenants.length > 1 && (
-        <TenantSelector 
-          tenants={userTenants}
-          activeTenantId={user.tenantId}
-          translations={getTenantSelectorTranslations(locale)}
-        />
-      )}
 
       {/* 🛰️ Part 2: Allowed Applications Launcher Grid */}
       {user.tenantId && (

@@ -1,7 +1,7 @@
 'use server'
 
 import { userRepository } from "@/lib/repositories/UserRepository";
-import bcrypt from "bcryptjs";
+import * as argon2 from "argon2";
 
 export async function activateAccountAction(formData: FormData) {
   const token = formData.get('token') as string;
@@ -22,8 +22,7 @@ export async function activateAccountAction(formData: FormData) {
     const user = users[0];
 
     // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, salt);
+    const passwordHash = await argon2.hash(password);
 
     // Update user
     await userRepository.update(user._id!.toString(), {

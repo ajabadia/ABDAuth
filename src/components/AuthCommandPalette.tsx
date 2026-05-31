@@ -3,8 +3,8 @@
 import React from 'react';
 import { useRouter, usePathname } from '@/i18n/routing';
 import { useLocale } from 'next-intl';
-import { signOut } from 'next-auth/react';
-import { CommandPalette, type Command } from '@abd/ecosystem-widgets';
+import { authClient } from '@/lib/auth-client';
+import { CommandPalette, type Command } from '@ajabadia/ecosystem-widgets';
 import { LayoutDashboard, Users, Shield, Building2, Key, Globe, LogOut, Settings } from 'lucide-react';
 
 export function AuthCommandPalette() {
@@ -103,8 +103,9 @@ export function AuthCommandPalette() {
       category: locale === 'es' ? 'Configuración' : 'Settings',
       shortcut: ['q', 'q'],
       icon: <LogOut className="w-4 h-4" />,
-      action: () => {
-        signOut({ callbackUrl: '/' });
+      action: async () => {
+        await authClient.signOut();
+        window.location.href = '/';
       }
     }
   ];

@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import { useRouter as useIntlRouter } from "@/i18n/routing";
 import { Shield } from "lucide-react";
 import { useTranslations } from 'next-intl';
-import { SystemSettings } from "@/components/ui/SystemSettings";
 import { toast } from "sonner";
 import { resetPasswordAction } from "@/services/auth/recovery-actions";
 import { ResetPasswordForm } from "./components/ResetPasswordForm";
@@ -70,11 +69,6 @@ export default function ResetPasswordPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 font-sans relative overflow-hidden transition-colors duration-300">
       <div className="bg-grain" />
-
-      {/* 🛠️ Accessibility Controls */}
-      <div className="absolute top-6 right-6 flex items-center gap-3 z-50">
-        <SystemSettings isAuthenticated={false} />
-      </div>
       
       {/* 🛡️ Header Branding */}
       <div className="mb-12 flex flex-col items-center animate-in slide-in-from-top duration-700">

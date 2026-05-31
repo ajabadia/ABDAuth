@@ -1,6 +1,6 @@
 'use server';
 
-import { auth, unstable_update } from '@/auth';
+import { getServerSession } from '@/lib/get-session';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { auditAuthOpsRepository } from '@/lib/repositories/AuditAuthOpsRepository';
@@ -9,10 +9,12 @@ import type { TenantId } from '@/lib/schemas/common';
 /**
  * 🏢 Switch Tenant Server Action
  * Changes the active tenant for the logged-in session.
+ * With better-auth, the tenantId is stored in the user document.
+ * The session will reflect the change on next getSession() call.
  */
 export async function switchTenantAction(tenantId: string) {
   try {
-    const session = await auth();
+    const session = await getServerSession();
     if (!session?.user) {
       return { success: false, error: 'UNAUTHORIZED_SESSION' };
     }
@@ -50,14 +52,11 @@ export async function switchTenantAction(tenantId: string) {
       isolationStrategy = 'COLLECTION_PREFIX';
     }
 
-    // 3. Update NextAuth JWT Session Cookie
-    await unstable_update({
-      user: {
-        ...session.user,
-        tenantId,
-        dbPrefix,
-        isolationStrategy,
-      }
+    // 3. Update user's active tenant in DB (session will reflect on next getSession)
+    await userRepository.update(user.id, {
+      tenantId,
+      dbPrefix,
+      isolationStrategy,
     });
 
     // 4. Fallback Cookie for sub-domains or static layouts

@@ -5,6 +5,7 @@ import { Shield, Edit3, Briefcase, RefreshCw, Loader2 } from 'lucide-react'
 import type { IndustrialUserDisplay, UserManagementTranslations } from "./types"
 import { adminResetMfaAction } from "@/services/auth/security-actions"
 import { toast } from "sonner"
+import { ConfirmDialog, useConfirmDialog } from "@ajabadia/ecosystem-widgets"
 
 interface UserCardProps {
   user: IndustrialUserDisplay
@@ -14,24 +15,25 @@ interface UserCardProps {
 }
 
 export function UserCard({ user, t, isSuperAdmin, onEdit }: UserCardProps) {
-  const [loading, setLoading] = React.useState(false);
-  const initials = `${(user.name || 'U').charAt(0)}${(user.surname || '').charAt(0)}`.toUpperCase();
-  
-  const handleResetMfa = async () => {
-    if (!confirm(t.mfa.reset_confirm)) return;
-    setLoading(true);
-    try {
-      await adminResetMfaAction(user._id);
-      toast.success(t.mfa.reset_success || 'MFA Reseteado correctamente');
-      // The page will revalidate via server action
-    } catch (err: unknown) {
-      toast.error(t.mfa.reset_error || 'Error al resetear MFA', {
-        description: err instanceof Error ? err.message : 'Unknown error'
-      });
-    } finally {
-      setLoading(false);
-    }
+  const resetMfaDialog = useConfirmDialog({
+    onConfirm: async () => {
+      try {
+        await adminResetMfaAction(user._id);
+        toast.success(t.mfa.reset_success || 'MFA Reseteado correctamente');
+      } catch (err: unknown) {
+        toast.error(t.mfa.reset_error || 'Error al resetear MFA', {
+          description: err instanceof Error ? err.message : 'Unknown error'
+        });
+      }
+    },
+  });
+
+  const handleResetMfa = () => {
+    resetMfaDialog.trigger();
   };
+
+  const loading = resetMfaDialog.isLoading;
+  const initials = `${(user.name || 'U').charAt(0)}${(user.surname || '').charAt(0)}`.toUpperCase();
 
   return (
     <div className="bg-card p-5 rounded-none border border-border hover:border-primary/40 transition-all group relative overflow-hidden">
@@ -114,6 +116,17 @@ export function UserCard({ user, t, isSuperAdmin, onEdit }: UserCardProps) {
           </div>
         </div>
       </div>
+      <ConfirmDialog
+        open={resetMfaDialog.open}
+        title={t.mfa.reset || "RESET MFA"}
+        message={t.mfa.reset_confirm}
+        confirmLabel="RESET"
+        cancelLabel="CANCELAR"
+        variant="warning"
+        isLoading={resetMfaDialog.isLoading}
+        onConfirm={resetMfaDialog.confirm}
+        onCancel={resetMfaDialog.cancel}
+      />
     </div>
   )
 }

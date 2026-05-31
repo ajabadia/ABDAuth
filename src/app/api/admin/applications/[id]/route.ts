@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
-import { auth } from '@/auth';
+import { getServerSession } from '@/lib/get-session';
 import { ApplicationSchema } from '@/lib/schemas/auth';
 import { checkApiSecurity } from '@/lib/utils/api-security';
 import { ObjectId } from 'mongodb';
@@ -12,7 +12,7 @@ export async function PATCH(
   const secError = checkApiSecurity(req);
   if (secError) return secError;
 
-  const session = await auth();
+  const session = await getServerSession();
   if (session?.user?.role !== 'SUPER_ADMIN') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -45,7 +45,7 @@ export async function DELETE(
   const secError = checkApiSecurity(req);
   if (secError) return secError;
 
-  const session = await auth();
+  const session = await getServerSession();
   if (session?.user?.role !== 'SUPER_ADMIN') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

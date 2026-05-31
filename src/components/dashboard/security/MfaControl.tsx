@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useTranslations } from 'next-intl';
 import { AnimatePresence } from 'framer-motion';
-import { setupMfaAction, enableMfaAction, disableMfaAction } from '@/services/auth/security-actions';
-import { toast } from 'sonner';
+import { ConfirmDialog } from '@ajabadia/ecosystem-widgets';
+import { useMfaControl } from './hooks/useMfaControl';
 import { MfaHeader } from './sections/MfaHeader';
 import { MfaIdleState } from './sections/MfaIdleState';
 import { MfaSetupState } from './sections/MfaSetupState';
@@ -19,114 +19,21 @@ interface MfaControlProps {
 
 export function MfaControl({ isActive, isMandatory = false, initialStep = 'IDLE', onComplete }: MfaControlProps) {
   const t = useTranslations('dashboard.security.mfa');
-  const [enabled, setEnabled] = useState(isActive);
-  const [step, setStep] = useState<'IDLE' | 'SETUP' | 'RECOVERY'>(initialStep);
-  const [loading, setLoading] = useState(false);
-  const [setupData, setSetupData] = useState<{ secret: string, qrCode: string } | null>(null);
-  const [token, setToken] = useState('');
-  const [recoveryCodes, setRecoveryCodes] = useState<string[]>([]);
-  
-  useEffect(() => {
-    if (initialStep === 'SETUP' && !setupData && !loading) {
-      handleStartSetup();
-    }
-  }, [initialStep]);
-
-  useEffect(() => {
-    if (enabled && step === 'IDLE' && initialStep === 'SETUP') {
-      const timer = setTimeout(() => {
-        onComplete?.();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [enabled, step, initialStep, onComplete]);
-
-  const handleStartSetup = async () => {
-    setLoading(true);
-    try {
-      const data = await setupMfaAction();
-      setSetupData(data);
-      setStep('SETUP');
-    } catch {
-      toast.error('Verification failed');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerify = async () => {
-    if (!setupData || token.length < 6) return;
-    setLoading(true);
-    try {
-      const result = await enableMfaAction(setupData.secret, token);
-      if (result.success) {
-        setEnabled(true);
-        setRecoveryCodes(result.backupCodes);
-        setStep('RECOVERY');
-        toast.success(t('status_active'));
-      } else {
-        toast.error('Invalid token');
-      }
-    } catch {
-      toast.error('Verification failed');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDisable = async () => {
-    if (!confirm(t('disable'))) return;
-    setLoading(true);
-    try {
-      await disableMfaAction();
-      setEnabled(false);
-      setStep('IDLE');
-      toast.success(t('status_inactive'));
-    } catch {
-      toast.error('Error disabling MFA');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleRegisterPasskey = async () => {
-    setLoading(true);
-    try {
-      const { startRegistration } = await import('@simplewebauthn/browser');
-      const { 
-        generatePasskeyRegistrationOptionsAction, 
-        verifyPasskeyRegistrationAction 
-      } = await import('@/services/auth/security-actions');
-
-      const options = await generatePasskeyRegistrationOptionsAction();
-      const regResponse = await startRegistration({ optionsJSON: options });
-      const result = await verifyPasskeyRegistrationAction(regResponse);
-
-      if (result.success) {
-        setEnabled(true);
-        toast.success(t('status_active'));
-        onComplete?.();
-      } else {
-        toast.error(result.error || 'Failed to verify passkey registration');
-      }
-    } catch (err) {
-      const errorName = (err as Error)?.name;
-      if (errorName === 'NotAllowedError') {
-        toast.error('Biometric registration was cancelled');
-      } else {
-        // eslint-disable-next-line no-console
-        console.error('[Passkey Registration Error]', err);
-        toast.error('Biometric registration failed');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCopyCodes = () => {
-    navigator.clipboard.writeText(recoveryCodes.join('\n'));
-    toast.success(t('copy_codes'));
-  };
+  const {
+    enabled,
+    step,
+    loading,
+    setupData,
+    token,
+    setToken,
+    recoveryCodes,
+    disableMfaDialog,
+    handleStartSetup,
+    handleVerify,
+    handleDisable,
+    handleCopyCodes,
+    setStep,
+  } = useMfaControl(isActive, initialStep, onComplete);
 
   return (
     <div className="relative bg-card border border-border rounded-none overflow-hidden shadow-none transition-all duration-300">
@@ -139,11 +46,10 @@ export function MfaControl({ isActive, isMandatory = false, initialStep = 'IDLE'
               enabled={enabled}
               initialStep={initialStep}
               isMandatory={isMandatory}
-              loading={loading}
+              loading={loading || disableMfaDialog.isLoading}
               t={t}
               onStartSetup={handleStartSetup}
               onDisable={handleDisable}
-              onRegisterPasskey={handleRegisterPasskey}
               onComplete={onComplete}
             />
           )}
@@ -173,6 +79,17 @@ export function MfaControl({ isActive, isMandatory = false, initialStep = 'IDLE'
           )}
         </AnimatePresence>
       </div>
+      <ConfirmDialog
+        open={disableMfaDialog.open}
+        title={t('disable') || "DESACTIVAR MFA"}
+        message={t('disable') || "¿Estás seguro de que deseas desactivar la autenticación de doble factor?"}
+        confirmLabel="DESACTIVAR"
+        cancelLabel="CANCELAR"
+        variant="danger"
+        isLoading={disableMfaDialog.isLoading}
+        onConfirm={disableMfaDialog.confirm}
+        onCancel={disableMfaDialog.cancel}
+      />
     </div>
   );
 }

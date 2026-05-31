@@ -13,7 +13,7 @@
 - [x] **Purity Auditing**: Remediated all `any` usages and verified the 6-phase certification pipeline (`scripts/abd-audit.ps1`), achieving the **SYSTEM CERTIFIED - ERA 11 COMPLIANT** status with 38/38 vitest tests passing.
 
 ## 🗓️ 2026-05-19 (Visual System Centralization & Header Standardization)
-- [x] **Shared CSS Library Integration**: Integrated `@abd/styles` via local module imports and resolved Next.js 16/Turbopack import path resolution and Tailwind CSS v4 color theme mapping in `globals.css`.
+- [x] **Shared CSS Library Integration**: Integrated `@ajabadia/styles` via local module imports and resolved Next.js 16/Turbopack import path resolution and Tailwind CSS v4 color theme mapping in `globals.css`.
 - [x] **Header Alignment**: Standardized all panel headers using `STYLE_GUIDE.md` specifications (Variante A for Main Dashboard, Variante B with aseptic back buttons for Users, Satellites, Audit, and Security).
 - [x] **Navigation and UI Polish**: Removed deprecated settings link from `TacticalSidebar` and corrected key mapping translations in `SystemSettings` to fix runtime localization exceptions.
 

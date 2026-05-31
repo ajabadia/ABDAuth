@@ -1,6 +1,4 @@
 import type { UserRole } from "@/lib/schemas/auth";
-import "next-auth";
-import "next-auth/jwt";
 
 /**
  * 👤 Industrial User Profile
@@ -29,18 +27,3 @@ export interface IndustrialUser {
 }
 
 export type IndustrialSession = IndustrialUser;
-
-// 🛡️ Module Augmentation for Auth.js (v5 Beta Standard)
-declare module "next-auth" {
-  interface Session {
-    user: IndustrialSession;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  interface User extends IndustrialUser {}
-}
-
-declare module "next-auth/jwt" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  interface JWT extends IndustrialUser {}
-}

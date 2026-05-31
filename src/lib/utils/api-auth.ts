@@ -1,4 +1,4 @@
-import { auth } from '@/auth';
+import { getServerSession } from '@/lib/get-session';
 import { NextResponse } from 'next/server';
 import type { IndustrialSession } from '@/types/auth';
 
@@ -7,10 +7,10 @@ import type { IndustrialSession } from '@/types/auth';
  * Returns the validated session user, or a 403 JSON Response on failure.
  */
 export async function validateAdminSession() {
-  const session = await auth();
+  const session = await getServerSession();
   const user = session?.user as unknown as IndustrialSession;
 
-  if (!user || (user.role !== 'SUPER_ADMIN' && user.role !== 'ADMIN')) {
+  if (!user || (user.role !== 'SUPER_ADMIN' && user.role !== 'ADMIN' && user.role !== 'PROFESSOR')) {
     return {
       authorized: false,
       user: null,
@@ -26,7 +26,7 @@ export async function validateAdminSession() {
  * Returns the validated session user, or a 403 JSON Response on failure.
  */
 export async function validateSuperAdminSession() {
-  const session = await auth();
+  const session = await getServerSession();
   const user = session?.user as unknown as IndustrialSession;
 
   if (!user || user.role !== 'SUPER_ADMIN') {

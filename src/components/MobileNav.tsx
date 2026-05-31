@@ -1,1 +1,1 @@
-export { TacticalSidebar as MobileNav } from "./TacticalSidebar";
+export { SidebarNavigation as MobileNav } from "./SidebarNavigation";

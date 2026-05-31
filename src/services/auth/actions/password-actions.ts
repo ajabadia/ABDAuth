@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/auth";
+import { getServerSession } from '@/lib/get-session';
 import { userRepository } from "@/lib/repositories/UserRepository";
 import { SessionService } from "../SessionService";
 import type { IndustrialUser } from "@/types/auth";
@@ -10,20 +10,20 @@ import type { EntityId } from "@/lib/schemas/common";
  * 🔐 Security: Change user password
  */
 export async function changePasswordAction(currentPass: string, newPass: string) {
-  const session = await auth();
+  const session = await getServerSession();
   const user = session?.user as IndustrialUser;
   if (!user) return { success: false, error: 'UNAUTHORIZED' };
 
   const dbUser = await userRepository.findById(user.id as EntityId);
   if (!dbUser) return { success: false, error: 'USER_NOT_FOUND' };
 
-  const bcrypt = await import('bcryptjs');
-  const isMatch = await bcrypt.compare(currentPass, dbUser.password);
+  const argon2 = await import('argon2');
+  const isMatch = await argon2.verify(dbUser.password, currentPass);
   if (!isMatch) {
     return { success: false, error: 'INVALID_CURRENT_PASSWORD' };
   }
 
-  const hashedPassword = await bcrypt.hash(newPass, 12);
+  const hashedPassword = await argon2.hash(newPass);
   const updated = await userRepository.update(user.id as EntityId, { 
     password: hashedPassword,
     updatedAt: new Date()

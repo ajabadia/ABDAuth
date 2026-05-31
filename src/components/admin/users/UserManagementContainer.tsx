@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Plus, Users } from "lucide-react";
 import type { IndustrialUserDisplay, UserManagementTranslations, IndustrialUserFormValues } from "./types";
 import { useRouter } from "next/navigation";
-import { IndustrialSearchInput } from "@/components/ui/industrial/SearchInput";
+import { IndustrialSearchInput } from "@ajabadia/ecosystem-widgets";
 import { PageHeader } from "@/components/ui/industrial/PageHeader";
 import { toast } from "sonner";
 import { UserGrid } from "./components/UserGrid";

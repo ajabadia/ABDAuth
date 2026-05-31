@@ -1,9 +1,11 @@
-import { mfaRepository } from '../lib/repositories/MfaRepository';
 import { userRepository } from '../lib/repositories/UserRepository';
 
 /**
  * 🧹 MFA Reset CLI Tool
  * Usage: npx tsx --env-file=.env.local src/scripts/reset-mfa.ts <email>
+ *
+ * Phase 3: Uses MfaService.disable() instead of the deleted MfaRepository.
+ * Better-auth's twoFactor plugin manages TOTP secrets internally.
  */
 async function resetMfa() {
   const email = process.argv[2];
@@ -27,10 +29,7 @@ async function resetMfa() {
 
     console.log(`🛡️ Reseteando MFA para: ${user.name} (${email})...`); // eslint-disable-line no-console
 
-    // 1. Eliminar configuración de MFA
-    await mfaRepository.disable(userId);
-
-    // 2. Desactivar flag en el usuario
+    // 1. Desactivar MFA mediante userRepository
     await userRepository.updateMfaStatus(userId, false);
 
     console.log('✅ Éxito: El MFA ha sido desactivado. El usuario podrá configurar uno nuevo en su próximo acceso.'); // eslint-disable-line no-console

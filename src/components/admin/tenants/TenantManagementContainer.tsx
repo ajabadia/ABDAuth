@@ -2,13 +2,15 @@
 
 import * as React from "react"
 import { Plus, Database } from 'lucide-react'
+import { toast } from 'sonner'
+import { ConfirmDialog, useConfirmDialog } from '@ajabadia/ecosystem-widgets'
 import type { Tenant } from "@/lib/schemas/auth"
 import { TenantDialog } from "./TenantDialog"
 import { TenantCard } from "./TenantCard"
 import { useRouter } from "next/navigation"
 import type { TenantManagementTranslations } from "./types"
 import { PageHeader } from "@/components/ui/industrial/PageHeader"
-import { IndustrialSearchInput } from "@/components/ui/industrial/SearchInput"
+import { IndustrialSearchInput } from "@ajabadia/ecosystem-widgets"
 
 interface TenantManagementContainerProps {
   initialTenants: Tenant[]
@@ -20,6 +22,26 @@ export function TenantManagementContainer({ initialTenants, translations: t }: T
   const [search, setSearch] = React.useState("")
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [editingTenant, setEditingTenant] = React.useState<Tenant | null>(null)
+  const deleteDialog = useConfirmDialog<string>({
+    onConfirm: async (id) => {
+      const promise = fetch(`/api/admin/tenants/${id}`, {
+        method: 'DELETE',
+      }).then(async response => {
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}))
+          throw new Error(errData.error || 'Error al eliminar organización')
+        }
+        router.refresh()
+        setTenants(prev => prev.map(ten => ten._id?.toString() === id ? { ...ten, active: false } : ten))
+      })
+      toast.promise(promise, {
+        loading: 'Eliminando organización...',
+        success: 'Organización eliminada correctamente',
+        error: (err: Error) => err.message || 'Error al eliminar organización',
+      })
+      await promise
+    },
+  })
   const router = useRouter()
 
   const filteredTenants = tenants.filter(tenant => 
@@ -32,33 +54,33 @@ export function TenantManagementContainer({ initialTenants, translations: t }: T
     const url = isEditing ? `/api/admin/tenants/${editingTenant._id}` : '/api/admin/tenants'
     const method = isEditing ? 'PATCH' : 'POST'
 
-    const response = await fetch(url, {
+    const promise = fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
-    })
-
-    if (response.ok) {
+    }).then(async response => {
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}))
+        throw new Error(errData.error || `Error ${response.status} al guardar tenant`)
+      }
       router.refresh()
       const updatedResponse = await fetch('/api/admin/tenants')
       if (updatedResponse.ok) {
         const newData = await updatedResponse.json()
         setTenants(newData)
       }
-    }
-  }
-
-  const handleDelete = async (id: string) => {
-    if (!window.confirm(t.confirm_delete)) return
-
-    const response = await fetch(`/api/admin/tenants/${id}`, {
-      method: 'DELETE',
+      return response
     })
 
-    if (response.ok) {
-      router.refresh()
-      setTenants(prev => prev.map(ten => ten._id?.toString() === id ? { ...ten, active: false } : ten))
-    }
+    toast.promise(promise, {
+      loading: isEditing ? 'Actualizando organización...' : 'Creando organización...',
+      success: isEditing ? 'Organización actualizada correctamente' : 'Organización creada correctamente',
+      error: (err: Error) => err.message || 'Error al guardar organización',
+    })
+  }
+
+  const handleDelete = (id: string) => {
+    deleteDialog.trigger(id)
   }
 
   return (
@@ -107,6 +129,18 @@ export function TenantManagementContainer({ initialTenants, translations: t }: T
         onSave={handleSave}
         initialData={editingTenant}
         title={editingTenant ? t.edit_tenant : t.register_tenant}
+      />
+
+      <ConfirmDialog
+        open={deleteDialog.open}
+        title="ELIMINAR ORGANIZACIÓN"
+        message={t.confirm_delete}
+        confirmLabel="ELIMINAR"
+        cancelLabel="CANCELAR"
+        variant="danger"
+        isLoading={deleteDialog.isLoading}
+        onConfirm={deleteDialog.confirm}
+        onCancel={deleteDialog.cancel}
       />
     </div>
   )

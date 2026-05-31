@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "@/i18n/routing";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from 'next-intl';
-import { SystemSettings } from "@/components/ui/SystemSettings";
 import { toast } from "sonner";
 import { loginAction } from "./actions";
 import { useTenantBranding } from "./hooks/useTenantBranding";
 import { LoginBranding } from "./components/LoginBranding";
 import { LoginForm } from "./components/LoginForm";
 import { LoginDemoCredentials } from "./components/LoginDemoCredentials";
+import { ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 export default function LoginPage() {
   const t = useTranslations('login');
@@ -20,6 +22,10 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // 🌐 Federated SSO link — preserve current query params
+  const searchParams = useSearchParams();
+  const federatedUrl = `/login/federated${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
 
   // 🎨 White-label styling state & dynamic CSS injection hook
   const { brandingCss, tenantBranding, tenantName } = useTenantBranding();
@@ -37,10 +43,17 @@ export default function LoginPage() {
       const result = await loginAction(formData);
 
       if (result?.error) {
-        setError(t('error_invalid'));
-        toast.error(t('error_invalid'), {
-          description: common('brand'),
-        });
+        if (result.error === 'ACCOUNT_LOCKED') {
+          setError(t('error_locked'));
+          toast.error(t('error_locked'), {
+            description: common('brand'),
+          });
+        } else {
+          setError(t('error_invalid'));
+          toast.error(t('error_invalid'), {
+            description: common('brand'),
+          });
+        }
       } else {
         toast.success(common('brand'), {
           description: "Acceso concedido. Sincronizando..."
@@ -67,66 +80,6 @@ export default function LoginPage() {
     }
   };
 
-  const handlePasskeyLogin = async () => {
-    if (!email) {
-      setError(t('error_email_required'));
-      toast.error(t('error_email_required'));
-      return;
-    }
-
-    setIsLoading(true);
-    setError("");
-
-    try {
-      const { startAuthentication } = await import('@simplewebauthn/browser');
-      const { 
-        generatePasskeyAuthenticationOptionsAction, 
-        verifyPasskeyAuthenticationAction 
-      } = await import('@/services/auth/security-actions');
-
-      const options = await generatePasskeyAuthenticationOptionsAction(email);
-      const authResponse = await startAuthentication({ optionsJSON: options });
-      const verification = await verifyPasskeyAuthenticationAction(email, authResponse);
-
-      if (verification.success && verification.bypassToken) {
-        const formData = new FormData();
-        formData.append('email', email);
-        formData.append('passkeyBypassToken', verification.bypassToken);
-
-        const result = await loginAction(formData);
-
-        if (result?.error) {
-          setError(t('error_invalid'));
-          toast.error(t('error_invalid'));
-        } else {
-          toast.success(common('brand'), {
-            description: "Acceso biométrico concedido. Sincronizando..."
-          });
-          const params = new URLSearchParams(window.location.search);
-          const callbackUrl = params.get('callbackUrl');
-          if (callbackUrl) {
-            window.location.href = callbackUrl;
-          } else {
-            router.push('/dashboard');
-          }
-        }
-      } else {
-        setError(verification.error || t('error_invalid'));
-        toast.error(verification.error || t('error_invalid'));
-      }
-    } catch (err: unknown) {
-      if (err instanceof Error && (err.message === 'NEXT_REDIRECT' || (err as { digest?: string }).digest?.includes('NEXT_REDIRECT'))) {
-        return;
-      }
-      // eslint-disable-next-line no-console
-      console.error('[Passkey Login Flow Error]', err);
-      setError(t('error_generic'));
-      toast.error(t('error_generic'));
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 bg-background text-foreground selection:bg-primary/30 overflow-hidden relative" role="main">
       {brandingCss && (
@@ -139,10 +92,7 @@ export default function LoginPage() {
       {/* 🛰️ Glow Effect */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-primary/5 dark:bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
 
-      {/* 🛠️ Accessibility Controls */}
-      <div className="absolute top-6 right-6 flex items-center gap-3 z-50">
-        <SystemSettings isAuthenticated={false} />
-      </div>
+
       
       {/* 🛡️ Branding Header */}
       <LoginBranding 
@@ -162,9 +112,20 @@ export default function LoginPage() {
         error={error}
         onSubmit={handleSubmit}
         onForgotPassword={() => router.push('/login/forgot-password')}
-        onPasskeyLogin={handlePasskeyLogin}
         t={t}
       />
+
+      {/* 🌐 SSO Federation Link */}
+      <div className="relative z-10 mt-4 mb-2">
+        <Link
+          href={federatedUrl}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/20 border border-border hover:border-primary/40 hover:bg-secondary/30 hover:shadow-[0_0_12px_-2px_hsl(var(--primary)/0.15)] active:scale-95 transition-all duration-200 text-[9px] font-mono font-black text-muted-foreground hover:text-primary uppercase tracking-widest rounded-none"
+          aria-label={t('federated_login')}
+        >
+          <ExternalLink size={12} />
+          {t('federated_login')}
+        </Link>
+      </div>
 
       {/* 📟 Lab Credentials & Footer Specs */}
       <LoginDemoCredentials 

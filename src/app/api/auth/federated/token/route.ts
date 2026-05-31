@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
 import { federatedCodeRepository, type FederatedCode } from '@/lib/repositories/FederatedCodeRepository';
 import { type UserTenantMembership } from '@/lib/schemas/user';
@@ -7,16 +6,7 @@ import { userRepository } from '@/lib/repositories/UserRepository';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { type SafeFilter } from '@/lib/repositories/BaseRepository';
 import { SsoService } from '@/services/auth/SsoService';
-
-/**
- * 🎫 Federated Token Schema
- */
-const TokenExchangeSchema = z.object({
-  code: z.string().min(1),
-  client_id: z.string().min(1),
-  client_secret: z.string().min(1),
-  redirect_uri: z.string().url().optional(),
-});
+import { TokenExchangeSchema } from './schema';
 
 /**
  * 🎫 Federated Token Endpoint

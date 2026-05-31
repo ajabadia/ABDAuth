@@ -1,5 +1,5 @@
 import { getMessages, getTranslations } from "next-intl/server";
-import { auth } from "@/auth";
+import { getServerSession } from '@/lib/get-session';
 import { redirect } from "next/navigation";
 import { UserManagementContainer } from "@/components/admin/users/UserManagementContainer";
 import type { IndustrialSession } from "@/types/auth";
@@ -23,9 +23,9 @@ interface LocalizedMessages {
  * Orchestrates the transition between server-side data and client-side UI.
  */
 export default async function UsersPage() {
-  const session = await auth() as unknown as { user: IndustrialSession } | null;
+  const session = await getServerSession() as unknown as { user: IndustrialSession } | null;
   
-  if (!session?.user || (session.user.role !== 'SUPER_ADMIN' && session.user.role !== 'ADMIN')) {
+  if (!session?.user || (session.user.role !== 'SUPER_ADMIN' && session.user.role !== 'ADMIN' && session.user.role !== 'PROFESSOR')) {
     redirect('/login');
   }
 

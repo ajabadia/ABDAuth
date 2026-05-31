@@ -1,4 +1,4 @@
-import { logger, configureLogger } from '@abd/satellite-sdk';
+import { logger, configureLogger } from '@ajabadia/satellite-sdk';
 
 export interface LogPayload {
   tenantId: string;
@@ -11,6 +11,7 @@ export interface LogPayload {
   previousState?: Record<string, unknown>;
   ipAddress?: string;
   userAgent?: string;
+  [key: string]: unknown;
 }
 
 export class LogsClient {

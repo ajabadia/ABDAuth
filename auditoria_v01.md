@@ -492,7 +492,7 @@ Implementación ligera con `opossum` o un helper casero con contador de fallos.
 | `tailwindcss` | 4.3.0 | CSS utility-first |
 | `framer-motion` | 12.38.0 | Animaciones React |
 | `sonner` | 2.0.7 | Toast notifications |
-| `@abd/styles` | GitHub main | Sistema de diseño centralizado |
+| `@ajabadia/styles` | GitHub main | Sistema de diseño centralizado |
 | `@playwright/test` | 1.60.0 | Tests E2E |
 | `typescript` | 6.0.3 | Type system |
 

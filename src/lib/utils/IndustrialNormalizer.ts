@@ -50,6 +50,7 @@ export class IndustrialNormalizer {
 
     return {
       ...raw,
+      dbPrefix: raw.dbPrefix || raw.tenantId,
       createdAt: raw.createdAt ? new Date(raw.createdAt as string | number | Date) : new Date(),
       updatedAt: raw.updatedAt ? new Date(raw.updatedAt as string | number | Date) : undefined
     } as unknown as Tenant;

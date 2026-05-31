@@ -50,13 +50,14 @@
 - [x] **Federated Application Management (CRUD)**: Master control for satellite applications and OAuth2 credentials.
 - [x] **Ecosystem SSO Integration**: Connect ABDQuiz to the centralized identity gateway. (AgRAG Pending).
 - [x] **Tenant Data Isolation**: Enforce deterministic isolation across satellite projects using session claims.
-- [ ] **Ecosystem Audit (ABDAgRAG)**: Review legacy user management in AgRAG to prepare its federation bridge.
+- [ ] **Ecosystem Audit (ABDAgRAG)**: Review legacy user management in AgRAG to prepare its federation bridge. *(Pendiente — fuera del alcance actual)*
 - [x] **Global User Management (CRUD)**: Centralized interface to create, suspend, and audit users.
 - [x] **Hierarchical Delegation**: Enable Tenant-Admins to manage only their own organizational users.
 - [x] **User-Tenant Mapping**: Interface to manage organizational memberships and per-tenant roles.
-- [ ] **MFA Biometric Hardening**: Implement WebAuthn (Passkeys/FaceID) for high-privilege roles.
-- [ ] **Shared Session Store**: Transition to Redis-backed industrial session management.
+- [x] **MFA Biometric Hardening (WebAuthn/Passkeys)**: Implemented WebAuthn (FaceID, TouchID, Windows Hello) using `@simplewebauthn/server` + `@simplewebauthn/browser` with MongoDB TTL challenge storage.
+- [x] **MFA Grace Period**: Dynamic countdown enforcement (3 logins / 7 days default) in `authorize-user.ts` and `proxy.ts`.
+- [ ] **Shared Session Store**: Transition to Redis-backed industrial session management. *(Pendiente — backlog)*
 
 ---
-*Last Updated: 05/19/2026 (Tenant Governance Delegation & Federation Completed)*
+*Last Updated: 2026-05-28 (Audit of documentation completed — PROGRESS aligned)*
 **Status**: `SYS_CERTIFIED_PROD` | **Target**: `GLOBAL_GOVERNANCE_CERTIFIED`

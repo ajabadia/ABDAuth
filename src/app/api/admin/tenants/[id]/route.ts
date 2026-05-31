@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/auth';
+import { getServerSession } from '@/lib/get-session';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { auditRepository } from '@/lib/repositories/AuditRepository';
 import { TenantSchema } from '@/lib/schemas/auth';
@@ -18,7 +18,7 @@ export async function PATCH(
   const secError = checkApiSecurity(request);
   if (secError) return secError;
 
-  const session = await auth();
+  const session = await getServerSession();
   const user = session?.user as unknown as IndustrialSession;
 
   if (!user || user.role !== 'SUPER_ADMIN') {
@@ -64,7 +64,7 @@ export async function DELETE(
   const secError = checkApiSecurity(_request);
   if (secError) return secError;
 
-  const session = await auth();
+  const session = await getServerSession();
   const user = session?.user as unknown as IndustrialSession;
 
   if (!user || user.role !== 'SUPER_ADMIN') {

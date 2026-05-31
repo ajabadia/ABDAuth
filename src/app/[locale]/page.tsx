@@ -1,8 +1,7 @@
-import { auth } from '@/auth';
+import { getServerSession } from '@/lib/get-session';
 import { Link } from '@/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { Shield, Zap, Lock, ChevronRight } from 'lucide-react';
-import { SystemSettings } from '@/components/ui/SystemSettings';
 
 /**
  * 🏭 Root Landing Page
@@ -10,7 +9,7 @@ import { SystemSettings } from '@/components/ui/SystemSettings';
  * Industrial instrument console feel, theme-aware, and fully localized.
  */
 export default async function RootPage() {
-  const session = await auth();
+  const session = await getServerSession();
   const t = await getTranslations('landing');
   const c = await getTranslations('common');
 
@@ -24,15 +23,10 @@ export default async function RootPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 md:p-24 bg-background text-foreground selection:bg-primary/30 overflow-hidden relative" role="main">
       {/* 🏗️ Atmosphere & Grid */}
-      <div className="absolute inset-0 z-0 bg-industrial-grid mask-industrial-fade opacity-50 pointer-events-none" />
+      <div className="absolute inset-0 z-0 bg-industrial-grid mask-industrial-fade opacity-50 pointer-events-none" aria-hidden="true" />
       
       {/* 🛰️ Glow Effect */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-primary/5 dark:bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
-
-      {/* 🛠️ System Settings Console */}
-      <div className="absolute top-6 right-6 z-50">
-        <SystemSettings isAuthenticated={!!session} />
-      </div>
 
       {/* 📟 Main Console Screen */}
       <div className="relative z-10 flex flex-col items-center text-center max-w-5xl gap-12 animate-in fade-in duration-500">

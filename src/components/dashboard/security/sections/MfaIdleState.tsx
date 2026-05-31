@@ -12,7 +12,6 @@ interface MfaIdleStateProps {
   t: (key: string) => string;
   onStartSetup: () => void;
   onDisable: () => void;
-  onRegisterPasskey?: () => void;
   onComplete?: () => void;
 }
 
@@ -24,7 +23,6 @@ export function MfaIdleState({
   t, 
   onStartSetup, 
   onDisable, 
-  onRegisterPasskey,
   onComplete 
 }: MfaIdleStateProps) {
   return (
@@ -58,18 +56,6 @@ export function MfaIdleState({
                   onClick={() => onComplete?.()}
                 >
                   {t('done_btn')}
-                </Button>
-              )}
-
-              {onRegisterPasskey && (
-                <Button 
-                  variant="outline" 
-                  className="border-primary/20 text-primary hover:bg-primary/5 h-10 px-8 font-black uppercase tracking-[0.2em] text-[9px] rounded-none shadow-none"
-                  onClick={onRegisterPasskey}
-                  disabled={loading}
-                >
-                  {loading ? <Loader2 size={14} className="animate-spin mr-2" /> : null}
-                  {t('register_passkey')}
                 </Button>
               )}
 
@@ -109,17 +95,7 @@ export function MfaIdleState({
               {t('enable')}
             </Button>
 
-            {onRegisterPasskey && (
-              <Button 
-                variant="outline" 
-                className="border-primary/20 text-primary hover:bg-primary/5 h-10 px-8 font-black uppercase tracking-[0.2em] text-[9px] rounded-none shadow-none"
-                onClick={onRegisterPasskey}
-                disabled={loading}
-              >
-                {loading ? <Loader2 size={14} className="animate-spin mr-2" /> : null}
-                {t('register_passkey')}
-              </Button>
-            )}
+
           </div>
         )}
       </div>

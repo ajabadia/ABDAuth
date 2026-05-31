@@ -6,8 +6,7 @@ const withNextIntl = createNextIntlPlugin(
 );
 
 const nextConfig: NextConfig = {
-  transpilePackages: ['@abd/ecosystem-widgets', '@abd/styles', '@abd/satellite-sdk'],
-  /* industrial config */
+  transpilePackages: ['@ajabadia/ecosystem-widgets', '@ajabadia/styles', '@ajabadia/satellite-sdk'],
 };
 
 export default withNextIntl(nextConfig);

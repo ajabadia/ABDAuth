@@ -6,7 +6,7 @@ export const EntityIdSchema = z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ID 
 /**
  * 🎭 User Roles
  */
-export const UserRoleSchema = z.enum(['SUPER_ADMIN', 'ADMIN', 'USER', 'AUDITOR', 'OPERATOR']);
+export const UserRoleSchema = z.enum(['SUPER_ADMIN', 'ADMIN', 'PROFESSOR', 'USER', 'AUDITOR', 'OPERATOR']);
 export type UserRole = z.infer<typeof UserRoleSchema>;
 
 export const UserTenantMembershipSchema = z.object({

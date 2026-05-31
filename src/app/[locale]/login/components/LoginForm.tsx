@@ -1,5 +1,6 @@
-import React from 'react';
-import { Lock, Mail, Loader2, AlertCircle, ArrowRight } from "lucide-react";
+import React, { useState } from 'react';
+import { Lock, Mail, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
+import { SocialLoginButtons } from './SocialLoginButtons';
 
 interface LoginFormProps {
   email: string;
@@ -10,43 +11,24 @@ interface LoginFormProps {
   error: string;
   onSubmit: (e: React.FormEvent) => void;
   onForgotPassword: () => void;
-  onPasskeyLogin?: () => void;
   t: (key: string) => string;
 }
 
-export function LoginForm({
-  email,
-  setEmail,
-  password,
-  setPassword,
-  isLoading,
-  error,
-  onSubmit,
-  onForgotPassword,
-  onPasskeyLogin,
-  t
-}: LoginFormProps) {
+export function LoginForm({ email, setEmail, password, setPassword, isLoading, error, onSubmit, onForgotPassword, t }: LoginFormProps) {
   return (
     <div className="w-full max-w-[380px] bg-card/85 backdrop-blur-md border border-border rounded-none shadow-2xl overflow-hidden relative z-10">
       <div className="h-1 w-full bg-primary/10 flex">
         <div className="h-full bg-primary w-1/3 animate-pulse" />
       </div>
-      
+
       <form onSubmit={onSubmit} className="p-8 space-y-5 relative z-10">
         <div className="space-y-2">
           <label className="text-[9px] font-mono font-black text-muted-foreground uppercase tracking-widest ml-1">{t('email_label')}</label>
           <div className="relative group/input">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-primary transition-colors" size={14} />
-            <input
-              type="email"
-              name="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+            <input type="email" name="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)}
               placeholder={t('email_placeholder')}
-              className="w-full bg-secondary/30 border-border border rounded-none h-10 pl-10 pr-4 text-xs focus:ring-1 focus:ring-primary/30 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/30 text-foreground font-sans"
-              required
-            />
+              className="w-full bg-secondary/30 border-border border rounded-none h-10 pl-10 pr-4 text-xs focus:ring-1 focus:ring-primary/30 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/30 text-foreground font-sans" required />
           </div>
         </div>
 
@@ -54,24 +36,13 @@ export function LoginForm({
           <label className="text-[9px] font-mono font-black text-muted-foreground uppercase tracking-widest ml-1">{t('password_label')}</label>
           <div className="relative group/input">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-primary transition-colors" size={14} />
-            <input
-              type="password"
-              name="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+            <input type="password" name="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)}
               placeholder={t('password_placeholder')}
-              className="w-full bg-secondary/30 border-border border rounded-none h-10 pl-10 pr-4 text-xs focus:ring-1 focus:ring-primary/30 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/30 text-foreground font-sans"
-              required={!onPasskeyLogin}
-            />
+              className="w-full bg-secondary/30 border-border border rounded-none h-10 pl-10 pr-4 text-xs focus:ring-1 focus:ring-primary/30 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/30 text-foreground font-sans" required />
           </div>
           <div className="flex justify-end pt-1">
-            <button 
-              aria-label={t('forgot_password_link')}
-              type="button"
-              onClick={onForgotPassword}
-              className="text-[9px] font-mono font-black text-muted-foreground hover:text-primary transition-colors uppercase tracking-widest"
-            >
+            <button aria-label={t('forgot_password_link')} type="button" onClick={onForgotPassword}
+              className="text-[9px] font-mono font-black text-muted-foreground hover:text-primary transition-colors uppercase tracking-widest">
               {t('forgot_password_link')}
             </button>
           </div>
@@ -84,26 +55,12 @@ export function LoginForm({
           </div>
         )}
 
-        <button 
-          type="submit"
-          disabled={isLoading}
-          aria-label={t('button')}
-          className="w-full bg-primary hover:bg-primary/95 text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed text-[10px] font-mono uppercase tracking-widest font-black py-3 rounded-none border border-primary/30 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
-        >
+        <button type="submit" disabled={isLoading} aria-label={t('button')}
+          className="w-full bg-primary hover:bg-primary/95 text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed text-[10px] font-mono uppercase tracking-widest font-black py-3 rounded-none border border-primary/30 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer">
           {isLoading ? <Loader2 size={16} className="animate-spin text-primary-foreground" /> : <><ArrowRight size={14} /> {t('button')}</>}
         </button>
 
-        {onPasskeyLogin && (
-          <button 
-            type="button"
-            onClick={onPasskeyLogin}
-            disabled={isLoading}
-            className="w-full bg-secondary/30 hover:bg-secondary/50 text-foreground border border-border text-[10px] font-mono uppercase tracking-widest font-black py-3 rounded-none active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
-          >
-            <Lock size={14} className="text-primary animate-pulse" />
-            {t('passkey_login_btn')}
-          </button>
-        )}
+        <SocialLoginButtons t={t} />
       </form>
 
       <div className="p-4 bg-secondary/20 border-t border-border flex items-center justify-center gap-2">

@@ -22,6 +22,8 @@ const MONGODB_AUTH_DB = env.MONGODB_AUTH_DB || 'ABD-Auth';
 const SLUG_MAP = {
   'ABDQuiz Federated': 'quiz',
   'ABDTenantGobernance Federated': 'gobernanza',
+  'ABDLogs Federated': 'logs',
+  'ABDAnalytics Federated': 'analytics',
 };
 
 async function main() {
@@ -56,16 +58,14 @@ async function main() {
     const activeSlugs = updatedApps.filter(a => a.slug).map(a => a.slug);
     console.log(`\n📋 Active slugs: ${JSON.stringify(activeSlugs)}`);
 
-    // Step 3: Populate allowedApps on all tenants (except system-level ones)
+    // Step 3: Populate allowedApps on all tenants
     console.log('\n🔧 Step 2: Populating tenant allowedApps...');
     const result = await db.collection('tenants').updateMany(
-      {
-        $or: [
-          { allowedApps: { $exists: false } },
-          { allowedApps: { $size: 0 } },
-        ]
-      },
-      { $set: { allowedApps: activeSlugs, updatedAt: new Date() } }
+      {},
+      { 
+        $addToSet: { allowedApps: { $each: activeSlugs } },
+        $set: { updatedAt: new Date() } 
+      }
     );
     console.log(`  ✅ Updated ${result.modifiedCount} tenants`);
 

@@ -3,12 +3,10 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { MfaControl } from '@/components/dashboard/security/MfaControl';
-import { ShieldAlert, LogOut } from 'lucide-react';
+import { ShieldAlert, LogOut, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { signOut } from 'next-auth/react';
-import { SystemSettings } from '@/components/ui/SystemSettings';
+import { authClient } from '@/lib/auth-client';
 import { useTranslations } from 'next-intl';
-
 import { syncMfaEnforcementAction, skipMfaGraceAction } from '@/services/auth/security-actions';
 import { toast } from 'sonner';
 
@@ -81,9 +79,7 @@ export function MfaSetupContainer({
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6">
-      <div className="fixed top-6 right-6 z-50">
-        <SystemSettings isAuthenticated={isAuthenticated} />
-      </div>
+
 
       <div className="w-full max-w-2xl space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="text-center space-y-4">
@@ -128,7 +124,7 @@ export function MfaSetupContainer({
           <Button 
             variant="ghost" 
             className="text-muted-foreground hover:text-foreground gap-2 font-black uppercase tracking-[0.2em] text-[9px] h-10 px-6 rounded-none font-mono"
-            onClick={() => signOut({ callbackUrl: '/login' })}
+            onClick={async () => { await authClient.signOut(); window.location.href = '/login'; }}
           >
             <LogOut size={14} />
             {t.cancel_logout}

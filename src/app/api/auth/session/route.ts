@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/auth';
+import { getServerSession } from '@/lib/get-session';
 import type { IndustrialSession } from '@/types/auth';
 
 /**
@@ -9,7 +9,7 @@ import type { IndustrialSession } from '@/types/auth';
  */
 export async function GET() {
   try {
-    const session = await auth();
+    const session = await getServerSession();
 
     if (!session?.user) {
       return NextResponse.json({ authenticated: false }, { status: 401 });
@@ -26,7 +26,7 @@ export async function GET() {
         role: user.role,
         tenantId: user.tenantId,
       },
-      expires: session.expires
+      expires: session.session.expiresAt
     });
   } catch {
     return NextResponse.json({ error: 'Internal Identity Failure' }, { status: 500 });

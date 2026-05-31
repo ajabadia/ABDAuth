@@ -32,15 +32,6 @@ export function PageHeader({
         
         {/* Fila de Título e Interacción */}
         <div className="flex items-center gap-4 mt-1">
-          {backHref && (
-            <Link
-              href={backHref}
-              aria-label={backAriaLabel}
-              className="inline-flex items-center justify-center p-2 bg-transparent text-muted-foreground hover:text-foreground border border-border hover:border-border/80 transition-all duration-200 cursor-pointer rounded-none active:scale-[0.95] shrink-0 focus:outline-none focus:ring-1 focus:ring-primary/50"
-            >
-              <ArrowLeft size={14} />
-            </Link>
-          )}
           <h1 className="text-3xl font-black uppercase italic tracking-tight text-foreground leading-none flex-1 truncate">
             {title}
           </h1>

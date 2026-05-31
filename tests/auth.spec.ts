@@ -4,10 +4,12 @@ test.describe('Identity Handshake (Login)', () => {
   test.beforeEach(async ({ page }) => {
     // Start at login terminal
     await page.goto('/es/login');
+    // Wait for SmartNavbar to hydrate before interacting with it
+    await page.waitForSelector('[data-testid="smart-navbar"]', { timeout: 15000 });
   });
 
   test('should display login terminal with industrial branding', async ({ page }) => {
-    await expect(page.locator('h1').first()).toContainText('ABDAuth');
+    await expect(page.locator('h1').first()).toContainText('ABD Auth');
     await expect(page.locator('input[type="email"]')).toBeVisible();
     await expect(page.locator('input[type="password"]')).toBeVisible();
   });
@@ -22,17 +24,20 @@ test.describe('Identity Handshake (Login)', () => {
     await expect(errorMsg).toBeVisible();
   });
 
-  test('should allow localization switching', async ({ page }) => {
-    // Click settings button and wait for menu
-    await page.click('button[aria-label="Open Settings"]');
-    
-    // Switch to English (Resilient selector: text matches the language code inside the button)
-    const enButton = page.locator('button:has-text("en")');
-    await enButton.waitFor({ state: 'visible' });
-    await enButton.click();
-    
-    // Verify title change (Industrial Identity Gateway)
-    // The subtitle text-muted-foreground is more unique than h1 brand
+  test('should allow localization switching via language mega-menu', async ({ page }) => {
+    // SystemSettings is only rendered in the mobile drawer (md:hidden), not on desktop.
+    // Instead, use the language mega-menu button which is always visible on desktop.
+    await page.locator('[data-testid="navbar-menu-language"]').click();
+    const dropdown = page.locator('[data-testid="navbar-dropdown"]');
+    await expect(dropdown).toBeVisible();
+
+    // Click ENGLISH button
+    await dropdown.locator('button', { hasText: 'ENGLISH' }).click();
+
+    // Should navigate to /en/login
+    await page.waitForURL(/\/en(?:$|\/)/, { timeout: 10000 });
+
+    // Verify English content is shown (Industrial Identity Gateway subtitle)
     await expect(page.locator('p.text-muted-foreground')).toContainText('Industrial Identity Gateway');
   });
 });

@@ -37,14 +37,36 @@
     "password_placeholder": "••••••••",
     "button": "Authenticate System",
     "error_invalid": "Unauthorized credentials",
+    "error_locked": "Account temporarily locked for security. Please try again in 15 minutes.",
     "error_generic": "Critical connection failure",
     "error_email_required": "Please enter your Identity Principal (email)",
     "shield_badge": "SOC2 Type II Certified",
     "passkey_login_btn": "Sign In with Passkey",
+    "social": {
+      "google": "Sign in with Google",
+      "github": "Sign in with GitHub",
+      "microsoft": "Sign in with Microsoft",
+      "divider": "or continue with",
+      "loading": "Authenticating with external provider..."
+    },
     "demo_title": "Lab Credentials",
     "demo_user": "ajabadia@gmail.com",
     "demo_pass": "11111111",
     "footer_text": "Certified Identity System v1.0",
+    "federated_login": "Sign in with Corporate SSO",
+    "federated": {
+      "subtitle": "FEDERATED IDENTITY GATEWAY",
+      "back_to_login": "Back to login",
+      "welcome_back": "Welcome back",
+      "providers_count": "{count} identity provider available",
+      "providers_count_plural": "{count} identity providers available",
+      "no_providers": "No federated identity providers configured",
+      "contact_admin": "Contact your system administrator to enable SSO.",
+      "select_provider": "Select your corporate provider to continue",
+      "error_init": "Failed to initiate authentication. Please try again.",
+      "footer_text": "SOC2 Type II Certified — Federation",
+      "sign_in_with": "Sign in with {provider}"
+    },
     "mfa": {
       "title": "Identity Verification",
       "subtitle": "Second Factor Required",
@@ -114,6 +136,7 @@
       "users": "Identities",
       "tenants": "Organizations",
       "applications": "Satellites",
+      "identity_providers": "ID Providers",
       "audit": "System Audit",
       "security": "Security",
       "settings": "Settings"
@@ -185,6 +208,7 @@
       "roles": {
         "SUPER_ADMIN": "Super Administrator",
         "ADMIN": "Tenant Administrator",
+        "PROFESSOR": "Professor",
         "USER": "Operator",
         "TECHNICAL": "Technical"
       },
@@ -247,6 +271,52 @@
         "delete": "Deactivate",
         "save": "Save Changes",
         "cancel": "Cancel"
+      }
+    },
+    "identity_providers": {
+      "title": "Identity Providers",
+      "subtitle": "OIDC/SAML FEDERATION — EXTERNAL PROVIDERS",
+      "add_provider": "Add Provider",
+      "new_provider": "New Identity Provider",
+      "edit_provider": "Edit Identity Provider",
+      "delete_confirm": "DANGER: Delete this federated identity provider?",
+      "no_providers": "No identity providers configured",
+      "oidc_label": "OIDC",
+      "saml_label": "SAML",
+      "active": "ACTIVE",
+      "inactive": "INACTIVE",
+      "form": {
+        "name": "Provider Name",
+        "description": "Description",
+        "provider_type": "Provider Type",
+        "active": "Active",
+        "issuer_url": "Issuer URL",
+        "client_id": "Client ID",
+        "client_secret": "Client Secret",
+        "entity_id": "Entity ID",
+        "metadata_url": "Metadata URL",
+        "attribute_mapping": "Attribute Mapping",
+        "allowed_domains": "Allowed Domains",
+        "auto_provision": "Auto-provision users",
+        "default_tenant": "Default Tenant",
+        "save": "Save Provider",
+        "cancel": "Cancel",
+        "placeholder_name": "e.g. Google Workspace",
+        "placeholder_description": "Corporate OIDC provider",
+        "placeholder_issuer": "https://accounts.google.com",
+        "placeholder_entity_id": "https://idp.example.com",
+        "placeholder_metadata_url": "https://idp.example.com/metadata.xml",
+        "placeholder_client_id": "123456789.apps.googleusercontent.com",
+        "placeholder_client_secret": "GOCSPX-...",
+        "placeholder_domain": "example.com"
+      },
+      "cards": {
+        "oidc": "OPENID CONNECT",
+        "saml": "SAML 2.0",
+        "client_credentials": "Client Credentials",
+        "authorized_domains": "Authorized Domains",
+        "issuer": "Issuer",
+        "entity_id": "Entity ID"
       }
     },
     "audit": {

@@ -2,8 +2,10 @@
 
 import * as React from "react"
 import { Plus, Shield } from "lucide-react"
+import { toast } from "sonner"
 import { useRouter } from "next/navigation"
-import { IndustrialSearchInput } from "@/components/ui/industrial/SearchInput"
+import { ConfirmDialog, useConfirmDialog } from '@ajabadia/ecosystem-widgets'
+import { IndustrialSearchInput } from "@ajabadia/ecosystem-widgets"
 import { PageHeader } from "@/components/ui/industrial/PageHeader"
 import { ApplicationCard } from "./ApplicationCard"
 import { ApplicationFormModal } from "./ApplicationFormModal"
@@ -19,6 +21,26 @@ export function ApplicationManagementContainer({ initialApplications, t }: Appli
   const [search, setSearch] = React.useState("")
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [editingApp, setEditingApp] = React.useState<IndustrialApplicationDisplay | null>(null)
+  const deleteDialog = useConfirmDialog<string>({
+    onConfirm: async (id) => {
+      try {
+        const response = await fetch(`/api/admin/applications/${id}`, {
+          method: 'DELETE',
+        })
+        if (response.ok) {
+          toast.success('Aplicación eliminada correctamente')
+          router.refresh()
+          setApps(prev => prev.filter(a => a._id !== id))
+        } else {
+          const errData = await response.json().catch(() => ({}))
+          throw new Error(errData.error || 'Error al eliminar aplicación')
+        }
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Error al eliminar aplicación'
+        toast.error(msg)
+      }
+    },
+  })
   const router = useRouter()
 
   const filteredApps = apps.filter(app => 
@@ -48,17 +70,8 @@ export function ApplicationManagementContainer({ initialApplications, t }: Appli
     }
   }
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm(t.delete_confirm)) return
-
-    const response = await fetch(`/api/admin/applications/${id}`, {
-      method: 'DELETE',
-    })
-
-    if (response.ok) {
-      router.refresh()
-      setApps(prev => prev.filter(a => a._id !== id))
-    }
+  const handleDelete = (id: string) => {
+    deleteDialog.trigger(id)
   }
 
   return (
@@ -115,6 +128,18 @@ export function ApplicationManagementContainer({ initialApplications, t }: Appli
         editingApp={editingApp}
         t={t}
         onSubmit={handleSave}
+      />
+
+      <ConfirmDialog
+        open={deleteDialog.open}
+        title="ELIMINAR APLICACIÓN"
+        message={t.delete_confirm}
+        confirmLabel="ELIMINAR"
+        cancelLabel="CANCELAR"
+        variant="danger"
+        isLoading={deleteDialog.isLoading}
+        onConfirm={deleteDialog.confirm}
+        onCancel={deleteDialog.cancel}
       />
     </div>
   )

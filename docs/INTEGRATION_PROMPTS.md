@@ -1,6 +1,6 @@
 # Prompts & Integration Guide for Sibling Applications
 
-This guide provides **ready-to-use, copy-pasteable prompts** designed to instruct other AI coding agents (or developers) to seamlessly integrate the `@abd/styles` central engine into any sibling application inside the ABD SaaS suite.
+This guide provides **ready-to-use, copy-pasteable prompts** designed to instruct other AI coding agents (or developers) to seamlessly integrate the `@ajabadia/styles` central engine into any sibling application inside the ABD SaaS suite.
 
 ---
 
@@ -9,23 +9,23 @@ This guide provides **ready-to-use, copy-pasteable prompts** designed to instruc
 Copy and paste this prompt when instructing an agent working on a satellite application to connect its layout to the central branding engine:
 
 ```markdown
-# ESPECIFICACIÓN: Integración del Motor Central de Estilos (@abd/styles)
+# ESPECIFICACIÓN: Integración del Motor Central de Estilos (@ajabadia/styles)
 
-Estamos integrando el sistema central de marca blanca dinámica `@abd/styles` en esta aplicación para que cargue los colores base (primario, secundario, bordes, etc.) y logotipos del Tenant activo en tiempo real, de manera accesible (WCAG) y con latencia cero (sin parpadeo visual).
+Estamos integrando el sistema central de marca blanca dinámica `@ajabadia/styles` en esta aplicación para que cargue los colores base (primario, secundario, bordes, etc.) y logotipos del Tenant activo en tiempo real, de manera accesible (WCAG) y con latencia cero (sin parpadeo visual).
 
 ## REQUERIMIENTOS TÉCNICOS:
 
 1. **Instalación de Dependencia**:
    - Agrega la dependencia central de GitHub en el `package.json` de este proyecto:
      ```json
-     "@abd/styles": "git+https://github.com/ajabadia/ABDStyles.git#main"
+     "@ajabadia/styles": "git+https://github.com/ajabadia/ABDStyles.git#main"
      ```
    - Ejecuta `npm install` para importar el módulo.
 
 2. **Inyección en Servidor (SSR) en el Layout Raíz**:
    - En `src/app/[locale]/layout.tsx` (o tu layout raíz), importa la función generadora:
      ```typescript
-     import { generateTenantCss } from '@abd/styles';
+     import { generateTenantCss } from '@ajabadia/styles';
      ```
    - Recupera los datos de branding del Tenant activo (ya sea de la base de datos de configuración por subdominio o desde la sesión de usuario federada).
    - Ejecuta `generateTenantCss(tenant.branding.theme)` en el servidor (en memoria) para obtener el bloque CSS optimizado.
@@ -65,7 +65,7 @@ Estamos construyendo un panel administrativo dentro del portal de gobernanza par
 ## REQUERIMIENTOS TÉCNICOS:
 
 1. **Esquema de Base de Datos (MongoDB)**:
-   - Modifica o extiende el modelo de datos de `Tenant` para incorporar el objeto `branding` estructurado de acuerdo con `@abd/styles`:
+   - Modifica o extiende el modelo de datos de `Tenant` para incorporar el objeto `branding` estructurado de acuerdo con `@ajabadia/styles`:
      ```typescript
      branding: {
        logoUrl: string; // URL CDN de la imagen
@@ -80,7 +80,7 @@ Estamos construyendo un panel administrativo dentro del portal de gobernanza par
      ```
 
 2. **Sanitización Estricta mediante Zod**:
-   - Instala e importa `@abd/styles` para reutilizar su esquema de validación `brandingSchema` en el backend antes de persistir cualquier cambio en la base de datos, evitando inyecciones de CSS maliciosas.
+   - Instala e importa `@ajabadia/styles` para reutilizar su esquema de validación `brandingSchema` en el backend antes de persistir cualquier cambio en la base de datos, evitando inyecciones de CSS maliciosas.
 
 3. **UI del Formulario de Marca (`TenantBrandingForm.tsx`)**:
    - Diseña un panel de control premium (estética Tech-Noir minimalista, bordes industriales, fondos glassmorphism).
