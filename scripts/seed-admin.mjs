@@ -120,6 +120,23 @@ const SATELLITES = [
     slug: 'analytics',
     redirectUris: ['http://localhost:3700/api/auth/federated/callback', 'http://localhost:3700'],
   },
+  {
+    clientId: 'landing',
+    name: 'ABD Landing',
+    description: 'Official multipurpose landing and portal page.',
+    clientSecret: 'dev-landing-client-secret',
+    slug: 'landing',
+    redirectUris: [
+      'http://localhost:3399/api/auth/federated/callback',
+      'http://localhost:3399',
+      'https://abd-landing.vercel.app/api/auth/federated/callback',
+      'https://abd-landing.vercel.app',
+      'https://abdia.es/api/auth/federated/callback',
+      'https://abdia.es',
+      'https://www.abdia.es/api/auth/federated/callback',
+      'https://www.abdia.es',
+    ],
+  },
 ];
 
 // ── Helpers ─────────────────────────────────────────────────────────────
