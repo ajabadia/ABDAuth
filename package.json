@@ -10,8 +10,8 @@
     "seed": "node scripts/seed-admin.mjs"
   },
   "dependencies": {
-    "@ajabadia/ecosystem-widgets": "file:..\\ABDEcosystemWidgets",
-    "@ajabadia/satellite-sdk": "file:..\\ABDSatelliteSDK",
+    "@ajabadia/ecosystem-widgets": "^1.0.10",
+    "@ajabadia/satellite-sdk": "^1.0.11",
     "@ajabadia/styles": "latest",
     "@better-auth/mongo-adapter": "^1.6.11",
     "@radix-ui/react-label": "^2.1.8",
