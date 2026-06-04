@@ -124,6 +124,29 @@ async function main() {
   const db = mongoose.connection.db;
   console.log('Connected to:', db.databaseName);
 
+  // ── Register Tenant ──────────────────────────────────────────────────────
+  const tenantsCol = db.collection('tenants');
+  const existingTenant = await tenantsCol.findOne({ tenantId: TENANT_ID });
+  if (!existingTenant) {
+    await tenantsCol.insertOne({
+      tenantId: TENANT_ID,
+      dbPrefix: DB_PREFIX,
+      isolationStrategy: 'COLLECTION_PREFIX',
+      active: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: 'Banco Parque',
+      allowedApps: ['abdquiz', 'abdlogs', 'abdtenantgobernance', 'abdauth', 'quiz', 'gobernanza', 'logs', 'analytics'],
+    });
+    console.log(`Registered tenant '${TENANT_ID}' in tenants collection.`);
+  } else {
+    console.log(`Tenant '${TENANT_ID}' already exists in tenants collection, ensuring active...`);
+    await tenantsCol.updateOne(
+      { tenantId: TENANT_ID },
+      { $set: { active: true, updatedAt: new Date() } }
+    );
+  }
+
   // ── Spaces ──────────────────────────────────────────────────────────────
   const spacesCol = db.collection(SPACES_COLL);
   await spacesCol.deleteMany({ tenantId: TENANT_ID });
