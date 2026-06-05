@@ -46,21 +46,21 @@ describe('Proxy: Public Routes (Login/Register)', () => {
   });
 
   it('should redirect to callbackUrl when authenticated user hits login', async () => {
-    const r = req('/es/login', { user: { id: 'u1' } }, '?callbackUrl=http://localhost:3300/exams');
+    const r = req('/es/login', { user: { id: 'u1' } }, '?callbackUrl=http://localhost:5020/exams');
     const res = await runProxy(r);
     expect(NextResponse.redirect).toHaveBeenCalledWith(
-      expect.objectContaining({ href: 'http://localhost:3300/exams' })
+      expect.objectContaining({ href: 'http://localhost:5020/exams' })
     );
-    expect(res.redirectUrl).toBe('http://localhost:3300/exams');
+    expect(res.redirectUrl).toBe('http://localhost:5020/exams');
   });
 
   it('should redirect to dashboard when authenticated user hits login without callbackUrl', async () => {
     const r = req('/en/login', { user: { id: 'u1' } });
     const res = await runProxy(r);
     expect(NextResponse.redirect).toHaveBeenCalledWith(
-      expect.objectContaining({ href: 'http://localhost:3400/en/dashboard' })
+      expect.objectContaining({ href: 'http://localhost:5001/en/dashboard' })
     );
-    expect(res.redirectUrl).toBe('http://localhost:3400/en/dashboard');
+    expect(res.redirectUrl).toBe('http://localhost:5001/en/dashboard');
   });
 });
 
@@ -73,7 +73,7 @@ describe('Proxy: Dashboard Route Protection & RBAC', () => {
     const r = req('/es/dashboard');
     const res = await runProxy(r);
     expect(NextResponse.redirect).toHaveBeenCalledWith(
-      expect.objectContaining({ href: 'http://localhost:3400/es/login' })
+      expect.objectContaining({ href: 'http://localhost:5001/es/login' })
     );
   });
 
@@ -87,11 +87,11 @@ describe('Proxy: Dashboard Route Protection & RBAC', () => {
   it('should deny "/dashboard/tenants" for ADMIN and USER roles', async () => {
     let r = req('/es/dashboard/tenants', { user: { id: 'u1', role: 'ADMIN' } });
     let res = await runProxy(r);
-    expect(res.redirectUrl).toBe('http://localhost:3400/es/dashboard');
+    expect(res.redirectUrl).toBe('http://localhost:5001/es/dashboard');
 
     r = req('/es/dashboard/tenants', { user: { id: 'u1', role: 'USER' } });
     res = await runProxy(r);
-    expect(res.redirectUrl).toBe('http://localhost:3400/es/dashboard');
+    expect(res.redirectUrl).toBe('http://localhost:5001/es/dashboard');
   });
 
   it('should allow "/dashboard/tenants" for SUPER_ADMIN role', async () => {
@@ -104,11 +104,11 @@ describe('Proxy: Dashboard Route Protection & RBAC', () => {
   it('should deny "/dashboard/users" and "/dashboard/audit" for USER role', async () => {
     let r = req('/es/dashboard/users', { user: { id: 'u1', role: 'USER' } });
     let res = await runProxy(r);
-    expect(res.redirectUrl).toBe('http://localhost:3400/es/dashboard');
+    expect(res.redirectUrl).toBe('http://localhost:5001/es/dashboard');
 
     r = req('/es/dashboard/audit', { user: { id: 'u1', role: 'USER' } });
     res = await runProxy(r);
-    expect(res.redirectUrl).toBe('http://localhost:3400/es/dashboard');
+    expect(res.redirectUrl).toBe('http://localhost:5001/es/dashboard');
   });
 
   it('should allow "/dashboard/users" and "/dashboard/audit" for ADMIN and SUPER_ADMIN', async () => {

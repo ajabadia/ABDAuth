@@ -22,7 +22,7 @@ export const authClient = createAuthClient({
    * Base URL + handler path prefix.
    * Uses NEXT_PUBLIC_* for browser bundle compatibility.
    */
-  baseURL: (process.env.NEXT_PUBLIC_BETTER_AUTH_URL || process.env.BETTER_AUTH_URL || "http://localhost:3400") + "/api/auth",
+  baseURL: (process.env.NEXT_PUBLIC_BETTER_AUTH_URL || process.env.BETTER_AUTH_URL || "http://localhost:5001") + "/api/auth",
   plugins: [
     inferAdditionalFields<typeof auth>(),
     twoFactorClient({

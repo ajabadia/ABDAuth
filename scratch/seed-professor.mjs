@@ -119,8 +119,8 @@ async function run() {
   console.log('   Role:     PROFESSOR');
   console.log('   Tenant:   ' + tenant.tenantId);
   console.log('');
-  console.log('👉 Login at http://localhost:3400/login');
-  console.log('👉 Then access: http://localhost:3300/es/admin');
+  console.log('👉 Login at http://localhost:5001/login');
+  console.log('👉 Then access: http://localhost:5020/es/admin');
 
   await client.close();
 }

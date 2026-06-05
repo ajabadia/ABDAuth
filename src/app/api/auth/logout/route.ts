@@ -13,7 +13,7 @@ import { generateSloPage } from './slo-html';
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const redirectUri = searchParams.get('redirect_uri') || searchParams.get('callbackUrl') || 'http://localhost:3400';
+  const redirectUri = searchParams.get('redirect_uri') || searchParams.get('callbackUrl') || 'http://localhost:5001';
 
   // 🛰️ Determine the execution environment from the requester's origin
   const isLocalEnvironment = process.env.NODE_ENV !== 'production';

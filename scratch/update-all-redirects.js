@@ -11,8 +11,8 @@ const satellites = [
     clientSecret: 'abdquiz-industrial-super-secret-key-2026',
     slug: 'quiz',
     redirectUris: [
-      'http://localhost:3300/api/auth/federated/callback',
-      'http://localhost:3300',
+      'http://localhost:5020/api/auth/federated/callback',
+      'http://localhost:5020',
       'https://quiz.abd.vercel.app/api/auth/federated/callback',
       'https://abd-quiz.vercel.app/api/auth/federated/callback',
       'https://abd-quiz.vercel.app'
@@ -26,8 +26,8 @@ const satellites = [
     clientSecret: 'abdgov-industrial-super-secret-key-2026',
     slug: 'gobernanza',
     redirectUris: [
-      'http://localhost:3500/api/auth/federated/callback',
-      'http://localhost:3500',
+      'http://localhost:5002/api/auth/federated/callback',
+      'http://localhost:5002',
       'https://abd-tenant-gobernance.vercel.app/api/auth/federated/callback',
       'https://abd-tenant-gobernance.vercel.app'
     ],
@@ -40,8 +40,8 @@ const satellites = [
     clientSecret: 'abdlogs-industrial-super-secret-key-2026',
     slug: 'logs',
     redirectUris: [
-      'http://localhost:3600/api/auth/federated/callback',
-      'http://localhost:3600',
+      'http://localhost:5003/api/auth/federated/callback',
+      'http://localhost:5003',
       'https://abd-logs.vercel.app/api/auth/federated/callback',
       'https://abd-logs.vercel.app'
     ],

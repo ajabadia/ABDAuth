@@ -41,7 +41,7 @@ export async function requestPasswordResetAction(email: string) {
   });
 
   // 4. Send email
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3400';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:5001';
   const resetUrl = `${baseUrl}/login/reset-password?token=${token}`;
 
   try {

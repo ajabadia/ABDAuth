@@ -13,7 +13,7 @@ export default defineConfig({
   reporter: 'html',
   timeout: 120000, // 🛡️ Industrial 2-minute timeout per test
   use: {
-    baseURL: 'http://localhost:3400',
+    baseURL: 'http://localhost:5001',
     trace: 'on-first-retry',
     screenshot: 'on', // 📸 Always capture screenshots for industrial auditing
     video: 'on-first-retry',
@@ -29,7 +29,7 @@ export default defineConfig({
   /* 🚀 Auto-start server for tests */
   webServer: {
     command: 'npm run dev',
-    url: 'http://localhost:3400',
+    url: 'http://localhost:5001',
     reuseExistingServer: !process.env.CI,
     timeout: 180000,
   },

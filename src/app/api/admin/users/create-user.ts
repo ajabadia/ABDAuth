@@ -54,7 +54,7 @@ export async function createUserHandler(payload: Record<string, unknown>, adminU
     createdAt: new Date(),
   });
 
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3400';
+  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:5001';
   const verificationUrl = `${baseUrl}/login/reset-password?token=${token}`;
 
   try {

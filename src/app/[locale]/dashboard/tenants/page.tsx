@@ -19,7 +19,7 @@ export default async function TenantsPage({
   const controlPlaneUrl = process.env.NEXT_PUBLIC_CONTROL_PLANE_URL || 
     (process.env.NODE_ENV === 'production' 
       ? 'https://abd-tenant-gobernance.vercel.app' 
-      : 'http://localhost:3500');
+      : 'http://localhost:5002');
 
   redirect(`${controlPlaneUrl}/${locale}/admin/tenants`);
 }

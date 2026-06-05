@@ -21,7 +21,7 @@ export class LogsClient {
     if (this.initialized) return;
 
     configureLogger({
-      endpoint: process.env.LOGS_SERVICE_URL || 'http://localhost:3600/api/logs',
+      endpoint: process.env.LOGS_SERVICE_URL || 'http://localhost:5003/api/logs',
       token: process.env.LOGS_SECRET_TOKEN || 'shared-system-token-2026',
       appId: process.env.NEXT_PUBLIC_APP_ID || 'auth',
     });

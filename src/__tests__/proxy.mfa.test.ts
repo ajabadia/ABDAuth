@@ -44,9 +44,9 @@ describe('Proxy: MFA Setup and Enrollment Rules', () => {
     });
     const res = await runProxy(r);
     expect(NextResponse.redirect).toHaveBeenCalledWith(
-      expect.objectContaining({ href: 'http://localhost:3400/es/login/mfa' })
+      expect.objectContaining({ href: 'http://localhost:5001/es/login/mfa' })
     );
-    expect(res.redirectUrl).toBe('http://localhost:3400/es/login/mfa');
+    expect(res.redirectUrl).toBe('http://localhost:5001/es/login/mfa');
   });
 
   it('should redirect to "/login/mfa/setup" when MFA is enforced but not enabled', async () => {
@@ -55,9 +55,9 @@ describe('Proxy: MFA Setup and Enrollment Rules', () => {
     });
     const res = await runProxy(r);
     expect(NextResponse.redirect).toHaveBeenCalledWith(
-      expect.objectContaining({ href: 'http://localhost:3400/en/login/mfa/setup' })
+      expect.objectContaining({ href: 'http://localhost:5001/en/login/mfa/setup' })
     );
-    expect(res.redirectUrl).toBe('http://localhost:3400/en/login/mfa/setup');
+    expect(res.redirectUrl).toBe('http://localhost:5001/en/login/mfa/setup');
   });
 
   it('should not redirect if already on MFA pages to prevent loops', async () => {

@@ -47,14 +47,14 @@ export default async function DashboardLayout({
   }
 
   // 🔍 Derive central logs audit URL dynamically (cross-satellite navigation to ABDLogs)
-  const logsServiceUrl = process.env.LOGS_SERVICE_URL || 'http://localhost:3600/api/logs';
+  const logsServiceUrl = process.env.LOGS_SERVICE_URL || 'http://localhost:5003/api/logs';
   let logsAuditUrl = '';
   try {
     const logsOrigin = new URL(logsServiceUrl).origin;
     logsAuditUrl = `${logsOrigin}/${locale}/admin/audit`;
   } catch (err) {
     console.error("Failed to parse LOGS_SERVICE_URL:", err);
-    logsAuditUrl = `http://localhost:3600/${locale}/admin/audit`;
+    logsAuditUrl = `http://localhost:5003/${locale}/admin/audit`;
   }
 
   return (

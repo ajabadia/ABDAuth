@@ -5,8 +5,8 @@ const dbName = "ABDElevators-Auth";
 const clientId = "abdquiz-industrial-client-id";
 
 const correctRedirectUris = [
-  'http://localhost:3300/api/auth/federated/callback',
-  'http://localhost:3300',
+  'http://localhost:5020/api/auth/federated/callback',
+  'http://localhost:5020',
   'https://quiz.abd.vercel.app/api/auth/federated/callback',
   'https://abd-quiz.vercel.app/api/auth/federated/callback',
   'https://abd-quiz.vercel.app'

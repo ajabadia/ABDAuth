@@ -62,7 +62,7 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const AUTH_DB = process.env.MONGODB_AUTH_DB || 'ABDElevators-Auth';
 
 const TENANT_ID = 'abd-local';
-const ALLOWED_APPS = ['quiz', 'gobernanza', 'logs', 'analytics'];
+const ALLOWED_APPS = ['quiz', 'gobernanza', 'logs', 'analytics', 'files', 'base'];
 
 // ── Usuarios a crear ─────────────────────────────────────────────────────
 
@@ -94,7 +94,7 @@ const SATELLITES = [
     description: 'Official industrial audit and quiz satellite.',
     clientSecret: 'abdquiz-industrial-super-secret-key-2026',
     slug: 'quiz',
-    redirectUris: ['http://localhost:3300/api/auth/federated/callback', 'http://localhost:3300'],
+    redirectUris: ['http://localhost:5020/api/auth/federated/callback', 'http://localhost:5020'],
   },
   {
     clientId: 'abdgov-industrial-client-id',
@@ -102,7 +102,7 @@ const SATELLITES = [
     description: 'Official tenant governance console.',
     clientSecret: 'abdgov-industrial-super-secret-key-2026',
     slug: 'gobernanza',
-    redirectUris: ['http://localhost:3500/api/auth/federated/callback', 'http://localhost:3500'],
+    redirectUris: ['http://localhost:5002/api/auth/federated/callback', 'http://localhost:5002'],
   },
   {
     clientId: 'abdlogs-industrial-client-id',
@@ -110,7 +110,7 @@ const SATELLITES = [
     description: 'Official centralized logging and auditing console.',
     clientSecret: 'abdlogs-industrial-super-secret-key-2026',
     slug: 'logs',
-    redirectUris: ['http://localhost:3600/api/auth/federated/callback', 'http://localhost:3600'],
+    redirectUris: ['http://localhost:5003/api/auth/federated/callback', 'http://localhost:5003'],
   },
   {
     clientId: 'abdanalytics-industrial-client-id',
@@ -118,7 +118,7 @@ const SATELLITES = [
     description: 'Official analytics, compliance and reporting dashboard.',
     clientSecret: 'abdanalytics-industrial-super-secret-key-2026',
     slug: 'analytics',
-    redirectUris: ['http://localhost:3700/api/auth/federated/callback', 'http://localhost:3700'],
+    redirectUris: ['http://localhost:5004/api/auth/federated/callback', 'http://localhost:5004'],
   },
   {
     clientId: 'landing',
@@ -127,8 +127,8 @@ const SATELLITES = [
     clientSecret: 'dev-landing-client-secret',
     slug: 'landing',
     redirectUris: [
-      'http://localhost:3399/api/auth/federated/callback',
-      'http://localhost:3399',
+      'http://localhost:5000/api/auth/federated/callback',
+      'http://localhost:5000',
       'https://abd-landing.vercel.app/api/auth/federated/callback',
       'https://abd-landing.vercel.app',
       'https://abdia.es/api/auth/federated/callback',
@@ -136,6 +136,22 @@ const SATELLITES = [
       'https://www.abdia.es/api/auth/federated/callback',
       'https://www.abdia.es',
     ],
+  },
+  {
+    clientId: 'files',
+    name: 'ABDFiles Federated',
+    description: 'Official document manager satellite.',
+    clientSecret: 'dev-files-client-secret',
+    slug: 'files',
+    redirectUris: ['http://localhost:5005/api/auth/federated/callback', 'http://localhost:5005'],
+  },
+  {
+    clientId: 'base',
+    name: 'ABDBase Federated',
+    description: 'Template application base.',
+    clientSecret: 'dev-base-client-secret',
+    slug: 'base',
+    redirectUris: ['http://localhost:3900/api/auth/federated/callback', 'http://localhost:3900'],
   },
 ];
 
@@ -293,8 +309,8 @@ async function main() {
       console.log(`     ${admin.email.padEnd(25)} ${admin.role.padEnd(12)} ${admin.password}`);
     }
     console.log('');
-    console.log('   Login:  http://localhost:3400/login');
-    console.log('   Admin:  http://localhost:3300/es/admin');
+    console.log('   Login:  http://localhost:5001/login');
+    console.log('   Admin:  http://localhost:5020/es/admin');
     console.log('');
 
   } catch (err) {
