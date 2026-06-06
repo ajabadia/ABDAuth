@@ -11,12 +11,14 @@ export interface SatelliteAppConfig {
 
 export const SATELLITES: SatelliteAppConfig[] = [
   {
-    clientId: 'abdquiz-industrial-client-id',
+    clientId: 'quiz',
     name: 'ABDQuiz Federated',
     description: 'Official industrial audit and quiz satellite.',
-    clientSecret: 'abdquiz-industrial-super-secret-key-2026',
+    clientSecret: 'abdquiz-industrial-client-secret',
     slug: 'quiz',
     redirectUris: [
+      'http://localhost:5200/api/auth/federated/callback',
+      'http://localhost:5200',
       'http://localhost:5020/api/auth/federated/callback',
       'http://localhost:5020',
       'https://quiz.abd.vercel.app/api/auth/federated/callback',
@@ -25,10 +27,10 @@ export const SATELLITES: SatelliteAppConfig[] = [
     ],
   },
   {
-    clientId: 'abdgov-industrial-client-id',
+    clientId: 'gobernanza',
     name: 'ABDTenantGobernance Federated',
     description: 'Official tenant governance console.',
-    clientSecret: 'abdgov-industrial-super-secret-key-2026',
+    clientSecret: 'dev-gobernanza-client-secret',
     slug: 'gobernanza',
     redirectUris: [
       'http://localhost:5002/api/auth/federated/callback',
@@ -38,10 +40,10 @@ export const SATELLITES: SatelliteAppConfig[] = [
     ],
   },
   {
-    clientId: 'abdlogs-industrial-client-id',
+    clientId: 'logs',
     name: 'ABDLogs Federated',
     description: 'Official centralized logging and auditing console.',
-    clientSecret: 'abdlogs-industrial-super-secret-key-2026',
+    clientSecret: 'dev-logs-client-secret',
     slug: 'logs',
     redirectUris: [
       'http://localhost:5003/api/auth/federated/callback',
@@ -51,10 +53,10 @@ export const SATELLITES: SatelliteAppConfig[] = [
     ],
   },
   {
-    clientId: 'abdanalytics-industrial-client-id',
+    clientId: 'analytics',
     name: 'ABDAnalytics Federated',
     description: 'Official centralized analytics, compliance and reporting dashboard.',
-    clientSecret: 'abdanalytics-industrial-super-secret-key-2026',
+    clientSecret: 'dev-analytics-client-secret',
     slug: 'analytics',
     redirectUris: [
       'http://localhost:5004/api/auth/federated/callback',
@@ -78,6 +80,20 @@ export const SATELLITES: SatelliteAppConfig[] = [
       'https://abdia.es',
       'https://www.abdia.es/api/auth/federated/callback',
       'https://www.abdia.es',
+    ],
+  },
+  {
+    clientId: 'files',
+    name: 'ABDFiles Federated',
+    description: 'Official document manager satellite.',
+    clientSecret: 'dev-files-client-secret',
+    slug: 'files',
+    redirectUris: [
+      'http://localhost:5005/api/auth/federated/callback',
+      'http://localhost:5005',
+      'https://abd-files.vercel.app/api/auth/federated/callback',
+      'https://files.abdia.es/api/auth/federated/callback',
+      'https://files.abdia.es',
     ],
   },
 ];

@@ -56,8 +56,8 @@ export async function GET(req: Request) {
       const tenant = await tenantRepository.findByTenantId(effectiveTenantId as TenantId);
       const tenantAllowedApps = tenant?.allowedApps || [];
       const isPrivilegedRole = membership.role === 'admin' || membership.role === 'owner';
-      if (appSlug && !tenantAllowedApps.includes(appSlug)) { dashboardUrl.searchParams.set('error', 'APPLICATION_NOT_LICENSED'); dashboardUrl.searchParams.set('app', appSlug); return NextResponse.redirect(dashboardUrl); }
-      if (!isPrivilegedRole && appSlug) {
+      if (appSlug && appSlug !== 'landing' && !tenantAllowedApps.includes(appSlug)) { dashboardUrl.searchParams.set('error', 'APPLICATION_NOT_LICENSED'); dashboardUrl.searchParams.set('app', appSlug); return NextResponse.redirect(dashboardUrl); }
+      if (!isPrivilegedRole && appSlug && appSlug !== 'landing') {
         const userAllowedApps = membership.allowedApps || [];
         if (!userAllowedApps.includes(appSlug)) { dashboardUrl.searchParams.set('error', 'APPLICATION_NOT_LICENSED'); dashboardUrl.searchParams.set('app', appSlug); return NextResponse.redirect(dashboardUrl); }
       }

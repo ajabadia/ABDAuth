@@ -94,14 +94,18 @@ export async function POST(req: Request) {
     // Resolve membership details
     const isSuperAdmin = user.role === 'SUPER_ADMIN';
     const membership = user.tenants?.find((t: UserTenantMembership) => t.tenantId === user.tenantId);
-    const role = membership?.role || user.role;
+    const role = isSuperAdmin ? 'SUPER_ADMIN' : (membership?.role || user.role);
     const permissions = membership?.appPermissions || [];
     
     const tenantAllowedApps = tenant?.allowedApps || [];
     const userAllowedApps = membership?.allowedApps || [];
     const resolvedAllowedApps = (isSuperAdmin || role === 'owner' || role === 'admin')
-      ? tenantAllowedApps
+      ? [...tenantAllowedApps]
       : tenantAllowedApps.filter((app: string) => userAllowedApps.includes(app));
+
+    if (!resolvedAllowedApps.includes('landing')) {
+      resolvedAllowedApps.push('landing');
+    }
 
     // 5. Generate cryptographically signed JWT via SsoService
     const token = await SsoService.generateToken({

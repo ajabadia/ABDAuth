@@ -89,36 +89,59 @@ const ADMINS = [
 
 const SATELLITES = [
   {
-    clientId: 'abdquiz-industrial-client-id',
+    clientId: 'quiz',
     name: 'ABDQuiz Federated',
     description: 'Official industrial audit and quiz satellite.',
-    clientSecret: 'abdquiz-industrial-super-secret-key-2026',
+    clientSecret: 'abdquiz-industrial-client-secret',
     slug: 'quiz',
-    redirectUris: ['http://localhost:5020/api/auth/federated/callback', 'http://localhost:5020'],
+    redirectUris: [
+      'http://localhost:5200/api/auth/federated/callback',
+      'http://localhost:5200',
+      'http://localhost:5020/api/auth/federated/callback',
+      'http://localhost:5020',
+      'https://quiz.abd.vercel.app/api/auth/federated/callback',
+      'https://abd-quiz.vercel.app/api/auth/federated/callback',
+      'https://abd-quiz.vercel.app',
+    ],
   },
   {
-    clientId: 'abdgov-industrial-client-id',
+    clientId: 'gobernanza',
     name: 'ABDTenantGobernance Federated',
     description: 'Official tenant governance console.',
-    clientSecret: 'abdgov-industrial-super-secret-key-2026',
+    clientSecret: 'dev-gobernanza-client-secret',
     slug: 'gobernanza',
-    redirectUris: ['http://localhost:5002/api/auth/federated/callback', 'http://localhost:5002'],
+    redirectUris: [
+      'http://localhost:5002/api/auth/federated/callback',
+      'http://localhost:5002',
+      'https://abd-tenant-gobernance.vercel.app/api/auth/federated/callback',
+      'https://abd-tenant-gobernance.vercel.app',
+    ],
   },
   {
-    clientId: 'abdlogs-industrial-client-id',
+    clientId: 'logs',
     name: 'ABDLogs Federated',
     description: 'Official centralized logging and auditing console.',
-    clientSecret: 'abdlogs-industrial-super-secret-key-2026',
+    clientSecret: 'dev-logs-client-secret',
     slug: 'logs',
-    redirectUris: ['http://localhost:5003/api/auth/federated/callback', 'http://localhost:5003'],
+    redirectUris: [
+      'http://localhost:5003/api/auth/federated/callback',
+      'http://localhost:5003',
+      'https://abd-logs.vercel.app/api/auth/federated/callback',
+      'https://abd-logs.vercel.app',
+    ],
   },
   {
-    clientId: 'abdanalytics-industrial-client-id',
+    clientId: 'analytics',
     name: 'ABDAnalytics Federated',
-    description: 'Official analytics, compliance and reporting dashboard.',
-    clientSecret: 'abdanalytics-industrial-super-secret-key-2026',
+    description: 'Official centralized analytics, compliance and reporting dashboard.',
+    clientSecret: 'dev-analytics-client-secret',
     slug: 'analytics',
-    redirectUris: ['http://localhost:5004/api/auth/federated/callback', 'http://localhost:5004'],
+    redirectUris: [
+      'http://localhost:5004/api/auth/federated/callback',
+      'http://localhost:5004',
+      'https://abd-analytics.vercel.app/api/auth/federated/callback',
+      'https://abd-analytics.vercel.app',
+    ],
   },
   {
     clientId: 'landing',
@@ -143,7 +166,13 @@ const SATELLITES = [
     description: 'Official document manager satellite.',
     clientSecret: 'dev-files-client-secret',
     slug: 'files',
-    redirectUris: ['http://localhost:5005/api/auth/federated/callback', 'http://localhost:5005'],
+    redirectUris: [
+      'http://localhost:5005/api/auth/federated/callback',
+      'http://localhost:5005',
+      'https://abd-files.vercel.app/api/auth/federated/callback',
+      'https://files.abdia.es/api/auth/federated/callback',
+      'https://files.abdia.es',
+    ],
   },
   {
     clientId: 'base',
@@ -280,12 +309,7 @@ async function main() {
     for (const sat of SATELLITES) {
       const existing = await appsCol.findOne({ clientId: sat.clientId });
 
-      if (existing) {
-        console.log(`📌  ${sat.name} ya registrada`);
-        continue;
-      }
-
-      await appsCol.insertOne({
+      const appData = {
         clientId: sat.clientId,
         name: sat.name,
         description: sat.description,
@@ -293,11 +317,19 @@ async function main() {
         slug: sat.slug,
         redirectUris: sat.redirectUris,
         active: true,
-        createdAt: now(),
-        updatedAt: now(),
-      });
+        updatedAt: now()
+      };
 
-      console.log(`🚀  ${sat.name} registrada`);
+      if (existing) {
+        await appsCol.updateOne({ clientId: sat.clientId }, { $set: appData });
+        console.log(`🔄  ${sat.name} actualizada`);
+      } else {
+        await appsCol.insertOne({
+          ...appData,
+          createdAt: now()
+        });
+        console.log(`🚀  ${sat.name} registrada`);
+      }
     }
     console.log('');
 
