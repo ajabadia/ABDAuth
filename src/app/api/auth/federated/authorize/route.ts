@@ -35,7 +35,11 @@ export async function GET(req: Request) {
 
   const session = await getServerSession();
   if (!session?.user) {
-    const loginUrl = new URL('/login', req.url);
+    let locale = 'es';
+    if (state.startsWith('/en') || state.startsWith('/en/')) {
+      locale = 'en';
+    }
+    const loginUrl = new URL(`/${locale}/login`, req.url);
     const callback = new URL(req.url);
     if (tenantParam) { callback.searchParams.set('tenant', tenantParam); loginUrl.searchParams.set('tenant', tenantParam); }
     loginUrl.searchParams.set('callbackUrl', callback.toString());

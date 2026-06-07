@@ -30,7 +30,11 @@ export async function GET(req: Request) {
   // 1. Verify User Authentication Session
   const session = await getServerSession();
   if (!session?.user) {
-    const loginUrl = new URL('/login', req.url);
+    let locale = 'es';
+    if (stateParam.startsWith('/en') || stateParam.startsWith('/en/')) {
+      locale = 'en';
+    }
+    const loginUrl = new URL(`/${locale}/login`, req.url);
     loginUrl.searchParams.set('callbackUrl', req.url);
     return NextResponse.redirect(loginUrl);
   }
