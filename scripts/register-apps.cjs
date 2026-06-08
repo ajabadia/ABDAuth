@@ -1,0 +1,154 @@
+const { MongoClient } = require('mongodb');
+const crypto = require('crypto');
+
+const uri = "mongodb+srv://ajabadia03_db_user:Ajabafan1974@cluster0.xarmew0.mongodb.net/ABDElevators-Auth";
+const client = new MongoClient(uri);
+
+const apps = [
+  {
+    name: "ABDAuth",
+    description: "Identity Provider - Central Auth Service",
+    clientId: "auth",
+    clientSecret: "abd-auth-industrial-client-secret-" + crypto.randomBytes(16).toString('hex'),
+    redirectUris: [
+      "http://localhost:5001/api/auth/federated/callback",
+      "https://auth.abdia.es/api/auth/federated/callback"
+    ],
+    slug: "auth",
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    name: "ABDAnalytics",
+    description: "Analytics Satellite",
+    clientId: "analytics",
+    clientSecret: "dev-analytics-client-secret-" + crypto.randomBytes(16).toString('hex'),
+    redirectUris: [
+      "http://localhost:5004/api/auth/federated/callback",
+      "https://analytics.abdia.es/api/auth/federated/callback"
+    ],
+    slug: "analytics",
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    name: "ABDLogs",
+    description: "Logging Service Satellite",
+    clientId: "logs",
+    clientSecret: "dev-logs-client-secret-" + crypto.randomBytes(16).toString('hex'),
+    redirectUris: [
+      "http://localhost:5003/api/auth/federated/callback",
+      "https://logs.abdia.es/api/auth/federated/callback"
+    ],
+    slug: "logs",
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    name: "ABDQuiz",
+    description: "Quiz Satellite App",
+    clientId: "quiz",
+    clientSecret: "abdquiz-industrial-client-secret-" + crypto.randomBytes(16).toString('hex'),
+    redirectUris: [
+      "http://localhost:5020/api/auth/federated/callback",
+      "https://quiz.abdia.es/api/auth/federated/callback"
+    ],
+    slug: "quiz",
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    name: "ABDFiles",
+    description: "Document Manager Satellite",
+    clientId: "files",
+    clientSecret: "dev-files-client-secret-" + crypto.randomBytes(16).toString('hex'),
+    redirectUris: [
+      "http://localhost:5005/api/auth/federated/callback",
+      "https://files.abdia.es/api/auth/federated/callback"
+    ],
+    slug: "files",
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    name: "ABDtenantGobernance",
+    description: "Tenant Governance Satellite",
+    clientId: "gobernanza",
+    clientSecret: "dev-gobernanza-client-secret-" + crypto.randomBytes(16).toString('hex'),
+    redirectUris: [
+      "http://localhost:5002/api/auth/federated/callback",
+      "https://tenantgobernance.abdia.es/api/auth/federated/callback"
+    ],
+    slug: "gobernanza",
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    name: "ABDLanding",
+    description: "Landing Page & Portal",
+    clientId: "landing",
+    clientSecret: "dev-landing-client-secret-" + crypto.randomBytes(16).toString('hex'),
+    redirectUris: [
+      "http://localhost:3000/api/auth/federated/callback",
+      "https://abdia.es/api/auth/federated/callback"
+    ],
+    slug: "landing",
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }
+];
+
+async function registerApps() {
+  try {
+    await client.connect();
+    console.log('Connected to MongoDB');
+    
+    const db = client.db('ABDElevators-Auth');
+    const collection = db.collection('applications');
+    
+    // Check existing
+    const existing = await collection.find({}).toArray();
+    console.log(`Found ${existing.length} existing applications`);
+    existing.forEach(app => console.log(`  - ${app.name} (${app.clientId})`));
+    
+    for (const app of apps) {
+      const existingApp = await collection.findOne({ clientId: app.clientId });
+      if (existingApp) {
+        console.log(`Updating ${app.name}...`);
+        await collection.updateOne(
+          { clientId: app.clientId },
+          { $set: { ...app, updatedAt: new Date() } }
+        );
+      } else {
+        console.log(`Inserting ${app.name}...`);
+        await collection.insertOne(app);
+      }
+    }
+    
+    console.log('\nDone! All applications registered with redirect URIs.');
+    
+    // Verify
+    const all = await collection.find({}).toArray();
+    console.log(`\nTotal applications: ${all.length}`);
+    all.forEach(app => {
+      console.log(`\n${app.name} (${app.clientId}):`);
+      console.log(`  Client Secret: ${app.clientSecret}`);
+      console.log(`  Redirect URIs:`);
+      app.redirectUris.forEach(uri => console.log(`    - ${uri}`));
+    });
+    
+  } catch (error) {
+    console.error('Error:', error);
+  } finally {
+    await client.close();
+  }
+}
+
+registerApps();
