@@ -15,6 +15,13 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
+import { configureLogger } from '@ajabadia/satellite-sdk';
+
+configureLogger({
+  endpoint: process.env.LOGS_SERVICE_URL || 'http://localhost:5003/api/logs',
+  token: process.env.LOGS_SECRET_TOKEN,
+  appId: 'ABDAuth',
+});
 
 import { auth } from "@/lib/auth";
 import { headers, cookies } from "next/headers";
