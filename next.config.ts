@@ -6,6 +6,7 @@ const withNextIntl = createNextIntlPlugin(
 );
 
 const nextConfig: NextConfig = {
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
   transpilePackages: ['@ajabadia/ecosystem-widgets', '@ajabadia/styles', '@ajabadia/satellite-sdk'],
 };
 
