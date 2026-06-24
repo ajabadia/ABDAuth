@@ -4,11 +4,12 @@
  * @refactorable true (contains too many state variables and UI parts)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:2,imports:6,sig:pyr9sl
- * @lastUpdated 2026-06-23T22:38:40.929Z
+ * @fingerprint exports:2,imports:7,sig:1kuyd2e
+ * @lastUpdated 2026-06-24T10:28:26.597Z
  */
 
 import { NextResponse } from 'next/server';
+import { logger } from '@ajabadia/satellite-sdk';
 import { identityProviderRepository } from '@/lib/repositories/IdentityProviderRepository';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { setFederatedSession } from '@/services/auth/federated-session';
@@ -136,6 +137,16 @@ export async function POST(req: Request) {
       }
     }
 
+    await logger.audit({
+      tenantId: provider.tenantId || provider.defaultTenantId || 'unknown',
+      action: 'SAML_LOGIN_SUCCESS',
+      entityType: 'SSO',
+      entityId: entityId || 'unknown',
+      userId: user._id?.toString() || 'system',
+      userEmail: user.email || 'system@abd.com',
+      changedFields: { providerId: provider._id?.toString(), method: 'SAML', autoProvision: !user },
+    });
+
     // Create better-auth-compatible session via MongoDB
     const response = await setFederatedSession({
       userId: user._id?.toString() || '',
@@ -145,6 +156,16 @@ export async function POST(req: Request) {
 
     return response;
   } catch (error) {
+    const samlError = error instanceof Error ? error.message : 'Unknown error';
+    await logger.audit({
+      tenantId: 'unknown',
+      action: 'SAML_ACS_ERROR',
+      entityType: 'FEDERATION',
+      entityId: 'unknown',
+      userId: 'system',
+      userEmail: 'system@abd.com',
+      changedFields: { error: samlError },
+    });
     console.error('[SAML_ACS]', error);
     return NextResponse.redirect(
       new URL(`/dashboard?error=SAML_ERROR&details=${encodeURIComponent((error as Error).message)}`, req.url)

@@ -4,12 +4,13 @@
  * @refactorable true (contains too many state variables and UI parts)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:2,imports:6,sig:1fv2zfu
- * @lastUpdated 2026-06-23T23:00:18.692Z
+ * @fingerprint exports:2,imports:7,sig:am2yuj
+ * @lastUpdated 2026-06-24T10:29:54.380Z
  */
 
 'use server';
 
+import { logger } from '@ajabadia/satellite-sdk';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { resetTokenRepository } from '@/lib/repositories/ResetTokenRepository';
 import { auditRepository } from '@/lib/repositories/AuditRepository';
@@ -71,7 +72,16 @@ export async function requestPasswordResetAction(email: string) {
       status: 'SUCCESS'
     });
   } catch (error) {
-    // eslint-disable-next-line no-console
+    const resetErr = error instanceof Error ? error.message : 'Unknown error';
+    await logger.audit({
+      tenantId: dbUser?.tenantId || 'unknown',
+      action: 'PASSWORD_RESET_EMAIL_ERROR',
+      entityType: 'USER',
+      entityId: dbUser?._id?.toString() || 'unknown',
+      userId: dbUser?._id?.toString() || 'system',
+      userEmail: email,
+      changedFields: { error: resetErr },
+    });
     console.error('Failed to send reset email:', error);
     return { success: false, error: 'EMAIL_FAILURE' };
   }
@@ -123,7 +133,16 @@ export async function resetPasswordAction(token: string, newPass: string) {
       const { SessionService } = await import('@/services/auth/SessionService');
       await SessionService.revokeAllUserSessions(dbUser._id!.toString() as EntityId, dbUser.tenantId);
     } catch (err) {
-      // eslint-disable-next-line no-console
+      const revokeErr = err instanceof Error ? err.message : 'Unknown error';
+      await logger.audit({
+        tenantId: dbUser?.tenantId || 'unknown',
+        action: 'PASSWORD_RESET_REVOKE_SESSIONS_ERROR',
+        entityType: 'USER',
+        entityId: dbUser?._id?.toString() || 'unknown',
+        userId: dbUser?._id?.toString() || 'system',
+        userEmail: dbUser?.email || 'system@abd.com',
+        changedFields: { error: revokeErr },
+      });
       console.error('Failed to revoke sessions during recovery reset:', err);
     }
 
@@ -136,7 +155,16 @@ export async function resetPasswordAction(token: string, newPass: string) {
         details: 'Tu contraseña ha sido restaurada satisfactoriamente utilizando un enlace de recuperación.'
       });
     } catch (err) {
-      // eslint-disable-next-line no-console
+      const alertErr = err instanceof Error ? err.message : 'Unknown error';
+      await logger.audit({
+        tenantId: dbUser?.tenantId || 'unknown',
+        action: 'PASSWORD_RESET_SECURITY_ALERT_ERROR',
+        entityType: 'USER',
+        entityId: dbUser?._id?.toString() || 'unknown',
+        userId: dbUser?._id?.toString() || 'system',
+        userEmail: dbUser?.email || 'system@abd.com',
+        changedFields: { error: alertErr },
+      });
       console.error('Failed to send security alert:', err);
     }
 

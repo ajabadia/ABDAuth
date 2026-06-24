@@ -1,11 +1,11 @@
 /**
  * @purpose Gestiona acciones de inicio de sesión del usuario, incluyendo autenticación, limitación de tasa y verificación de bloqueo de cuenta.
- * @purpose_en Handles user login actions, including authentication, rate limiting, and account lockout checks.
+ * @purpose_en Manages user login actions, including authentication, rate limiting, and account lockout checks.
  * @refactorable true (contains too many state variables and UI parts)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:3,sig:lo41dx
- * @lastUpdated 2026-06-21T10:23:44.469Z
+ * @fingerprint exports:1,imports:4,sig:18zhaj4
+ * @lastUpdated 2026-06-24T10:29:17.724Z
  */
 
 'use server'
@@ -13,6 +13,7 @@
 import { auth } from "@/lib/auth";
 import { APIError } from "better-auth";
 import { userRepository } from "@/lib/repositories/UserRepository";
+import { logger } from '@ajabadia/satellite-sdk';
 
 export async function loginAction(formData: FormData) {
   const email = formData.get('email') as string;
@@ -60,6 +61,16 @@ export async function loginAction(formData: FormData) {
     // Success — cookies are set by nextCookies plugin
     return {};
   } catch (error) {
+    const loginError = error instanceof Error ? error.message : 'Unknown error';
+    await logger.audit({
+      tenantId: 'unknown',
+      action: 'LOGIN_ACTION_CRITICAL_ERROR',
+      entityType: 'USER',
+      entityId: email,
+      userId: 'system',
+      userEmail: email || 'unknown@abd.com',
+      changedFields: { error: loginError, email },
+    });
     console.error("[LOGIN_ACTION_CRITICAL_ERROR]", error);
 
     // 🔢 Increment login attempts on any authentication failure
@@ -74,6 +85,16 @@ export async function loginAction(formData: FormData) {
         await userRepository.update(failedUser._id as string, updateData);
       }
     } catch (incrementError) {
+      const incMsg = incrementError instanceof Error ? incrementError.message : 'Unknown error';
+      await logger.audit({
+        tenantId: 'unknown',
+        action: 'LOGIN_INCREMENT_ATTEMPTS_ERROR',
+        entityType: 'USER',
+        entityId: email,
+        userId: 'system',
+        userEmail: email || 'unknown@abd.com',
+        changedFields: { error: incMsg, email },
+      });
       console.error("[LOGIN_ACTION] Failed to increment login attempts:", incrementError);
     }
 

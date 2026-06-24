@@ -1,16 +1,17 @@
 /**
- * @purpose Gestiona acciones de autenticación multifactor, incluyendo resetear MFA para usuarios y sincronizar el cumplimiento de MFA.
+ * @purpose Gestiona acciones de autenticación multifactor, incluyendo resetear MFA para usuarios y sincronizar el cumplimiento del MFA.
  * @purpose_en Manages Multi-Factor Authentication actions, including resetting MFA for users and synchronizing MFA enforcement.
  * @refactorable true (contains multiple distinct functions)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:3,imports:5,sig:1ietzav
- * @lastUpdated 2026-06-23T22:44:28.031Z
+ * @fingerprint exports:3,imports:6,sig:4qn3mh
+ * @lastUpdated 2026-06-24T10:29:36.401Z
  */
 
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { logger } from '@ajabadia/satellite-sdk';
 import { getServerSession } from "@/lib/get-session";
 import { userRepository } from "@/lib/repositories/UserRepository";
 import type { IndustrialUser } from "@/types/auth";
@@ -40,6 +41,17 @@ export async function adminResetMfaAction(targetUserId: string) {
 
   await userRepository.updateMfaStatus(targetUserId, false);
 
+  const { auditRepository } = await import('@/lib/repositories/AuditRepository');
+  await auditRepository.create({
+    timestamp: new Date(),
+    event: 'MFA_DISABLED',
+    actorId: user.id || 'SYSTEM',
+    actorEmail: user.email || 'system@abd.com',
+    tenantId: user.tenantId || 'SYSTEM',
+    status: 'SUCCESS',
+    metadata: { targetUserId, targetEmail: dbUser?.email, action: 'ADMIN_RESET' }
+  });
+
   if (dbUser) {
     try {
       await EmailService.sendSecurityAlert({
@@ -49,7 +61,16 @@ export async function adminResetMfaAction(targetUserId: string) {
         details: 'Un administrador ha reseteado tu configuración de Segundo Factor (MFA). Por favor, vuelve a configurarlo en tu próximo acceso.'
       });
     } catch (err) {
-      // eslint-disable-next-line no-console
+      const mfaErr = err instanceof Error ? err.message : 'Unknown error';
+      await logger.audit({
+        tenantId: dbUser?.tenantId || 'unknown',
+        action: 'MFA_RESET_ALERT_ERROR',
+        entityType: 'USER',
+        entityId: targetUserId,
+        userId: user?.id || 'system',
+        userEmail: user?.email || 'system@abd.com',
+        changedFields: { error: mfaErr, targetUserId },
+      });
       console.error('Failed to send MFA reset alert:', err);
     }
   }

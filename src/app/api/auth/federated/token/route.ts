@@ -4,11 +4,12 @@
  * @refactorable true (contains too many state variables and UI parts)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:9,sig:14crex4
- * @lastUpdated 2026-06-23T22:38:08.166Z
+ * @fingerprint exports:1,imports:10,sig:h4ym52
+ * @lastUpdated 2026-06-24T10:54:38.020Z
  */
 
 import { NextResponse } from 'next/server';
+import { logger } from '@ajabadia/satellite-sdk';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
 import { federatedCodeRepository, type FederatedCode } from '@/lib/repositories/FederatedCodeRepository';
 import { type UserTenantMembership } from '@/lib/schemas/user';
@@ -132,6 +133,16 @@ export async function POST(req: Request) {
       groups: membership?.groupIds || [],
       // 🔐 Back-channel SLO: propagate central session ID into the satellite token
       sessionId: rawCode.sessionId || undefined,
+    });
+
+    await logger.audit({
+      tenantId: user.tenantId || 'unknown',
+      action: 'FEDERATED_TOKEN_EXCHANGE',
+      entityType: 'SSO',
+      entityId: user._id?.toString() || 'unknown',
+      userId: user._id?.toString() || 'system',
+      userEmail: user.email || 'system@abd.com',
+      changedFields: { clientId: client_id, appSlug: app.slug },
     });
 
     // 6. Build Industrial Response (JWT + auxiliary user data)

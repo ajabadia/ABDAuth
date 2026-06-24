@@ -1,16 +1,16 @@
 /**
- * @purpose Gestiona el solicitud GET para obtener una lista de proveedores de identidad activos para login federado, asegurando solo que se devuelvan campos seguros.
+ * @purpose Gestiona el solicitud GET para listar proveedores de identidad activos para login federado, asegurando solo que se devuelvan campos seguros.
  * @purpose_en Manages the GET request to list active identity providers for federated login, ensuring only safe fields are returned.
  * @refactorable false
  * @classification Business Service
  * @complexity Low
- * @fingerprint exports:2,imports:3,sig:3xcs6o
- * @lastUpdated 2026-06-23T22:38:33.521Z
+ * @fingerprint exports:2,imports:3,sig:5el56h
+ * @lastUpdated 2026-06-24T10:28:19.573Z
  */
 
 import { NextResponse } from 'next/server';
+import { connectDB, logger } from '@ajabadia/satellite-sdk';
 import { identityProviderRepository } from '@/lib/repositories/IdentityProviderRepository';
-import { connectDB } from '@ajabadia/satellite-sdk';
 
 export const dynamic = 'force-dynamic';
 
@@ -36,6 +36,16 @@ export async function GET() {
 
     return NextResponse.json({ providers: safeProviders });
   } catch (error) {
+    const fedError = error instanceof Error ? error.message : 'Unknown error';
+    await logger.audit({
+      tenantId: 'unknown',
+      action: 'FEDERATION_PROVIDERS_ERROR',
+      entityType: 'FEDERATION',
+      entityId: 'unknown',
+      userId: 'system',
+      userEmail: 'system@abd.com',
+      changedFields: { error: fedError },
+    });
     console.error('[FEDERATION_PROVIDERS] Failed to list providers:', error);
     return NextResponse.json(
       { error: 'Failed to fetch identity providers' },

@@ -4,8 +4,8 @@
  * @refactorable true (contains too many state variables and UI parts)
  * @classification UI Component
  * @complexity Medium
- * @fingerprint exports:2,imports:15,sig:1wj1p1g
- * @lastUpdated 2026-06-21T10:18:05.068Z
+ * @fingerprint exports:2,imports:16,sig:r3vnym
+ * @lastUpdated 2026-06-24T10:28:58.857Z
  */
 
 import type { Metadata } from "next";

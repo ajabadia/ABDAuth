@@ -4,11 +4,12 @@
  * @refactorable false
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:2,imports:4,sig:lo0p48
- * @lastUpdated 2026-06-23T22:38:19.133Z
+ * @fingerprint exports:2,imports:5,sig:3wrr5p
+ * @lastUpdated 2026-06-24T10:28:07.267Z
  */
 
 import { NextResponse } from 'next/server';
+import { logger } from '@ajabadia/satellite-sdk';
 import { identityProviderRepository } from '@/lib/repositories/IdentityProviderRepository';
 import { FederationService } from '@/services/auth/FederationService';
 import crypto from 'crypto';
@@ -73,6 +74,16 @@ export async function GET(req: Request) {
 
     return response;
   } catch (error) {
+    const oidcError = error instanceof Error ? error.message : 'Unknown error';
+    await logger.audit({
+      tenantId: 'unknown',
+      action: 'OIDC_AUTHORIZE_ERROR',
+      entityType: 'FEDERATION',
+      entityId: providerId || 'unknown',
+      userId: 'system',
+      userEmail: 'system@abd.com',
+      changedFields: { error: oidcError, providerId },
+    });
     console.error('[OIDC_AUTHORIZE]', error);
     return NextResponse.redirect(
       new URL(`/dashboard?error=FEDERATION_ERROR&details=${encodeURIComponent((error as Error).message)}`, req.url)

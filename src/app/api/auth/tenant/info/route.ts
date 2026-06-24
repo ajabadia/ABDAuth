@@ -4,12 +4,13 @@
  * @refactorable false
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:3,sig:j1tzyf
- * @lastUpdated 2026-06-23T22:39:21.801Z
+ * @fingerprint exports:1,imports:4,sig:1p2jrgc
+ * @lastUpdated 2026-06-24T10:28:53.747Z
  */
 
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { NextResponse } from 'next/server';
+import { logger } from '@ajabadia/satellite-sdk';
 import type { TenantId } from '@/lib/schemas/common';
 
 /**
@@ -56,7 +57,16 @@ export async function GET(request: Request) {
       branding: tenant.branding || null,
     });
   } catch (error) {
-    // eslint-disable-next-line no-console
+    const infoError = error instanceof Error ? error.message : 'Unknown error';
+    await logger.audit({
+      tenantId: identifier || 'unknown',
+      action: 'TENANT_INFO_API_ERROR',
+      entityType: 'TENANT',
+      entityId: identifier || 'unknown',
+      userId: 'system',
+      userEmail: 'system@abd.com',
+      changedFields: { error: infoError, identifier },
+    });
     console.error('[TENANT_INFO_API_ERROR]', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

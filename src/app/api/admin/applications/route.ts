@@ -4,8 +4,8 @@
  * @refactorable false
  * @classification Business Service
  * @complexity Low
- * @fingerprint exports:2,imports:6,sig:1moo9cm
- * @lastUpdated 2026-06-23T22:37:23.548Z
+ * @fingerprint exports:3,imports:6,sig:l6j0yb
+ * @lastUpdated 2026-06-24T10:27:42.113Z
  */
 
 import { NextResponse } from 'next/server';

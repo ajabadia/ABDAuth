@@ -4,12 +4,13 @@
  * @refactorable true (contains business logic and async operations)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:5,sig:lxjhpv
- * @lastUpdated 2026-06-23T22:39:09.429Z
+ * @fingerprint exports:1,imports:6,sig:1ko6py6
+ * @lastUpdated 2026-06-24T10:28:40.341Z
  */
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { logger } from '@ajabadia/satellite-sdk';
 import { userRepository } from "@/lib/repositories/UserRepository";
 import { applicationRepository } from "@/lib/repositories/ApplicationRepository";
 import { SessionService } from "@/services/auth/SessionService";
@@ -84,7 +85,16 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    // eslint-disable-next-line no-console
+    const verifyError = error instanceof Error ? error.message : 'Unknown error';
+    await logger.audit({
+      tenantId: 'unknown',
+      action: 'SESSION_VERIFY_API_ERROR',
+      entityType: 'USER',
+      entityId: email || 'unknown',
+      userId: 'system',
+      userEmail: email || 'system@abd.com',
+      changedFields: { error: verifyError, email },
+    });
     console.error("[SESSION_VERIFY_API_ERROR]", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }

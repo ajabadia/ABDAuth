@@ -4,13 +4,14 @@
  * @refactorable false
  * @classification Business Service
  * @complexity Low
- * @fingerprint exports:2,imports:5,sig:7cj682
- * @lastUpdated 2026-06-23T22:44:48.497Z
+ * @fingerprint exports:2,imports:6,sig:1vhwfai
+ * @lastUpdated 2026-06-24T10:38:51.708Z
  */
 
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { logger } from '@ajabadia/satellite-sdk';
 import { getServerSession } from '@/lib/get-session';
 import { SessionService } from "../SessionService";
 import type { IndustrialUser } from "@/types/auth";
@@ -25,6 +26,15 @@ export async function revokeSessionAction(sessionId: string) {
   if (!user) throw new Error("Unauthorized");
 
   await SessionService.revokeSession(sessionId, user.id as EntityId, user.tenantId);
+  await logger.audit({
+    tenantId: user.tenantId || 'system',
+    action: 'SESSION_REVOKED',
+    entityType: 'SSO_SESSION',
+    entityId: sessionId || 'unknown',
+    userId: user.id || 'system',
+    userEmail: user.email || 'system@abd.com',
+    changedFields: {},
+  });
   revalidatePath("/[locale]/dashboard/security", "page");
 }
 
@@ -39,5 +49,14 @@ export async function revokeAllOtherSessionsAction() {
   if (!user.sessionId) throw new Error("Current session ID missing");
 
   await SessionService.revokeAllOtherSessions(user.id as EntityId, user.sessionId, user.tenantId);
+  await logger.audit({
+    tenantId: user.tenantId || 'system',
+    action: 'ALL_OTHER_SESSIONS_REVOKED',
+    entityType: 'SSO_SESSION',
+    entityId: user.sessionId || 'unknown',
+    userId: user.id || 'system',
+    userEmail: user.email || 'system@abd.com',
+    changedFields: {},
+  });
   revalidatePath("/[locale]/dashboard/security", "page");
 }

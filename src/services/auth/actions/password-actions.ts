@@ -4,12 +4,13 @@
  * @refactorable false
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:5,sig:3lkwee
- * @lastUpdated 2026-06-23T22:44:42.946Z
+ * @fingerprint exports:1,imports:6,sig:fptzxr
+ * @lastUpdated 2026-06-24T10:29:44.610Z
  */
 
 "use server";
 
+import { logger } from '@ajabadia/satellite-sdk';
 import { getServerSession } from '@/lib/get-session';
 import { userRepository } from "@/lib/repositories/UserRepository";
 import { SessionService } from "../SessionService";
@@ -56,7 +57,16 @@ export async function changePasswordAction(currentPass: string, newPass: string)
       try {
         await SessionService.revokeAllOtherSessions(user.id as EntityId, user.sessionId, user.tenantId);
       } catch (err) {
-        // eslint-disable-next-line no-console
+        const revokeErr = err instanceof Error ? err.message : 'Unknown error';
+        await logger.audit({
+          tenantId: user?.tenantId || 'unknown',
+          action: 'PASSWORD_CHANGE_REVOKE_SESSIONS_ERROR',
+          entityType: 'USER',
+          entityId: user?.id || 'unknown',
+          userId: user?.id || 'system',
+          userEmail: user?.email || 'system@abd.com',
+          changedFields: { error: revokeErr },
+        });
         console.error('Failed to revoke other sessions during password change:', err);
       }
     }
@@ -69,7 +79,16 @@ export async function changePasswordAction(currentPass: string, newPass: string)
         details: 'Tu contraseña ha sido actualizada satisfactoriamente desde el panel de seguridad.'
       });
     } catch (err) {
-      // eslint-disable-next-line no-console
+      const alertErr = err instanceof Error ? err.message : 'Unknown error';
+      await logger.audit({
+        tenantId: user?.tenantId || 'unknown',
+        action: 'PASSWORD_CHANGE_SECURITY_ALERT_ERROR',
+        entityType: 'USER',
+        entityId: user?.id || 'unknown',
+        userId: user?.id || 'system',
+        userEmail: user?.email || 'system@abd.com',
+        changedFields: { error: alertErr },
+      });
       console.error('Failed to send security alert:', err);
     }
     

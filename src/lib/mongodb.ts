@@ -1,11 +1,11 @@
 /**
- * @purpose Gestiona conexiones del cliente MongoDB tanto para las bases de datos principales como de registros, asegurando un pool de conexión único para evitar saturación del handshake SSL.
+ * @purpose Gestiona conexiones del cliente MongoDB tanto para bases de datos principales como de logs, asegurando un pool de conexión único para evitar saturación de la mano de obra SSL.
  * @purpose_en Manages MongoDB client connections for both main and logs databases, ensuring a single connection pool to prevent SSL handshake saturation.
  * @refactorable false
  * @classification Business Service
  * @complexity Low
- * @fingerprint exports:2,imports:1,sig:eb0itj
- * @lastUpdated 2026-06-23T22:41:31.316Z
+ * @fingerprint exports:2,imports:1,sig:1ydpbew
+ * @lastUpdated 2026-06-24T10:29:24.233Z
  */
 
 import { MongoClient } from 'mongodb';

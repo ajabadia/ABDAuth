@@ -4,8 +4,8 @@
  * @refactorable true (contains business logic for tenant management)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:2,imports:8,sig:r3ogq7
- * @lastUpdated 2026-06-23T22:37:49.630Z
+ * @fingerprint exports:3,imports:8,sig:nfis18
+ * @lastUpdated 2026-06-24T10:28:01.344Z
  */
 
 import { NextResponse } from 'next/server';

@@ -1,14 +1,15 @@
 /**
- * @purpose Gestiona la creación y el manejo de usuarios internos dentro de un inquilino, incluyendo validación del usuario, operaciones de repositorio y envío de correos de activación.
- * @purpose_en Handles the creation and management of internal users within a tenant, including user validation, repository operations, and sending activation emails.
- * @refactorable false
+ * @purpose Gestiona la creación y el manejo de usuarios internos dentro de un inquilino, incluyendo validación de usuario, operaciones de repositorio y envío de correos de activación.
+ * @purpose_en Manages the creation and management of internal users within a tenant, including user validation, repository operations, and sending activation emails.
+ * @refactorable true (contains too many state variables and UI parts)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:5,sig:14adujt
- * @lastUpdated 2026-06-21T10:17:05.850Z
+ * @fingerprint exports:1,imports:6,sig:7c7rdn
+ * @lastUpdated 2026-06-24T10:38:47.156Z
  */
 
 import { NextResponse } from 'next/server';
+import { logger } from '@ajabadia/satellite-sdk';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { inviteService } from '@/lib/services/inviteService';
 import { randomBytes } from 'crypto';
@@ -81,6 +82,16 @@ export async function handleInternalCreateUser(body: Record<string, unknown>) {
   if (isNewUser && user) {
     await inviteService.sendActivationEmail(user.email, user.name, activationToken, tenantId);
   }
+
+  await logger.audit({
+    tenantId: tenantId || 'unknown',
+    action: isNewUser ? 'INTERNAL_USER_CREATED' : 'INTERNAL_USER_ADDED_TO_TENANT',
+    entityType: 'USER',
+    entityId: user?._id?.toString() || 'unknown',
+    userId: 'system',
+    userEmail: email || 'system@abd.com',
+    changedFields: { name, role, isNewUser },
+  });
 
   return NextResponse.json(
     { data: user, message: isNewUser ? 'User created and invited' : 'User added to tenant' },

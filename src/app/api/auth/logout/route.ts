@@ -1,15 +1,16 @@
 /**
- * @purpose Gestiona el proceso de logout para ABDAuth eliminando cookies de sesión y realizando SLO Front-Channel con aplicaciones satélite registradas.
+ * @purpose Gestiona el proceso de logout para ABDAuth eliminando cookies de sesión y realizando Front-Channel SLO con aplicaciones satélite registradas.
  * @purpose_en Handles the logout process for ABDAuth by wiping session cookies and performing Front-Channel SLO with registered satellite applications.
- * @refactorable false
+ * @refactorable true (contains too many state variables and UI parts)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:5,sig:9rictc
- * @lastUpdated 2026-06-23T22:38:51.270Z
+ * @fingerprint exports:1,imports:6,sig:cwvs2s
+ * @lastUpdated 2026-06-24T10:28:33.284Z
  */
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { logger } from '@ajabadia/satellite-sdk';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
 import { wipeCookies, setNoCacheHeaders, COOKIES_TO_WIPE } from './cookie-wiper';
 import { generateSloPage } from './slo-html';
@@ -45,8 +46,28 @@ export async function GET(request: NextRequest) {
         );
     });
   } catch (err) {
+    const sloError = err instanceof Error ? err.message : 'Unknown error';
+    await logger.audit({
+      tenantId: 'system',
+      action: 'SLO_RESOLVE_ERROR',
+      entityType: 'SSO_SESSION',
+      entityId: 'unknown',
+      userId: 'system',
+      userEmail: 'system@abd.com',
+      changedFields: { error: sloError },
+    });
     console.error('[ABDAuth_SLO_RESOLVE_ERROR] Failed to load satellite apps:', err);
   }
+
+  await logger.audit({
+    tenantId: 'system',
+    action: 'LOGOUT',
+    entityType: 'SSO_SESSION',
+    entityId: 'unknown',
+    userId: 'system',
+    userEmail: 'system@abd.com',
+    changedFields: { redirectUri, satellites: logoutUrls.length },
+  });
 
   // If there are registered satellites, perform Front-Channel SLO via dynamic HTML response
   if (logoutUrls.length > 0) {

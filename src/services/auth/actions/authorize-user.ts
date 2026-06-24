@@ -1,14 +1,15 @@
 /**
- * @purpose Gestiona la autorización del usuario mediante validación de credenciales, verificación del estado de cuenta y creación de registros de auditoría.
+ * @purpose Gestiona la autenticación del usuario mediante validación de credenciales, verificación del estado del cuenta y creación de registros de auditoria.
  * @purpose_en Handles user authorization by validating credentials, checking account status, and creating audit logs.
  * @refactorable true (contains too many state variables and UI parts)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:9,sig:ovxvk7
- * @lastUpdated 2026-06-21T12:09:30.209Z
+ * @fingerprint exports:1,imports:10,sig:172zcwe
+ * @lastUpdated 2026-06-24T10:29:30.132Z
  */
 
 import * as argon2 from 'argon2';
+import { logger } from '@ajabadia/satellite-sdk';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { auditRepository } from '@/lib/repositories/AuditRepository';
 import { SessionService } from '@/services/auth/SessionService';
@@ -65,9 +66,22 @@ export async function authorizeUser(credentials: Record<string, any> | undefined
     const { activeTenantId, dbPrefix, isolationStrategy } = await resolveUserTenant(user, requestedTenantId);
     let sessionId = undefined;
     try { sessionId = await SessionService.createSession({ userId: user._id?.toString() || '', email: user.email, tenantId: activeTenantId }); }
-    catch (error) { console.error('[AUTH ERROR] Failed to create session:', error); }
+    catch (error) {
+      const authError = error instanceof Error ? error.message : 'Unknown error';
+      await logger.audit({
+        tenantId: user?.tenantId || 'unknown',
+        action: 'AUTHORIZE_USER_SESSION_ERROR',
+        entityType: 'USER',
+        entityId: user?._id?.toString() || 'unknown',
+        userId: user?._id?.toString() || 'system',
+        userEmail: user?.email || email,
+        changedFields: { error: authError },
+      });
+      console.error('[AUTH ERROR] Failed to create session:', error);
+    }
 
     const graceState = await evaluateMfaGrace(user);
+    await auditRepository.create({ timestamp: new Date(), event: 'LOGIN_SUCCESS', actorId: user._id?.toString() || 'UNKNOWN', actorEmail: user.email, tenantId: activeTenantId, status: 'SUCCESS', metadata: { name: user.name, surname: user.surname } });
     return { id: user._id?.toString() || '', sessionId, name: user.name, surname: user.surname, email: user.email, role: user.role, tenantId: activeTenantId, dbPrefix, isolationStrategy, mfaEnabled: !!user.mfaEnabled, mfaEnforced: !!user.mfaEnforced, mfa_verified: false, mfaGracePeriodActive: graceState.mfaGracePeriodActive, mfaGraceLoginsRemaining: graceState.mfaGraceLoginsRemaining, mfaGraceExpiresAt: graceState.mfaGraceExpiresAt, mfaGraceBypassed: false } as IndustrialUser;
   } else {
     if (process.env.NODE_ENV === 'development') console.log('[AUTHORIZE_USER] Password mismatch. Incrementing login attempts.');

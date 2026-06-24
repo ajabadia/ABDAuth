@@ -1,15 +1,16 @@
 /**
- * @purpose Gestiona el activado de una cuenta de usuario mediante la validación del token, cifrado de la contraseña y actualización del estado del usuario.
+ * @purpose Gestiona el activado de una cuenta de usuario mediante la validación del token, cifrado del password y actualización del estado del usuario.
  * @purpose_en Handles the activation of a user account by validating the token, hashing the password, and updating the user's status.
  * @refactorable false
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:2,sig:1nas0r1
- * @lastUpdated 2026-06-21T10:18:21.683Z
+ * @fingerprint exports:1,imports:3,sig:1jojuk9
+ * @lastUpdated 2026-06-24T10:29:04.472Z
  */
 
 'use server'
 
+import { logger } from '@ajabadia/satellite-sdk';
 import { userRepository } from "@/lib/repositories/UserRepository";
 import * as argon2 from "argon2";
 
@@ -46,8 +47,28 @@ export async function activateAccountAction(formData: FormData) {
       }
     } as Record<string, unknown>);
 
+    await logger.audit({
+      tenantId: tenantId || 'unknown',
+      action: 'USER_ACTIVATED',
+      entityType: 'USER',
+      entityId: user._id?.toString() || 'unknown',
+      userId: user._id?.toString() || 'system',
+      userEmail: user.email || 'system@abd.com',
+      changedFields: { token },
+    });
+
     return { success: true };
   } catch (error) {
+    const activateErr = error instanceof Error ? error.message : 'Unknown error';
+    await logger.audit({
+      tenantId: tenantId || 'unknown',
+      action: 'ACTIVATE_ACTION_ERROR',
+      entityType: 'USER',
+      entityId: token || 'unknown',
+      userId: 'system',
+      userEmail: 'system@abd.com',
+      changedFields: { error: activateErr },
+    });
     console.error("[ACTIVATE_ACTION_ERROR]", error);
     return { error: 'Ocurrió un error inesperado al activar la cuenta' };
   }

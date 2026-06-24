@@ -1,11 +1,11 @@
 /**
- * @purpose Gestiona solicitudes PATCH y DELETE para actualizar y eliminar aplicaciones, respectivamente.
- * @purpose_en Handles PATCH and DELETE requests for updating and deleting applications, respectively.
+ * @purpose Gestiona solicitudes PATCH y DELETE para actualizar y eliminar aplicaciones.
+ * @purpose_en Manages PATCH and DELETE requests for updating and deleting applications.
  * @refactorable false
  * @classification Business Service
  * @complexity Low
- * @fingerprint exports:2,imports:6,sig:iiunne
- * @lastUpdated 2026-06-21T09:27:33.884Z
+ * @fingerprint exports:3,imports:6,sig:qxb46v
+ * @lastUpdated 2026-06-24T10:27:46.400Z
  */
 
 import { NextResponse } from 'next/server';

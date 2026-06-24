@@ -4,11 +4,12 @@
  * @refactorable true (contains too many state variables and UI parts)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:2,imports:7,sig:g1dfqa
- * @lastUpdated 2026-06-23T22:38:26.579Z
+ * @fingerprint exports:2,imports:8,sig:46bw7f
+ * @lastUpdated 2026-06-24T10:28:13.630Z
  */
 
 import { NextResponse } from 'next/server';
+import { logger } from '@ajabadia/satellite-sdk';
 import { identityProviderRepository } from '@/lib/repositories/IdentityProviderRepository';
 import { FederationService } from '@/services/auth/FederationService';
 import { userRepository } from '@/lib/repositories/UserRepository';
@@ -154,6 +155,16 @@ export async function GET(req: Request) {
       }
     }
 
+    await logger.audit({
+      tenantId: provider.defaultTenantId || 'unknown',
+      action: 'OIDC_LOGIN_SUCCESS',
+      entityType: 'SSO',
+      entityId: provider._id?.toString() || 'unknown',
+      userId: user._id?.toString() || 'system',
+      userEmail: user.email || 'system@abd.com',
+      changedFields: { issuerUrl: provider.issuerUrl, method: 'OIDC', autoProvision: !user },
+    });
+
     // Create session via MongoDB and set cookie
     const response = await setFederatedSession({
       userId: user._id?.toString() || '',
@@ -172,6 +183,16 @@ export async function GET(req: Request) {
 
     return response;
   } catch (error) {
+    const oidcError = error instanceof Error ? error.message : 'Unknown error';
+    await logger.audit({
+      tenantId: 'unknown',
+      action: 'OIDC_CALLBACK_ERROR',
+      entityType: 'FEDERATION',
+      entityId: 'unknown',
+      userId: 'system',
+      userEmail: 'system@abd.com',
+      changedFields: { error: oidcError },
+    });
     console.error('[OIDC_CALLBACK]', error);
     return NextResponse.redirect(
       new URL(`/dashboard?error=FEDERATION_ERROR&details=${encodeURIComponent((error as Error).message)}`, req.url)
