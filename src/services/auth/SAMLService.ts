@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona y extrae atributos del usuario desde una afirmación XML SAML 2.0.
+ * @purpose_en Parses and extracts user attributes from a SAML 2.0 XML assertion.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:1,imports:1,sig:16zbyw0
+ * @lastUpdated 2026-06-23T23:00:22.697Z
+ */
+
 import { XMLParser } from 'fast-xml-parser';
 
 /**

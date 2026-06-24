@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida el esquema de entrada para solicitudes de intercambio de tokens en autenticación federada.
+ * @purpose_en Validates the input schema for token exchange requests in federated authentication.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:2,imports:1,sig:10y6orl
+ * @lastUpdated 2026-06-23T22:38:12.897Z
+ */
+
 import { z } from 'zod';
 
 /**

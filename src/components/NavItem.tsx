@@ -1,5 +1,15 @@
 "use client"
 
+/**
+ * @purpose Renderiza un elemento de navegación localizado con detección automática del estado activo.
+ * @purpose_en Renders a localized navigation item with automatic active state detection.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:1,sig:1r993j9
+ * @lastUpdated 2026-06-23T22:40:33.951Z
+ */
+
 import { Link, usePathname } from "@/i18n/routing";
 
 /**

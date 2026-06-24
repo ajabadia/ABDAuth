@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el renderizado de un formulario de restablecimiento de contraseña con elementos de interfaz y lógica de validación.
+ * @purpose_en Manages the rendering of a password reset form with UI elements and validation logic.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:2,sig:18teh3w
+ * @lastUpdated 2026-06-21T10:29:43.388Z
+ */
+
 import React from 'react';
 import { Lock, Loader2, AlertCircle, Key, CheckCircle } from "lucide-react";
 

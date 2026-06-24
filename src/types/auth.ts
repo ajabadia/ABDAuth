@@ -1,3 +1,13 @@
+/**
+ * @purpose Proporciona plantillas y tipos para perfiles de usuario industriales y sesiones dentro del ecosistema ABD.
+ * @purpose_en Defines TypeScript interfaces and types for industrial user profiles and sessions within the ABD Ecosystem.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:2,imports:1,sig:12fuqxg
+ * @lastUpdated 2026-06-23T23:01:05.347Z
+ */
+
 import type { UserRole } from "@/lib/schemas/auth";
 
 /**

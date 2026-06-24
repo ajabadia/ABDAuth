@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el manejo de usuarios globales con normalización industrial.
+ * @purpose_en Manages global user management with Industrial Normalization.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:2,imports:7,sig:qro4uv
+ * @lastUpdated 2026-06-23T22:42:29.529Z
+ */
+
 import type { User } from '@/lib/schemas/auth';
 import { TenantAwareRepository } from './TenantAwareRepository';
 import { type SafeFilter } from './BaseRepository';

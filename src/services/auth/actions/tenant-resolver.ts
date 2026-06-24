@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el resolución del inquilino efectivo para una sesión de usuario basado en el rol del usuario y el ID de inquilino solicitado.
+ * @purpose_en Manages the resolution of the effective tenant for a user session based on user role and requested tenant ID.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:2,imports:2,sig:1g1zrui
+ * @lastUpdated 2026-06-23T22:44:55.946Z
+ */
+
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import type { TenantId } from '@/lib/schemas/common';
 

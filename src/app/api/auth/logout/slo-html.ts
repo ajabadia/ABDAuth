@@ -1,4 +1,14 @@
 /**
+ * @purpose Renderiza una página de logout frontal con un canal único (SLO) que incluye iframes para cada satélite, gestionando el proceso de logout y redirigiendo a una URI especificada al final.
+ * @purpose_en Renders a Front-Channel Single Logout (SLO) HTML page with iframes for each satellite, handling the logout process and redirecting to a specified URI upon completion.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:0,sig:12vuezp
+ * @lastUpdated 2026-06-23T22:38:58.527Z
+ */
+
+/**
  * Generates the Front-Channel SLO HTML page with iframes for each satellite.
  */
 export function generateSloPage(logoutUrls: string[], redirectUri: string): string {

@@ -1,5 +1,15 @@
 "use client"
 
+/**
+ * @purpose Renderiza un componente de tarjeta para mostrar y gestionar aplicaciones industriales, incluyendo opciones para editar o eliminarlas.
+ * @purpose_en Renders a card component for displaying and managing industrial applications, including options to edit or delete them.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:k3pz9y
+ * @lastUpdated 2026-06-21T10:30:18.997Z
+ */
+
 import * as React from "react"
 import { Shield, Key, Trash2, Edit3, Globe } from 'lucide-react'
 import type { IndustrialApplicationDisplay, ApplicationManagementTranslations } from "./types"

@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza una página de inicio de sesión federada que lista los proveedores de identidad disponibles y permite a los usuarios iniciar sesión utilizando ellos.
+ * @purpose_en Renders a federated login page that lists available identity providers and allows users to log in using them.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:2,imports:7,sig:1a482mo
+ * @lastUpdated 2026-06-23T22:40:18.318Z
+ */
+
 import { Suspense } from 'react';
 import { getTranslations } from 'next-intl/server';
 import { connectDB } from '@ajabadia/satellite-sdk';
@@ -25,7 +35,7 @@ async function FederatedProviderListWrapper({ email }: { email?: string }) {
 
   try {
     await connectDB();
-    const allProviders = await identityProviderRepository.list({ active: true } as any);
+    const allProviders = await identityProviderRepository.list({ active: true } as unknown as Parameters<typeof identityProviderRepository.list>[0]);
     providers = allProviders
       .filter((p) => p.providerType === 'OIDC') // SAML init endpoint pending implementation
       .map((p) => ({

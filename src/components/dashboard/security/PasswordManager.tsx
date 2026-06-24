@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Gestiona el proceso de cambio de contraseña para usuarios en la aplicación ABDAuth.
+ * @purpose_en Manages the password change process for users in the ABDAuth application.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:6,sig:e6h7gr
+ * @lastUpdated 2026-06-21T12:04:14.852Z
+ */
+
 import * as React from 'react';
 import { Key, Loader2 } from 'lucide-react';
 import { changePasswordAction } from '@/services/auth/security-actions';

@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona identificadores de proveedores de identidad con traducciones y datos iniciales.
+ * @purpose_en Renders a page for managing identity providers with translations and initial data.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:4,sig:1iok2oe
+ * @lastUpdated 2026-06-21T10:21:26.014Z
+ */
+
 import { getTranslations } from 'next-intl/server';
 import { IdentityProviderManagementContainer } from '@/components/admin/identity-providers/IdentityProviderManagementContainer';
 import { identityProviderRepository } from '@/lib/repositories/IdentityProviderRepository';

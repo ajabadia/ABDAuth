@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida y define esquemas para registros de uso y suscripciones de inquilinos en el sistema de facturación ABDSuite.
+ * @purpose_en Validates and defines schemas for usage logs and tenant subscriptions in the ABDSuite billing system.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:6,imports:2,sig:1a83odn
+ * @lastUpdated 2026-06-23T22:42:46.966Z
+ */
+
 import { EntityIdSchema, TenantIdSchema } from './core';
 import { z } from 'zod';
 

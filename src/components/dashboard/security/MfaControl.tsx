@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * @purpose Gestiona y renderiza el panel de control de Autenticación Multifactor (MFA), incluyendo configuración, recuperación y deshabilitar MFA.
+ * @purpose_en Renders and manages the Multi-Factor Authentication (MFA) control panel, including setup, recovery, and disabling MFA.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:9,sig:1vvnc3v
+ * @lastUpdated 2026-06-21T12:04:11.320Z
+ */
+
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { AnimatePresence } from 'framer-motion';

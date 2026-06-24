@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un modal para agregar o editar información del usuario, incluyendo una forma y un encabezado.
+ * @purpose_en Renders a modal for adding or editing user information, including a form and header.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:5,sig:6sjyze
+ * @lastUpdated 2026-06-21T12:03:21.293Z
+ */
+
 import React from "react";
 import { Plus } from "lucide-react";
 import { IndustrialModalHeader } from "@ajabadia/ecosystem-widgets";

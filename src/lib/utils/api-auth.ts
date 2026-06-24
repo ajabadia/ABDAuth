@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida sesiones de usuario para asegurar que tengan los privilegios administrativos necesarios.
+ * @purpose_en Validates user sessions to ensure they have the necessary administrative privileges.
+ * @refactorable false
+ * @classification Helper Utility
+ * @complexity Low
+ * @fingerprint exports:2,imports:3,sig:lmss3u
+ * @lastUpdated 2026-06-23T22:43:32.144Z
+ */
+
 import { getServerSession } from '@/lib/get-session';
 import { NextResponse } from 'next/server';
 import type { IndustrialSession } from '@/types/auth';

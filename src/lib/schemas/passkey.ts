@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida y establece la estructura de datos de passkey utilizando la plantilla Zod para autenticación biometrica/passwordless.
+ * @purpose_en Defines and validates the structure of passkey data using Zod schema for biometric/passwordless authentication.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:2,imports:1,sig:1hux769
+ * @lastUpdated 2026-06-23T22:42:57.929Z
+ */
+
 import { z } from 'zod';
 
 /**

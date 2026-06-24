@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Renderiza la página de inicio de sesión con manejo de formularios, enlace de SSO federado y marca de identidad del tenant.
+ * @purpose_en Renders the login page with form handling, federated SSO link, and tenant branding.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:12,sig:104zu2b
+ * @lastUpdated 2026-06-21T12:03:13.781Z
+ */
+
 import { useState } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";

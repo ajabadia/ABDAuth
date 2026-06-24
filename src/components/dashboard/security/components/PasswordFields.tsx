@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un formulario para cambiar la contraseña del usuario, incluyendo campos para la contraseña actual, nueva contraseña y confirmación de la nueva contraseña.
+ * @purpose_en Renders a form for changing user passwords, including fields for the current password, new password, and confirmation of the new password.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:2,sig:syx5ad
+ * @lastUpdated 2026-06-21T12:03:52.937Z
+ */
+
 import * as React from 'react';
 import { ShieldCheck, Lock, AlertCircle } from 'lucide-react';
 

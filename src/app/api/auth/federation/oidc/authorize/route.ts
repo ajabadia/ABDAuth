@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el flujo de autorización OIDC redirigiendo a los usuarios a la URL de autorización del proveedor externo.
+ * @purpose_en Handles the OIDC authorization flow by redirecting users to an external provider's authorization URL.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:2,imports:4,sig:lo0p48
+ * @lastUpdated 2026-06-23T22:38:19.133Z
+ */
+
 import { NextResponse } from 'next/server';
 import { identityProviderRepository } from '@/lib/repositories/IdentityProviderRepository';
 import { FederationService } from '@/services/auth/FederationService';
@@ -26,7 +36,7 @@ export async function GET(req: Request) {
       _id: providerId,
       active: true,
       providerType: 'OIDC',
-    } as any);
+    } as unknown as Parameters<typeof identityProviderRepository.findOne>[0]);
 
     if (!provider) {
       return NextResponse.json({ error: 'Provider not found or inactive' }, { status: 404 });

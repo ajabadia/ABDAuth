@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Gestiona el rendimiento y estado de un formulario de usuario para crear o editar usuarios industriales, incluyendo secciones de identidad, gobernanza y membresía.
+ * @purpose_en Manages the rendering and state of a user form for creating or editing industrial users, including identity, governance, and membership sections.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:6,sig:1r7wncm
+ * @lastUpdated 2026-06-21T10:36:58.486Z
+ */
+
 import { useState, useEffect } from "react";
 import type { 
   IndustrialUserDisplay, 

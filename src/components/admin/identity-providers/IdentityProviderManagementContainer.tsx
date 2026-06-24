@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Gestiona el display y la interacción de proveedores de identidad, incluyendo agregar, editar y eliminarlos.
+ * @purpose_en Manages the display and interaction of identity providers, including adding, editing, and deleting them.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:10,sig:uxnh0m
+ * @lastUpdated 2026-06-21T10:32:43.317Z
+ */
+
 import * as React from 'react';
 import { Plus, ShieldAlert } from 'lucide-react';
 import { toast } from 'sonner';

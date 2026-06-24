@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona actualizaciones y eliminación suave para proveedores de identidad.
+ * @purpose_en Handles the update and soft-delete operations for identity providers.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:5,sig:1ppo0y8
+ * @lastUpdated 2026-06-23T22:37:31.946Z
+ */
+
 import { NextResponse } from 'next/server';
 import { identityProviderRepository } from '@/lib/repositories/IdentityProviderRepository';
 import { IdentityProviderSchema } from '@/lib/schemas/identity-provider';
@@ -30,7 +40,7 @@ export async function PATCH(
     const success = await identityProviderRepository.update(id, {
       ...validation.data,
       updatedAt: new Date(),
-    } as any);
+    } as unknown as Parameters<typeof identityProviderRepository.update>[1]);
 
     if (!success) {
       return NextResponse.json({ error: 'Provider not found' }, { status: 404 });

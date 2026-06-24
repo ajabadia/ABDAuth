@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida y define el esquema para usuarios en el proyecto ABDSuite.
+ * @purpose_en Validates and defines the schema for users in the ABDSuite project.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:10,imports:2,sig:1c3s69q
+ * @lastUpdated 2026-06-23T22:43:21.741Z
+ */
+
 import { z } from 'zod';
 import { TenantIdSchema } from './common';
 

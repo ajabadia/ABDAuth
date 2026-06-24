@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona sesiones de usuario activas con persistencia en el cluster de Telemetry (LOGS).
+ * @purpose_en Manages active user sessions with persistence in the Telemetry (LOGS) cluster.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:5,sig:5ix0wr
+ * @lastUpdated 2026-06-23T22:42:16.160Z
+ */
+
 import { TenantAwareRepository } from './TenantAwareRepository';
 import type { UserSession } from '@/lib/schemas/auth';
 import type { EntityId, TenantId } from '@/lib/schemas/common';

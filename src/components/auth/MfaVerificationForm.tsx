@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * @purpose Renderiza una forma para verificar la autenticación multifactor (MFA) permitiendo a los usuarios ingresar un código de tiempo basado en una contraseña única (TOTP) o un código de respaldo.
+ * @purpose_en Renders a form for Multi-Factor Authentication (MFA) verification, allowing users to enter either a Time-Based One-Time Password (TOTP) or a backup code.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:8,sig:1vb3kws
+ * @lastUpdated 2026-06-23T22:40:29.868Z
+ */
+
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';

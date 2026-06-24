@@ -1,5 +1,15 @@
 "use client"
 
+/**
+ * @purpose Proporciona un componente del proveedor de temas para gestionar y aplicar temas en la aplicación.
+ * @purpose_en Provides a theme provider component for managing and applying themes in the application.
+ * @refactorable false
+ * @classification Context/Provider
+ * @complexity Low
+ * @fingerprint exports:1,imports:2,sig:15s0237
+ * @lastUpdated 2026-06-21T12:04:59.135Z
+ */
+
 import * as React from "react"
 import { ThemeProvider as NextThemesProvider } from "next-themes"
 

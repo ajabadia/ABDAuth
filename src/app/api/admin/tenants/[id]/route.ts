@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona detalles y operaciones de inquilinos, como actualizar o eliminar inquilinos, restringidos al rol SUPER_ADMIN.
+ * @purpose_en Manages tenant details and operations such as updating and deleting tenants, restricted to SUPER_ADMIN role.
+ * @refactorable true (contains business logic for tenant management)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:2,imports:8,sig:r3ogq7
+ * @lastUpdated 2026-06-23T22:37:49.630Z
+ */
+
 import { NextResponse } from 'next/server';
 import { getServerSession } from '@/lib/get-session';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
@@ -6,6 +16,8 @@ import { TenantSchema } from '@/lib/schemas/auth';
 import { checkApiSecurity } from '@/lib/utils/api-security';
 import type { IndustrialSession } from '@/types/auth';
 import { ObjectId } from 'mongodb';
+
+export const dynamic = 'force-dynamic';
 
 /**
  * 🏢 Tenant Detail Admin API

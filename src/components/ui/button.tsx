@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un componente botón personalizable con varias variantes y tamaños.
+ * @purpose_en Renders a customizable button component with various variants and sizes.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:4,sig:fot22t
+ * @lastUpdated 2026-06-21T12:05:06.246Z
+ */
+
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"

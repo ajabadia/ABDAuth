@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Gestiona el formulario de solicitud de reinicio de contraseña y maneja el proceso de envío.
+ * @purpose_en Renders a password reset request form and handles the submission process.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:6,sig:7donuy
+ * @lastUpdated 2026-06-21T10:25:32.360Z
+ */
+
 import { useState } from "react";
 import { useRouter } from "@/i18n/routing";
 import { Shield, Mail, Loader2, ArrowLeft, Send } from "lucide-react";

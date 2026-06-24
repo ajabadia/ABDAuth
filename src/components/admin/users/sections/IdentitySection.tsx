@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Renderiza seccion de identidad del usuario con campos de entrada para nombre, apellido y contraseña.
+ * @purpose_en Renders a user identity section with input fields for name, surname, and password.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:4,sig:v7vp7q
+ * @lastUpdated 2026-06-21T10:35:14.187Z
+ */
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User, Mail, Lock } from "lucide-react";

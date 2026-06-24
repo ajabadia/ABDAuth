@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Renderiza una página para activar un account utilizando un token, contraseña y ID del inquilino.
+ * @purpose_en Renders a page for activating an account using a token, password, and tenant ID.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:8,sig:1s23jst
+ * @lastUpdated 2026-06-21T10:18:33.787Z
+ */
+
 import { useState, useEffect } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations } from 'next-intl';

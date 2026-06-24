@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona la creación de sesiones de usuario federadas en MongoDB y establece una cookie de sesión.
+ * @purpose_en Manages the creation of federated user sessions in MongoDB and sets a session cookie.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:ziaun1
+ * @lastUpdated 2026-06-23T22:45:01.924Z
+ */
+
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { mongoClientPromise } from '@/lib/mongodb';

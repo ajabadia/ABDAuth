@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el manejo de los inquilinos redirigiendo a los usuarios al plano de control para la administración de inquilinos.
+ * @purpose_en Manages tenant management by redirecting users to the control plane for tenant administration.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:1,imports:2,sig:1iqapi
+ * @lastUpdated 2026-06-23T22:39:56.219Z
+ */
+
 import { getServerSession } from '@/lib/get-session';
 import { redirect } from "next/navigation";
 

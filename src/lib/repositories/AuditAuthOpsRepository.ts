@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona y persiste registros de auditoría para operaciones de autenticación, redirigiendo escrituras a un servicio ABDLogs centralizado y consultando desde el centro de auditorías.
+ * @purpose_en Manages and persists audit logs for authentication operations, redirecting writes to a central ABDLogs service and querying from the central_audit_logs.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:2,imports:3,sig:1xkob84
+ * @lastUpdated 2026-06-23T22:41:44.615Z
+ */
+
 import { BaseRepository, type SafeFilter } from './BaseRepository';
 import { LogsClient } from '@/lib/logs-client';
 import { type AuditAuthOps } from '@/lib/schemas/audit';

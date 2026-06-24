@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida y define esquemas para registros de auditoría y registros operativos en la aplicación ABDAuth, asegurando la integridad de los datos y la conformidad.
+ * @purpose_en Validates and defines schemas for audit logs and operational logs in the ABDAuth application, ensuring data integrity and compliance.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:5,imports:1,sig:v2g8si
+ * @lastUpdated 2026-06-23T22:42:41.023Z
+ */
+
 import { z } from 'zod';
 
 /**

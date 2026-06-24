@@ -1,5 +1,15 @@
 "use client"
 
+/**
+ * @purpose Gestiona y muestra una lista de aplicaciones con funciones para agregar, editar y eliminarlas.
+ * @purpose_en Manages and displays a list of applications with functionalities to add, edit, and delete them.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:10,sig:kd1blo
+ * @lastUpdated 2026-06-21T10:31:06.222Z
+ */
+
 import * as React from "react"
 import { Plus, Shield } from "lucide-react"
 import { toast } from "sonner"

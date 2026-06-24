@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el activado de una cuenta de usuario mediante la validación del token, cifrado de la contraseña y actualización del estado del usuario.
+ * @purpose_en Handles the activation of a user account by validating the token, hashing the password, and updating the user's status.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:2,sig:1nas0r1
+ * @lastUpdated 2026-06-21T10:18:21.683Z
+ */
+
 'use server'
 
 import { userRepository } from "@/lib/repositories/UserRepository";

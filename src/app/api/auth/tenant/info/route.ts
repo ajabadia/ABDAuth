@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona la recuperación de metadata del inquilino basada en subdominio o identificador de inquilino, proporcionando información de marca y estado para interfaces secundarias.
+ * @purpose_en Handles fetching tenant metadata based on subdomain or tenantId, providing branding and status information for satellite interfaces.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:3,sig:j1tzyf
+ * @lastUpdated 2026-06-23T22:39:21.801Z
+ */
+
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { NextResponse } from 'next/server';
 import type { TenantId } from '@/lib/schemas/common';

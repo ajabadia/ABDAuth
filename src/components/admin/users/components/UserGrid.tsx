@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza una red de tarjetas de usuario según los usuarios filtrados.
+ * @purpose_en Renders a grid of user cards based on filtered users.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:qd9efs
+ * @lastUpdated 2026-06-21T12:03:24.782Z
+ */
+
 import React from "react";
 import { UserCard } from "../UserCard";
 import type { IndustrialUserDisplay, UserManagementTranslations } from "../types";

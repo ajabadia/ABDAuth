@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona las aplicaciones de satélite en la base de datos utilizando los datos de configuración.
+ * @purpose_en Seeds satellite applications into the database using configuration data.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:0,imports:4,sig:cok54d
+ * @lastUpdated 2026-06-23T22:44:12.228Z
+ */
+
 /* eslint-disable no-console */
 import { applicationRepository } from '../lib/repositories/ApplicationRepository';
 import { SATELLITES } from './satellite-configs';

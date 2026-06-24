@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida y define la estructura del objeto de inquilino utilizando el esquema de Zod.
+ * @purpose_en Validates and defines the structure of a tenant object using Zod schema.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:3,imports:2,sig:1tm3d5s
+ * @lastUpdated 2026-06-23T22:43:16.219Z
+ */
+
 import { z } from 'zod';
 import { TenantIdSchema } from './common';
 

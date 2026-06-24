@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Gestiona el proceso de configuración, verificación y desactivación de autenticación multifactor.
+ * @purpose_en Manages Multi-Factor Authentication (MFA) setup, verification, and disabling processes.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Custom Hook
+ * @complexity Medium
+ * @fingerprint exports:1,imports:4,sig:m9nyro
+ * @lastUpdated 2026-06-21T12:04:02.458Z
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';

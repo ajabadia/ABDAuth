@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza la página de aterrizaje de raíz del aplicativo ABDAuth con un estilo inspirado en instrumentos industriales, temático y completamente localizado.
+ * @purpose_en Renders the root landing page of the ABDAuth application with a industrial instrument console feel, theme-aware, and fully localized.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:4,sig:1owcyav
+ * @lastUpdated 2026-06-23T23:00:11.592Z
+ */
+
 import { getServerSession } from '@/lib/get-session';
 import { Link } from '@/i18n/routing';
 import { getTranslations } from 'next-intl/server';

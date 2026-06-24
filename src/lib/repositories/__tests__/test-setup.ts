@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el comportamiento del clase `BaseRepository` para fines de pruebas.
+ * @purpose_en Mocks the `BaseRepository` class and its methods for testing purposes.
+ * @refactorable false
+ * @classification Helper Utility
+ * @complexity Low
+ * @fingerprint exports:2,imports:2,sig:1dc4n8u
+ * @lastUpdated 2026-06-21T12:07:28.556Z
+ */
+
 import { vi } from 'vitest';
 import { BaseRepository } from '../BaseRepository';
 

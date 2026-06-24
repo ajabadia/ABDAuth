@@ -1,3 +1,13 @@
+/**
+ * @purpose Normaliza los datos del usuario y del inquilino según las normas industriales, garantizando consistencia y seguridad de tipo.
+ * @purpose_en Normalizes user and tenant data according to industrial standards, ensuring consistency and type safety.
+ * @refactorable false
+ * @classification Helper Utility
+ * @complexity Low
+ * @fingerprint exports:1,imports:1,sig:1kf8dk3
+ * @lastUpdated 2026-06-23T22:43:50.994Z
+ */
+
 import type { User, Tenant } from '@/lib/schemas/auth';
 
 /**

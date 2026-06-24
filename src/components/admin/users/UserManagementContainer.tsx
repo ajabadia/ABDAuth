@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Gestiona y muestra la funcionalidad de gestión de usuarios dentro de la aplicación ABDAuth, incluyendo la recuperación de usuarios, el manejo de búsqueda, la edición y la adición de nuevos usuarios.
+ * @purpose_en Manages and displays user management functionality within the ABDAuth application, including fetching users, handling search, editing, and adding new users.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:9,sig:t2tkf0
+ * @lastUpdated 2026-06-21T12:03:31.445Z
+ */
+
 import { useState, useEffect } from "react";
 import { Plus, Users } from "lucide-react";
 import type { IndustrialUserDisplay, UserManagementTranslations, IndustrialUserFormValues } from "./types";

@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona tipos y interfaces para acciones de gestión de inquilinos y traducciones.
+ * @purpose_en Defines types and interfaces for tenant management actions and translations.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:3,imports:1,sig:2nnz8q
+ * @lastUpdated 2026-06-21T10:33:50.450Z
+ */
+
 import type { Tenant } from "@/lib/schemas/auth"
 
 export type SaveTenantAction = (data: Partial<Tenant>) => Promise<void>

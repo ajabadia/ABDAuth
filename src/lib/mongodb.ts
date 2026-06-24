@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona conexiones del cliente MongoDB tanto para las bases de datos principales como de registros, asegurando un pool de conexión único para evitar saturación del handshake SSL.
+ * @purpose_en Manages MongoDB client connections for both main and logs databases, ensuring a single connection pool to prevent SSL handshake saturation.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:1,sig:eb0itj
+ * @lastUpdated 2026-06-23T22:41:31.316Z
+ */
+
 import { MongoClient } from 'mongodb';
 
 const uri = process.env.MONGODB_URI;
@@ -30,7 +40,14 @@ async function getClient(connectionUri: string, isLogs: boolean): Promise<MongoC
       maxPoolSize: 10,
       minPoolSize: 1,
     });
-    globalWithMongo[promiseKey] = client.connect();
+    globalWithMongo[promiseKey] = client.connect().catch((error) => {
+      // 🛡️ Swallow connection errors during Next.js build phase to prevent build crash
+      if (process.env.NEXT_PHASE === 'phase-production-build') {
+        console.warn(`[Mongo] Warning: Database connection failed during build, ignoring to allow build to complete:`, error.message);
+        return client;
+      }
+      throw error;
+    });
   }
   
   return globalWithMongo[promiseKey]!;

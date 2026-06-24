@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un componente de campo de entrada estilizado.
+ * @purpose_en Renders a styled input field component.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:0,imports:2,sig:1eb1arg
+ * @lastUpdated 2026-06-21T12:05:26.397Z
+ */
+
 import * as React from "react"
 import { cn } from "@/lib/utils/tailwind"
 

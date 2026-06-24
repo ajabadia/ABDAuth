@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Gestiona una sección de gobernanza con opciones de selección de rol y validación de MFA para el manejo de usuarios.
+ * @purpose_en Renders a governance section with role selection and MFA enforcement options for user management.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:3,sig:aw5v1n
+ * @lastUpdated 2026-06-21T14:24:59.982Z
+ */
+
 import { Label } from "@/components/ui/label";
 import { Shield, Briefcase, ChevronDown } from "lucide-react";
 import type { UserManagementTranslations } from "../types";

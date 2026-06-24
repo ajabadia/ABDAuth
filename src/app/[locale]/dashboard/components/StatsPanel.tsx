@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un panel que muestra estadísticas como el número de usuarios, el número de inquilinos y el estado de cumplimiento.
+ * @purpose_en Renders a panel displaying statistics such as user count, tenant count, and compliance status.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:2,sig:vgvd0y
+ * @lastUpdated 2026-06-21T10:20:33.225Z
+ */
+
 import * as React from "react"
 import { Users, Database, Activity } from "lucide-react"
 

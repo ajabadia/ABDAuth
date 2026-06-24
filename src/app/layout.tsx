@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el layout principal para la aplicación ABDAuth, manejando autenticación, marca de tenant y internacionalización.
+ * @purpose_en Renders the main layout for the ABDAuth application, handling authentication, tenant branding, and internationalization.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:2,imports:15,sig:1wj1p1g
+ * @lastUpdated 2026-06-21T10:18:05.068Z
+ */
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@ajabadia/styles/dist/styles/industrial-core.css";

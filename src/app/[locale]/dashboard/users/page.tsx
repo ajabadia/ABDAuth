@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el renderizado de una página de administración de usuarios, maneja autenticación del servidor y carga de datos para usuarios industriales.
+ * @purpose_en Orchestrates the rendering of a user management page, handling server-side authentication and data fetching for industrial users.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:6,sig:zgpwy8
+ * @lastUpdated 2026-06-23T22:40:02.384Z
+ */
+
 import { getMessages, getTranslations } from "next-intl/server";
 import { getServerSession } from '@/lib/get-session';
 import { redirect } from "next/navigation";

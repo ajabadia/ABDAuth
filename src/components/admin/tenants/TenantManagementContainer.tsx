@@ -1,5 +1,15 @@
 "use client"
 
+/**
+ * @purpose Gestiona y muestra una lista de inquilinos con opciones para editar, eliminar y agregar nuevos inquilinos.
+ * @purpose_en Manages and displays a list of tenants with options to edit, delete, and add new tenants.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:11,sig:ic8xwz
+ * @lastUpdated 2026-06-21T10:33:34.631Z
+ */
+
 import * as React from "react"
 import { Plus, Database } from 'lucide-react'
 import { toast } from 'sonner'

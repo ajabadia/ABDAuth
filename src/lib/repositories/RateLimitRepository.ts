@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona límites de velocidad para solicitudes API incrementando puntos y reiniciando límites.
+ * @purpose_en Manages rate limiting for API requests by incrementing points and resetting limits.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:2,sig:1395j4x
+ * @lastUpdated 2026-06-21T12:07:05.635Z
+ */
+
 import { BaseRepository } from './BaseRepository';
 import type { RateLimit } from '../schemas/rate-limit';
 

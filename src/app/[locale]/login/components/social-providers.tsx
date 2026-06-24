@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza una lista de proveedores sociales con sus respectivos iconos para autenticación.
+ * @purpose_en Renders a list of social providers with their respective icons for authentication.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:2,imports:1,sig:1kbb7bd
+ * @lastUpdated 2026-06-21T10:24:46.452Z
+ */
+
 import React from 'react';
 
 export interface SocialProvider {

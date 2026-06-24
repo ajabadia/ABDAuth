@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza la sección de marca del formulario de inicio de sesión, incluyendo una pilla de estado, logo o icono de inquilino y título.
+ * @purpose_en Renders the branding section of the login page, including a status pill, tenant logo or icon, and title.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:1,sig:xmrk9p
+ * @lastUpdated 2026-06-21T10:24:02.187Z
+ */
+
 import { Shield } from "lucide-react";
 
 interface TenantBranding {

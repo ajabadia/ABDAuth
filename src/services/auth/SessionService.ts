@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona sesiones de usuario, incluyendo crear nuevas sesiones y validar existentes.
+ * @purpose_en Manages user sessions, including creating new sessions and validating existing ones.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:1,imports:4,sig:17l05y4
+ * @lastUpdated 2026-06-23T23:00:31.602Z
+ */
+
 import { sessionRepository } from "@/lib/repositories/SessionRepository";
 import { UserSessionSchema, type UserSession } from "@/lib/schemas/auth";
 import type { EntityId, TenantId } from "@/lib/schemas/common";

@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * @purpose Gestiona el proceso de configuración de Multi-Factor Authentication (MFA), incluyendo manejo de sincronización y saltos de gracia.
+ * @purpose_en ** Manages the Multi-Factor Authentication (MFA) setup process, including handling MFA enforcement synchronization and skipping grace periods.
+ * @refactorable ** true (contains too many state variables and UI parts)
+ * @classification ** UI Component
+ * @complexity ** Medium
+ * @fingerprint exports:1,imports:9,sig:en70qa
+ * @lastUpdated 2026-06-21T10:26:19.374Z
+ */
+
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { MfaControl } from '@/components/dashboard/security/MfaControl';

@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * @purpose Renderiza un componente de configuración del sistema que integra con autenticación, localización y gestión de temas.
+ * @purpose_en Renders a system settings component that integrates with authentication, localization, and theme management.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:5,sig:ga16rm
+ * @lastUpdated 2026-06-23T22:40:55.128Z
+ */
+
 import { useTheme } from "next-themes";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/routing";

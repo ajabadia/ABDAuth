@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida y define esquemas para diferentes tipos de datos utilizados en la aplicación ABDAuth, incluyendo tipos industriales, IDs de objetos, IDs de entidades, IDs de inquilinos, fechas, metadatos de auditoria, datos inquilinoscopes y cargas de trabajo.
+ * @purpose_en Validates and defines schemas for various data types used in the ABDAuth application, including industry types, object IDs, entity IDs, tenant IDs, dates, audit metadata, tenant-scoped data, and job payloads.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:12,imports:1,sig:1gamp9w
+ * @lastUpdated 2026-06-21T12:07:55.152Z
+ */
+
 import { z } from 'zod';
 
 export const IndustryTypeSchema = z.enum([

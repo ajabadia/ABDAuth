@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona tokens de reset para autenticación del usuario.
+ * @purpose_en Manages reset tokens for user authentication.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:4,sig:agtoxf
+ * @lastUpdated 2026-06-21T12:07:08.808Z
+ */
+
 import { BaseRepository } from './BaseRepository';
 import type { ResetToken } from '../schemas/reset-token';
 import type { EntityId } from '../schemas/common';

@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona un conjunto de botones para opciones de login social, maneja el proceso de autenticación y muestra estados de carga.
+ * @purpose_en Renders a set of buttons for social login options, handling the authentication process and displaying loading states.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:5,sig:14k0o1p
+ * @lastUpdated 2026-06-21T10:25:02.708Z
+ */
+
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';

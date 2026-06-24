@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona acciones de inicio de sesión del usuario, incluyendo autenticación, limitación de tasa y verificación de bloqueo de cuenta.
+ * @purpose_en Handles user login actions, including authentication, rate limiting, and account lockout checks.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:3,sig:lo41dx
+ * @lastUpdated 2026-06-21T10:23:44.469Z
+ */
+
 'use server'
 
 import { auth } from "@/lib/auth";

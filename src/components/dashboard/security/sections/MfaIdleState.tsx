@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Renderiza un componente UI para el estado inactivo de autenticación multifactor (MFA), mostrando el estado de MFA y proporcionando opciones para activar o desactivarla.
+ * @purpose_en Renders a multi-factor authentication (MFA) idle state UI component, displaying the status of MFA and providing options to enable or disable it.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:3,sig:14kpwhj
+ * @lastUpdated 2026-06-21T12:04:26.226Z
+ */
+
 import { motion } from 'framer-motion';
 import { ShieldCheck, ShieldAlert, Loader2, QrCode } from 'lucide-react';
 import { Button } from '@/components/ui/button';

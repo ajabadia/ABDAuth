@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el registro de eventos de seguridad alarmando los escritos a un servicio ABDLogs centralizado y recuperando registros para el contexto actual del session.
+ * @purpose_en Manages security event logging by routing writes to a central ABDLogs service and fetching logs for the current session context.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:2,imports:4,sig:1tgsz69
+ * @lastUpdated 2026-06-23T22:41:50.644Z
+ */
+
 import { TenantAwareRepository } from './TenantAwareRepository';
 import type { IndustrialSession } from '@/types/auth';
 import { LogsClient } from '@/lib/logs-client';

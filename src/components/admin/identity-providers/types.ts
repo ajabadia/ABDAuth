@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona tipos y interfaces de TypeScript para proveedores de identidad en la aplicación ABDAuth.
+ * @purpose_en Defines TypeScript types/interfaces for identity providers in the ABDAuth application.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:3,imports:1,sig:l1c4tr
+ * @lastUpdated 2026-06-21T14:24:55.864Z
+ */
+
 import type { IdentityProvider } from '@/lib/schemas/identity-provider';
 
 export interface IdentityProviderDisplay extends Omit<IdentityProvider, '_id' | 'createdAt' | 'updatedAt'> {

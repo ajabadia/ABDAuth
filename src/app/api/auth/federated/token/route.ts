@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el intercambio de un código de autenticación federada para tokens de perfil y sesión industriales.
+ * @purpose_en Handles the exchange of a federated authentication code for user profile and industrial session tokens.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:9,sig:14crex4
+ * @lastUpdated 2026-06-23T22:38:08.166Z
+ */
+
 import { NextResponse } from 'next/server';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
 import { federatedCodeRepository, type FederatedCode } from '@/lib/repositories/FederatedCodeRepository';

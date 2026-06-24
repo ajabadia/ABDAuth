@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona una página para administrar aplicaciones con traducciones y datos serializados.
+ * @purpose_en Renders a page for managing applications with translations and serialized data.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:4,sig:110nu5b
+ * @lastUpdated 2026-06-21T10:19:03.138Z
+ */
+
 import { getTranslations } from "next-intl/server";
 import { ApplicationManagementContainer } from "@/components/admin/applications/ApplicationManagementContainer";
 import { applicationRepository } from "@/lib/repositories/ApplicationRepository";

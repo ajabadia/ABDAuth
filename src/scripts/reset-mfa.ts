@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el reset de Autenticación Múltiple (MFA) para un usuario actualizando su estado de MFA en la base de datos.
+ * @purpose_en Manages the reset of Multi-Factor Authentication (MFA) for a user by updating their MFA status in the database.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:0,imports:1,sig:xqykq8
+ * @lastUpdated 2026-06-23T22:44:05.401Z
+ */
+
 import { userRepository } from '../lib/repositories/UserRepository';
 
 /**

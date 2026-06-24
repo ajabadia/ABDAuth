@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un elemento de sesión en el panel de control, mostrando información del dispositivo y última hora de actividad, con la opción de revocar la sesión.
+ * @purpose_en Renders a session item in the dashboard, displaying device information and last active time, with an option to revoke the session.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:5,sig:1nrqw3r
+ * @lastUpdated 2026-06-21T12:03:58.206Z
+ */
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Monitor, Smartphone, Tablet, XCircle, MapPin, Clock, Loader2 } from 'lucide-react';

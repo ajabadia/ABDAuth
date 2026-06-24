@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona las solicitudes de internacionalización proporcionando el mapa de calor correspondiente.
+ * @purpose_en Handles the configuration for internationalization requests by determining the locale, fetching messages, and returning them.
+ * @refactorable false
+ * @classification Custom Hook
+ * @complexity Low
+ * @fingerprint exports:0,imports:2,sig:15kwxt7
+ * @lastUpdated 2026-06-21T12:05:47.346Z
+ */
+
 import { getRequestConfig } from 'next-intl/server';
 import { routing } from './routing';
 

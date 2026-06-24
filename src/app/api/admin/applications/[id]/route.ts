@@ -1,9 +1,21 @@
+/**
+ * @purpose Gestiona solicitudes PATCH y DELETE para actualizar y eliminar aplicaciones, respectivamente.
+ * @purpose_en Handles PATCH and DELETE requests for updating and deleting applications, respectively.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:6,sig:iiunne
+ * @lastUpdated 2026-06-21T09:27:33.884Z
+ */
+
 import { NextResponse } from 'next/server';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
 import { getServerSession } from '@/lib/get-session';
 import { ApplicationSchema } from '@/lib/schemas/auth';
 import { checkApiSecurity } from '@/lib/utils/api-security';
 import { ObjectId } from 'mongodb';
+
+export const dynamic = 'force-dynamic';
 
 export async function PATCH(
   req: Request,

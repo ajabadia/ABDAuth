@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona cifrado a nivel de campo para datos sensibles utilizando el algoritmo AES-256-GCM.
+ * @purpose_en Manages field-level encryption for sensitive data using the AES-256-GCM algorithm.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:1,imports:2,sig:d92s8j
+ * @lastUpdated 2026-06-23T23:00:27.248Z
+ */
+
 import { AppError } from '@/lib/errors';
 import * as crypto from 'node:crypto';
 

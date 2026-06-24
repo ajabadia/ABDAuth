@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona operaciones MongoDB con soporte automático para auditoria de entidades.
+ * @purpose_en Manages MongoDB operations with automatic auditing support for entities.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:2,sig:1swsf55
+ * @lastUpdated 2026-06-23T22:41:54.673Z
+ */
+
 import { type Collection, type Document, type Filter, type OptionalUnlessRequiredId, type UpdateFilter, type UpdateOptions, type ObjectId } from 'mongodb';
 import { AppError } from '../errors';
 

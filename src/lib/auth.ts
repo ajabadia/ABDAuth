@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona autenticación y autorización utilizando adaptador MongoDB con soporte para email/password, proveedores sociales, autenticación de dos factores y gestión de sesiones.
+ * @purpose_en Manages authentication and authorization using MongoDB adapter with support for email/password, social providers, two-factor authentication, and session management.
+ * @refactorable true (contains too many configuration options and plugins)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:5,sig:1714kgq
+ * @lastUpdated 2026-06-23T22:41:05.486Z
+ */
+
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { twoFactor } from "better-auth/plugins";

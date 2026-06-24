@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Renderiza una forma para crear o editar proveedores de identidad, incluyendo campos para el tipo de proveedor, nombre, descripción y otros detalles de configuración.
+ * @purpose_en Renders a form for creating or editing identity providers, including fields for provider type, name, description, and other configuration details.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:4,sig:exb3bu
+ * @lastUpdated 2026-06-21T10:32:27.730Z
+ */
+
 import * as React from 'react';
 import { X, Plus, Globe, Shield } from 'lucide-react';
 import type { IdentityProviderDisplay, IdentityProviderFormValues, IdentityProviderTranslations } from './types';

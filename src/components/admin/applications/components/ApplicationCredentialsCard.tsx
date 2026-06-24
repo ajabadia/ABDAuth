@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza una tarjeta que muestra credenciales de aplicación con opciones para revelar el secreto del cliente.
+ * @purpose_en Renders a card displaying application credentials with options to reveal the client secret.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:1,sig:cuwdjc
+ * @lastUpdated 2026-06-21T10:31:22.712Z
+ */
+
 import { Shield, Key } from "lucide-react"
 
 interface ApplicationCredentialsCardProps {

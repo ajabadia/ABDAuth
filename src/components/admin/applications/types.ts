@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona tipos y interfaces para el manejo de aplicaciones dentro del componente ABDSAuth.
+ * @purpose_en Defines types and interfaces for application management in the ABDSAuth component.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:4,imports:1,sig:lonr6y
+ * @lastUpdated 2026-06-21T10:31:52.264Z
+ */
+
 import type { Application } from "@/lib/schemas/auth";
 
 export interface ApplicationManagementTranslations {

@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza el layout del panel de control, incluyendo un lado, encabezado y pie de página con navegación localizada y RBAC.
+ * @purpose_en Renders the layout for the dashboard, including a sidebar, header, and footer with localized navigation and RBAC.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:11,sig:1mqtzk6
+ * @lastUpdated 2026-06-23T22:39:50.603Z
+ */
+
 import { getServerSession } from '@/lib/get-session';
 import { redirect } from "@/i18n/routing";
 import { getTranslations } from 'next-intl/server';

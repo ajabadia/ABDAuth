@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona la integración de proveedores de identidad OIDC/SAML externos, manejando la descubierta de configuraciones, creando URLs de autorización y mapeando datos de usuario.
+ * @purpose_en Manages external OIDC/SAML identity provider integration, handling discovery of configurations, building authorization URLs, and mapping user data.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:3,imports:3,sig:hnbqte
+ * @lastUpdated 2026-06-23T22:45:12.699Z
+ */
+
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { identityProviderRepository } from '@/lib/repositories/IdentityProviderRepository';
 import type { IdentityProvider } from '@/lib/schemas/identity-provider';

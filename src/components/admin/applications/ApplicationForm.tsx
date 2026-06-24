@@ -1,5 +1,15 @@
 "use client"
 
+/**
+ * @purpose Renderiza una forma para crear o actualizar aplicaciones industriales, incluyendo campos para detalles de aplicación y URIs de redirección.
+ * @purpose_en Renders a form for creating or updating industrial applications, including fields for application details and redirect URIs.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:4,sig:rk847k
+ * @lastUpdated 2026-06-21T10:30:37.545Z
+ */
+
 import * as React from "react"
 import type { IndustrialApplicationDisplay, ApplicationManagementTranslations, IndustrialApplicationFormValues, ApplicationSubmitHandler } from "./types"
 import { ApplicationCredentialsCard } from "./components/ApplicationCredentialsCard"

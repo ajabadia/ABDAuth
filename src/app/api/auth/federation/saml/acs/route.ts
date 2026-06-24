@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el servicio de consumidor de afirmaciones SAML para autenticación, procesa respuestas SAML de proveedores de identidad externos y crea/autentica usuarios.
+ * @purpose_en Handles the SAML Assertion Consumer Service for authentication, processing SAML responses from external Identity Providers and creating/authenticating users.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:2,imports:6,sig:pyr9sl
+ * @lastUpdated 2026-06-23T22:38:40.929Z
+ */
+
 import { NextResponse } from 'next/server';
 import { identityProviderRepository } from '@/lib/repositories/IdentityProviderRepository';
 import { userRepository } from '@/lib/repositories/UserRepository';
@@ -59,7 +69,7 @@ export async function POST(req: Request) {
       ],
       active: true,
       providerType: 'SAML',
-    } as any) as IdentityProvider | null;
+    } as unknown as Parameters<typeof identityProviderRepository.findOne>[0]) as IdentityProvider | null;
 
     if (!provider) {
       return NextResponse.json({ error: 'No active SAML provider found for issuer: ' + entityId }, { status: 404 });
@@ -108,7 +118,7 @@ export async function POST(req: Request) {
         email: mappedUser.email,
         name: mappedUser.name,
         surname: mappedUser.surname || '',
-        role: mappedUser.role as any || 'USER',
+        role: (mappedUser.role as unknown as string) || 'USER',
         tenantId,
         tenants: [],
         activeModules: [],
@@ -118,7 +128,7 @@ export async function POST(req: Request) {
         loginAttempts: 0,
         preferences: {},
         password: '',
-      } as any);
+      } as unknown as Parameters<typeof userRepository.create>[0]);
 
       user = await userRepository.findById(newUserId);
       if (!user) {

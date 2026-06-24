@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida y define el esquema para las configuraciones del proveedor de identidad en la aplicación ABDAuth.
+ * @purpose_en Validates and defines the schema for identity provider configurations in the ABDAuth application.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:3,imports:1,sig:1q7brrp
+ * @lastUpdated 2026-06-23T22:42:52.177Z
+ */
+
 import { z } from 'zod';
 
 /**

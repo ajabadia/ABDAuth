@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida las solicitudes API para límites de tamaño de carga y aplica protección contra ataques de CSRF en puntos finales de mutación.
+ * @purpose_en Validates API requests for payload size limits and enforces CSRF protection on mutation endpoints.
+ * @refactorable false
+ * @classification Helper Utility
+ * @complexity Low
+ * @fingerprint exports:1,imports:1,sig:0384sb
+ * @lastUpdated 2026-06-23T22:43:38.801Z
+ */
+
 import { NextResponse } from 'next/server';
 
 /**

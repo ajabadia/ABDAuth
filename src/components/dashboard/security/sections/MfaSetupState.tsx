@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Renderiza el estado de configuración de autenticación multi-faceta con código QR y campos de entrada manual.
+ * @purpose_en Renders a multi-factor authentication setup state with QR code and input fields for manual entry.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:6,sig:3mrujd
+ * @lastUpdated 2026-06-21T12:04:36.729Z
+ */
+
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';

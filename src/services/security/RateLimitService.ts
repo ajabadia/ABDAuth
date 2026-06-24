@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona límites de velocidad para puntos finales sensibles en la aplicación ABDAuth.
+ * @purpose_en Manages rate limiting for sensitive endpoints in the ABDAuth application.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:1,imports:2,sig:1w6qton
+ * @lastUpdated 2026-06-23T23:01:00.720Z
+ */
+
 import { rateLimitRepository } from '@/lib/repositories/RateLimitRepository';
 import { headers } from 'next/headers';
 

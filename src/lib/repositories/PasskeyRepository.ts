@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona paskeys de WebAuthn para usuarios.
+ * @purpose_en Manages WebAuthn Passkeys for users.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:2,sig:9zih7w
+ * @lastUpdated 2026-06-23T22:42:11.660Z
+ */
+
 import { BaseRepository, type SafeFilter } from './BaseRepository';
 import type { Passkey } from '@/lib/schemas/passkey';
 

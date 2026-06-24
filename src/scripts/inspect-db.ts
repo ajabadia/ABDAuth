@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona y logra detalles de aplicaciones registradas, usuarios, límites de tasa y registros de auditoría recientes desde la base de datos.
+ * @purpose_en Inspects and logs details of registered applications, users, rate limits, and recent audit logs from the database.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:0,imports:4,sig:kp8yr9
+ * @lastUpdated 2026-06-21T12:09:06.824Z
+ */
+
 import { applicationRepository } from '../lib/repositories/ApplicationRepository';
 import { userRepository } from '../lib/repositories/UserRepository';
 import { auditRepository } from '../lib/repositories/AuditRepository';

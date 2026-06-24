@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona interacciones de inicio de sesión único (SSO), generando tokens y manejando auditorías para aplicaciones satelitales.
+ * @purpose_en Manages Single Sign-On (SSO) handshakes, generating tokens and handling audits for satellite applications.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:2,imports:11,sig:y4v5xw
+ * @lastUpdated 2026-06-23T23:00:40.093Z
+ */
+
 import crypto from 'crypto';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';

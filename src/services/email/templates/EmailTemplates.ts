@@ -1,4 +1,14 @@
 /**
+ * @purpose Gestiona plantillas HTML para diversas notificaciones de correo electrónico dentro de la aplicación ABDAuth, incluyendo correos electrónicos de restablecimiento de contraseña y alertas de seguridad.
+ * @purpose_en Generates HTML templates for various email notifications within the ABDAuth application, including password reset and security alert emails.
+ * @refactorable true (contains multiple distinct functions)
+ * @classification Helper Utility
+ * @complexity Low
+ * @fingerprint exports:3,imports:0,sig:1tcbezp
+ * @lastUpdated 2026-06-23T23:00:56.951Z
+ */
+
+/**
  * 🧱 Base Email Layout Wrapper
  * Implements standard styling, footer telemetries, and SOC2 signatures to maintain DRY.
  */

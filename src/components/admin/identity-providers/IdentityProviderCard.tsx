@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Rendra un componente de tarjeta para mostrar y gestionar proveedores de identidad, incluyendo acciones como editar y eliminar.
+ * @purpose_en Renders a card component for displaying and managing identity providers, including actions like editing and deleting.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:1gtakwi
+ * @lastUpdated 2026-06-21T10:32:09.798Z
+ */
+
 import * as React from 'react';
 import { Shield, Edit2, Trash2, ExternalLink, Globe, CheckCircle, XCircle, Server, Key } from 'lucide-react';
 import type { IdentityProviderDisplay, IdentityProviderTranslations } from './types';

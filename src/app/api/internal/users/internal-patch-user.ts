@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el parche interno de membresía de un usuario dentro de una tenencia.
+ * @purpose_en Handles the internal patching of a user's membership within a tenant.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:1,imports:2,sig:13u5ufn
+ * @lastUpdated 2026-06-21T10:17:18.118Z
+ */
+
 import { NextResponse } from 'next/server';
 import { userRepository } from '@/lib/repositories/UserRepository';
 

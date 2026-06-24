@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona cookies de sesión especificados desde una respuesta y establece cabeceras no caché.
+ * @purpose_en Wipes specified session cookies from a response and sets no-cache headers.
+ * @refactorable false
+ * @classification Helper Utility
+ * @complexity Low
+ * @fingerprint exports:3,imports:1,sig:1rwcarn
+ * @lastUpdated 2026-06-23T22:38:45.134Z
+ */
+
 import type { NextResponse } from 'next/server';
 
 /**

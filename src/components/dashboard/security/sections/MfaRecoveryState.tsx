@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Gestiona un seccion para el manejo de códigos de recuperación de autenticación multifactor, incluyendo mostrar los códigos, copiarlos y marcar el proceso como terminado.
+ * @purpose_en Renders a section for managing Multi-Factor Authentication recovery codes, including displaying the codes, copying them, and marking the process as done.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:87fel4
+ * @lastUpdated 2026-06-21T12:04:32.570Z
+ */
+
 import { motion } from 'framer-motion';
 import { CheckCircle2, ClipboardCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';

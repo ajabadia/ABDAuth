@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza una red de elementos del lanzador de aplicaciones con iconos, descripciones y botones de lanzamiento.
+ * @purpose_en Renders a grid of application launcher items with icons, descriptions, and launch buttons.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:2,sig:i9d60v
+ * @lastUpdated 2026-06-21T14:51:59.197Z
+ */
+
 import React from 'react';
 import { ExternalLink, HelpCircle, Award, Layers, Activity } from 'lucide-react';
 

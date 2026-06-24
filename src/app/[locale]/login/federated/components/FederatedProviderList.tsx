@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Gestiona una lista de proveedores de autenticación federada y maneja la selección del usuario para la redirección.
+ * @purpose_en Renders a list of federated authentication providers and handles user selection for redirection.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:3,sig:yiwppe
+ * @lastUpdated 2026-06-21T12:03:02.338Z
+ */
+
 import { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { Loader2, ExternalLink, Building2, Globe, CheckCircle, AlertCircle, Mail } from 'lucide-react';

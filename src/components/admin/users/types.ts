@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona tipos y interfaces de TypeScript para el manejo de usuarios en la aplicación ABDAuth.
+ * @purpose_en Defines TypeScript types and interfaces for user management in the ABDAuth application.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:6,imports:1,sig:1sk59ir
+ * @lastUpdated 2026-06-21T10:36:20.105Z
+ */
+
 import type { UserRole } from "@/lib/schemas/auth";
 
 export interface UserTenantMembershipDisplay {

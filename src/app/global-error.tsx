@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Renderiza un componente error global que muestra errores críticos del sistema y ofrece la opción de resetear el protocolo.
+ * @purpose_en Renders a global error boundary component that displays critical system errors and provides an option to reset the protocol.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:1,sig:1i71tx0
+ * @lastUpdated 2026-06-23T22:39:33.211Z
+ */
+
 import { ShieldAlert, RefreshCw } from 'lucide-react';
 
 /**

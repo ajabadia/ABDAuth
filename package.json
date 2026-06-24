@@ -5,9 +5,12 @@
     "start": "next start",
     "lint": "node node_modules/eslint/bin/eslint.js src",
     "tsc": "node node_modules/typescript/bin/tsc",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "seed": "node scripts/seed-admin.mjs"
+    "seed": "node scripts/seed-admin.mjs",
+    "arch-audit": "node scripts/arch-guard.mjs",
+    "full-audit": "powershell -ExecutionPolicy Bypass -File scripts/abd-audit.ps1"
   },
   "dependencies": {
     "@ajabadia/i18n": "^1.0.0",

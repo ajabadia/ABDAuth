@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un componente selector de tema que permite a los usuarios cambiar entre temas de luz, oscuro y sistema.
+ * @purpose_en Renders a theme selector component that allows users to switch between light, dark, and system themes.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:5m11qd
+ * @lastUpdated 2026-06-21T12:05:14.630Z
+ */
+
 import React from "react";
 import { Sun, Moon, Monitor, Check } from "lucide-react";
 import { cn } from "@/lib/utils/tailwind";

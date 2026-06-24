@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona la creación de un nuevo usuario, incluyendo cifrado de contraseñas, asignación de inquilinos y envío de correos electrónicos de verificación.
+ * @purpose_en Handles the creation of a new user, including password hashing, tenant assignment, and sending verification emails.
+ * @refactorable true (contains business logic and side effects)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:8,sig:1f75bq4
+ * @lastUpdated 2026-06-21T10:11:05.412Z
+ */
+
 import { NextResponse } from 'next/server';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { auditRepository } from '@/lib/repositories/AuditRepository';

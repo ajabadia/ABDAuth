@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * @purpose Gestiona y renderiza una lista de sesiones de usuario, permitiendo a los usuarios revocar individualmente o todas las otras sesiones.
+ * @purpose_en Manages and renders a list of user sessions, allowing users to revoke individual or all other sessions.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:9,sig:1arwv2a
+ * @lastUpdated 2026-06-21T12:04:41.708Z
+ */
+
 import React, { useState } from 'react';
 import { useTranslations, useFormatter, useNow } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';

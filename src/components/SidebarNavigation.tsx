@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * @purpose Renderiza un menú de navegación lateral basado en autenticación del usuario y rol, utilizando el componente SmartNavbar de @ajabadia/ecosystem-widgets.
+ * @purpose_en Renders a sidebar navigation menu based on user authentication and role, using the SmartNavbar component from @ajabadia/ecosystem-widgets.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:6,sig:4e6qvn
+ * @lastUpdated 2026-06-23T22:40:39.830Z
+ */
+
 import { useTranslations, useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";

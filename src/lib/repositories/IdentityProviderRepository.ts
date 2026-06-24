@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona persistencia y recuperación de configuraciones de proveedores de identidad OIDC/SAML externos.
+ * @purpose_en Manages persistence and retrieval of external OIDC/SAML identity provider configurations.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:1,imports:2,sig:1atqkbl
+ * @lastUpdated 2026-06-23T22:42:08.300Z
+ */
+
 import { BaseRepository, type SafeFilter } from './BaseRepository';
 import type { IdentityProvider } from '@/lib/schemas/identity-provider';
 

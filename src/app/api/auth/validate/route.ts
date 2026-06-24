@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida identidad industrial y devuelve detalles del usuario.
+ * @purpose_en Validates industrial identity and returns user details.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:1c285n7
+ * @lastUpdated 2026-06-23T22:39:24.956Z
+ */
+
 import { getServerSession } from '@/lib/get-session';
 import { NextResponse } from "next/server";
 import type { IndustrialSession } from "@/types/auth";

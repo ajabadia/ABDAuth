@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona la creación y el manejo de usuarios internos dentro de un inquilino, incluyendo validación del usuario, operaciones de repositorio y envío de correos de activación.
+ * @purpose_en Handles the creation and management of internal users within a tenant, including user validation, repository operations, and sending activation emails.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:5,sig:14adujt
+ * @lastUpdated 2026-06-21T10:17:05.850Z
+ */
+
 import { NextResponse } from 'next/server';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { inviteService } from '@/lib/services/inviteService';

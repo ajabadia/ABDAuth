@@ -1,4 +1,14 @@
 /**
+ * @purpose Valida una URI de redirección contra un arreglo de URIs registradas, apoyando coincidencia exacta y coincidencia dinámica de subdominios.
+ * @purpose_en Validates a redirect URI against an array of registered URIs, supporting exact matching and dynamic subdomain matching.
+ * @refactorable false
+ * @classification Helper Utility
+ * @complexity Low
+ * @fingerprint exports:1,imports:0,sig:1j8u2i9
+ * @lastUpdated 2026-06-23T22:38:02.829Z
+ */
+
+/**
  * Validates a redirect URI against an array of registered URIs.
  * Supports exact matching and dynamic subdomain matching.
  */

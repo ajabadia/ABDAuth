@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * @purpose Renderiza un botón que cambia entre locales español e inglés utilizando la ruta de Next-Intl.
+ * @purpose_en Renders a button that toggles between Spanish and English locales using Next-Intl routing.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:1oy4tko
+ * @lastUpdated 2026-06-23T22:40:50.680Z
+ */
+
 import { usePathname, useRouter } from "@/i18n/routing";
 import { useLocale } from "next-intl";
 import { Languages } from "lucide-react";

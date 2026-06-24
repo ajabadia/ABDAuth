@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Renderiza una paleta de comandos con comandos relacionados a la autenticación.
+ * @purpose_en Renders a command palette with authentication-related commands.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:6,sig:1g9uyk2
+ * @lastUpdated 2026-06-21T12:03:41.183Z
+ */
+
 import React from 'react';
 import { useRouter, usePathname } from '@/i18n/routing';
 import { useLocale } from 'next-intl';

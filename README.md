@@ -3,6 +3,7 @@
 **Centralized IAM for the ABD Industrial Ecosystem.**
 ![Status](https://img.shields.io/badge/Status-SYS__CERTIFIED__PROD-0070f3?style=for-the-badge)
 ![Deployment](https://img.shields.io/badge/Deployment-STABLE-success?style=for-the-badge)
+[![ERA 11 Certified](https://img.shields.io/badge/ERA%2011-CERTIFIED-brightgreen?style=for-the-badge&logo=shield)](../.github/workflows/audit.yml)
 
 ABDAuth is the certified identity provider (IdP) designed to manage authentication, authorization, and multi-tenant isolation across all satellite projects (ABDAgRAG, ABDQuiz, etc.) through secure OAuth2 federation.
 
@@ -26,7 +27,7 @@ ABDAuth is the certified identity provider (IdP) designed to manage authenticati
    ```bash
    .\start.bat
    ```
-   The portal will be available at `http://localhost:3400`.
+   The portal will be available at `http://localhost:5001`.
 
 ## 🏗️ Architecture
 

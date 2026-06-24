@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona un campo de formulario para el manejo de URIs de redirección con la capacidad de agregar, eliminar y editar URIs.
+ * @purpose_en Renders a form field for managing redirect URIs with the ability to add, remove, and edit URIs.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:1,sig:j0jarl
+ * @lastUpdated 2026-06-21T10:31:39.015Z
+ */
+
 import { Globe, AlertTriangle } from "lucide-react"
 
 interface RedirectUrisFieldProps {

@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona autenticación y verificación de dos factores para el ecosistema ABD Auth.
+ * @purpose_en Manages authentication and two-factor verification for the ABD Auth ecosystem.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:tinf8v
+ * @lastUpdated 2026-06-23T22:40:59.383Z
+ */
+
 import { createAuthClient } from "better-auth/client";
 import { inferAdditionalFields, twoFactorClient } from "better-auth/client/plugins";
 import type { auth } from "./auth";

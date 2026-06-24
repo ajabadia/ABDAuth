@@ -1,9 +1,21 @@
+/**
+ * @purpose Gestiona aplicaciones de satélite federadas mediante el manejo de solicitudes GET y POST para obtener y crear datos de aplicación.
+ * @purpose_en Manages federated satellite applications by handling GET and POST requests to retrieve and create application data.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:6,sig:1moo9cm
+ * @lastUpdated 2026-06-23T22:37:23.548Z
+ */
+
 import { NextResponse } from 'next/server';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
 import { getServerSession } from '@/lib/get-session';
 import { ApplicationSchema } from '@/lib/schemas/auth';
 import { checkApiSecurity } from '@/lib/utils/api-security';
 import crypto from 'crypto';
+
+export const dynamic = 'force-dynamic';
 
 /**
  * 🛰️ Applications API Handler

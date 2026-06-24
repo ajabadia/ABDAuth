@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza la página de configuración de seguridad para un usuario, incluyendo control de MFA, gestión de contraseñas y gobernanza de sesiones.
+ * @purpose_en Renders the security settings page for a user, including MFA control, password management, and session governance.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:11,sig:1ffeajl
+ * @lastUpdated 2026-06-21T10:22:21.268Z
+ */
+
 import { getTranslations } from 'next-intl/server';
 import { MfaControl } from '@/components/dashboard/security/MfaControl';
 import { PasswordManager } from '@/components/dashboard/security/PasswordManager';

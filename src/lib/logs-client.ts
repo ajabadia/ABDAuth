@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el registro de diversas acciones dentro de la aplicación ABDAuth enviando payloads de registro a un microservicio.
+ * @purpose_en Manages the logging of various actions within the ABDAuth application by sending log payloads to a microservice.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:1,sig:117r4jy
+ * @lastUpdated 2026-06-23T22:41:25.256Z
+ */
+
 import { logger, configureLogger } from '@ajabadia/satellite-sdk';
 
 export interface LogPayload {

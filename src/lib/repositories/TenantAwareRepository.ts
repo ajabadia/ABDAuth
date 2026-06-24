@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona operaciones de base de datos con aislamiento de tenant basado en sesiones de usuario, apoyando bypass explícito para SUPER_ADMIN global.
+ * @purpose_en Manages database operations with tenant isolation based on user sessions, supporting explicit SUPER_ADMIN bypass for global management.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:0,imports:3,sig:1h43u5e
+ * @lastUpdated 2026-06-23T22:42:22.216Z
+ */
+
 import { type Document, type Filter } from 'mongodb';
 import { BaseRepository, type SafeFilter } from './BaseRepository';
 import type { IndustrialSession } from '@/types/auth';

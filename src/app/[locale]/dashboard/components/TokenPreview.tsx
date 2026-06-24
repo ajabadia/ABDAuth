@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un componente de previsualización para tokens de usuario, mostrando diversas afirmaciones como asunto, correo electrónico, rol, organización, estado de autenticación multifactorial y protocolo.
+ * @purpose_en Renders a preview component for user tokens, displaying various claims such as subject, email, role, organization, MFA status, and protocol.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:t6w60m
+ * @lastUpdated 2026-06-21T10:20:53.245Z
+ */
+
 import * as React from "react"
 import { Key } from "lucide-react"
 import type { IndustrialUser } from "@/types/auth"

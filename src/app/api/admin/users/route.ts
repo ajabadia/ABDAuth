@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona operaciones del usuario como recuperar y actualizar usuarios industriales, requiriendo validación de sesión administrativa.
+ * @purpose_en Manages user operations such as retrieving and updating industrial users, requiring admin session validation.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:3,imports:6,sig:1lq8uvk
+ * @lastUpdated 2026-06-23T22:37:55.310Z
+ */
+
 import { NextResponse } from 'next/server';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { IndustrialNormalizer } from '@/lib/utils/IndustrialNormalizer';

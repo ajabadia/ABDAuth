@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Renderiza una sección de encabezado para la autenticación multifactor (MFA), mostrando su estado y proporcionando soporte de localización.
+ * @purpose_en Renders a header section for Multi-Factor Authentication (MFA), displaying its status and providing localization support.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:1,sig:1he6p2z
+ * @lastUpdated 2026-06-21T12:04:20.201Z
+ */
+
 import { Key } from 'lucide-react';
 
 interface MfaHeaderProps {

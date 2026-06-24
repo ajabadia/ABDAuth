@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el redireccionamiento a un servicio de registro de auditoria centralizado según el idioma del usuario y el estado de sesión.
+ * @purpose_en Manages the redirection to a centralized audit logging service based on the user's locale and session status.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:1,imports:2,sig:bl9r68
+ * @lastUpdated 2026-06-23T22:39:45.372Z
+ */
+
 import { getServerSession } from '@/lib/get-session';
 import { redirect } from "next/navigation";
 

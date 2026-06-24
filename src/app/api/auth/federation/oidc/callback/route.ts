@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el proveedor OIDC, intercambia el código por tokens, verifica el token de identidad y recupera información del usuario.
+ * @purpose_en Handles the OIDC provider's redirect, exchanges the code for tokens, verifies the ID token, fetches userinfo, and creates/authenticates the user.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:2,imports:7,sig:g1dfqa
+ * @lastUpdated 2026-06-23T22:38:26.579Z
+ */
+
 import { NextResponse } from 'next/server';
 import { identityProviderRepository } from '@/lib/repositories/IdentityProviderRepository';
 import { FederationService } from '@/services/auth/FederationService';
@@ -59,7 +69,7 @@ export async function GET(req: Request) {
     const provider = await identityProviderRepository.findOne({
       _id: stateData.providerId,
       active: true,
-    } as any) as IdentityProvider | null;
+    } as unknown as Parameters<typeof identityProviderRepository.findOne>[0]) as IdentityProvider | null;
 
     if (!provider) {
       return NextResponse.json({ error: 'Provider not found' }, { status: 404 });
@@ -121,12 +131,12 @@ export async function GET(req: Request) {
 
       // Auto-provision user
       const tenantId = provider.defaultTenantId || 'GLOBAL';
-      const tenant = await tenantRepository.findByTenantId(tenantId as any);
+      const tenant = await tenantRepository.findByTenantId(tenantId as unknown as Parameters<typeof tenantRepository.findByTenantId>[0]);
       const newUserId = await userRepository.create({
         email: mappedUser.email,
         name: mappedUser.name,
         surname: mappedUser.surname || '',
-        role: mappedUser.role as any || 'USER',
+        role: (mappedUser.role as unknown as string) || 'USER',
         tenantId,
         tenants: [],
         activeModules: [],
@@ -136,7 +146,7 @@ export async function GET(req: Request) {
         loginAttempts: 0,
         preferences: {},
         password: '',
-      } as any);
+      } as unknown as Parameters<typeof userRepository.create>[0]);
 
       user = await userRepository.findById(newUserId);
       if (!user) {

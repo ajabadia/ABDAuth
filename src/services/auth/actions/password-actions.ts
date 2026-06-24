@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el proceso de cambiar la contraseña de un usuario, incluyendo validar la contraseña actual, cifrar la nueva, actualizar la base de datos, auditorizar el cambio, revocar otras sesiones y enviar una alerta de seguridad.
+ * @purpose_en Manages the process of changing a user's password, including validating the current password, hashing the new one, updating the database, auditing the change, revoking other sessions, and sending a security alert.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:5,sig:3lkwee
+ * @lastUpdated 2026-06-23T22:44:42.946Z
+ */
+
 "use server";
 
 import { getServerSession } from '@/lib/get-session';

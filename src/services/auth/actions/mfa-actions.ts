@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona acciones de autenticación multifactor, incluyendo resetear MFA para usuarios y sincronizar el cumplimiento de MFA.
+ * @purpose_en Manages Multi-Factor Authentication actions, including resetting MFA for users and synchronizing MFA enforcement.
+ * @refactorable true (contains multiple distinct functions)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:3,imports:5,sig:1ietzav
+ * @lastUpdated 2026-06-23T22:44:28.031Z
+ */
+
 "use server";
 
 import { revalidatePath } from "next/cache";

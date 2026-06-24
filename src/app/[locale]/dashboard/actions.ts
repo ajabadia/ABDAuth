@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el cambio de inquilinos para una sesión de usuario conectado, incluyendo verificaciones de autorización, actualizaciones de preferencias del usuario, configuración de cookies y registro de eventos operativos.
+ * @purpose_en Manages the switching of tenants for a logged-in user session, including authorization checks, updating user preferences, setting cookies, and logging operational events.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:5,sig:1f24n2t
+ * @lastUpdated 2026-06-23T22:39:40.351Z
+ */
+
 'use server';
 
 import { getServerSession } from '@/lib/get-session';

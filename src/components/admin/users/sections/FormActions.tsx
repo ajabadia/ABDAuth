@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Renders a sección de acciones con botones cancelar y guardar, gestionando interacciones del usuario y mostrando estados de carga.
+ * @purpose_en Renders a form actions section with cancel and save buttons, handling user interactions and displaying loading states.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:2,sig:1pjp3to
+ * @lastUpdated 2026-06-21T10:35:04.662Z
+ */
+
 import { X, Save, Loader2 } from "lucide-react";
 import type { UserManagementTranslations } from "../types";
 

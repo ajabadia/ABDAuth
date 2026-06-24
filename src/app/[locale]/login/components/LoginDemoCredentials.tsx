@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un componente que muestra credenciales de inicio de sesión de demo y texto del pie de página.
+ * @purpose_en Renders a component displaying demo login credentials and footer text.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:1,sig:12n4hha
+ * @lastUpdated 2026-06-21T10:24:16.377Z
+ */
+
 import { CheckCircle } from "lucide-react";
 
 interface LoginDemoCredentialsProps {

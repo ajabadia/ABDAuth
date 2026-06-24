@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Gestiona el formulario de restablecimiento de contraseña y maneja el proceso de envío.
+ * @purpose_en Renders a password reset form and handles the submission process.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:8,sig:okr690
+ * @lastUpdated 2026-06-21T10:29:58.252Z
+ */
+
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter as useIntlRouter } from "@/i18n/routing";

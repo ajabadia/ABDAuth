@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un componente de diseño con soporte a la internacionalización, configuraciones específicas para el inquilino y elementos de navegación.
+ * @purpose_en Renders a layout component with internationalization support, tenant-specific settings, and navigation elements.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:11,sig:f0jy3x
+ * @lastUpdated 2026-06-23T22:40:12.923Z
+ */
+
 import { NextIntlClientProvider, type AbstractIntlMessages } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { routing } from '@/i18n/routing';

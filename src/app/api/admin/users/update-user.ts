@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el proceso de actualización para un usuario en la aplicación ABDSuite, incluyendo cifrado de contraseñas y registro de auditoría.
+ * @purpose_en Handles the update operation for a user in the ABDSuite application, including password hashing and audit logging.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:4,sig:y00f7q
+ * @lastUpdated 2026-06-21T10:11:40.505Z
+ */
+
 import { NextResponse } from 'next/server';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { auditRepository } from '@/lib/repositories/AuditRepository';

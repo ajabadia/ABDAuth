@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona sesiones de usuario revocando sesiones específicas o todas las demás.
+ * @purpose_en Manages user sessions by revoking specific or all other sessions.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:5,sig:7cj682
+ * @lastUpdated 2026-06-23T22:44:48.497Z
+ */
+
 "use server";
 
 import { revalidatePath } from "next/cache";

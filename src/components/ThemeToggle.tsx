@@ -1,5 +1,15 @@
 "use client"
 
+/**
+ * @purpose Renderiza un botón que cambia entre temas claros y oscuros.
+ * @purpose_en Renders a button that toggles the theme between light and dark.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:5kj6r6
+ * @lastUpdated 2026-06-21T12:05:02.705Z
+ */
+
 import { useTheme } from "next-themes"
 import { Sun, Moon } from "lucide-react"
 import { useEffect, useState } from "react"

@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza la página de dashboard para los usuarios, mostrando aplicaciones permitidas, promoción de autenticación multifactorial, previsualización del token y panel de estadísticas.
+ * @purpose_en Renders the dashboard page for users, displaying allowed applications, MFA promotion, token preview, and stats panel.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:18,sig:ge8ezo
+ * @lastUpdated 2026-06-21T10:22:03.681Z
+ */
+
 import { getServerSession } from "@/lib/get-session";
 import { redirect } from "@/i18n/routing";
 import { LayoutDashboard } from "lucide-react";

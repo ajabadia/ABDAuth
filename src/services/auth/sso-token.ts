@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona un token JWT firmado para autenticación de Single Sign-On.
+ * @purpose_en Generates a signed JWT token for Single Sign-On (SSO) authentication.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:2,sig:xgafhy
+ * @lastUpdated 2026-06-23T23:00:35.211Z
+ */
+
 import { SignJWT } from 'jose';
 import type { SsoPayload } from './types/sso-payload';
 

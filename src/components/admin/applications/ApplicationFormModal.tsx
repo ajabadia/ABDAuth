@@ -1,5 +1,15 @@
 "use client"
 
+/**
+ * @purpose Renderiza un modal para crear o editar aplicaciones con validación de formularios y manejo de envío.
+ * @purpose_en Renders a modal for creating or editing applications with form validation and submission handling.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:7,sig:7bgh2l
+ * @lastUpdated 2026-06-21T10:30:53.043Z
+ */
+
 import * as React from "react"
 import { useState, useRef, useEffect } from "react"
 import { Shield } from "lucide-react"

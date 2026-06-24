@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * @purpose Renderiza una componente promocional para Autenticación Multifactor (MFA) con una alerta flotante, título, descripción, botón de llamada a acción y badge de certificación SOC2.
+ * @purpose_en Renders a promotional component for Multi-Factor Authentication (MFA), featuring an alert icon, title, description, call-to-action button, and a SOC2 certification badge.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:4,sig:d2m7bh
+ * @lastUpdated 2026-06-21T12:03:47.917Z
+ */
+
 import React from 'react';
 import { ShieldAlert, ArrowRight, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';

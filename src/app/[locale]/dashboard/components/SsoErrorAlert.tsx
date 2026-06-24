@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un componente de alerta personalizado para errores de Single Sign-On (SSO), mostrando mensajes de error según el código proporcionado y, opcionalmente, agregando detalles del aplicativo.
+ * @purpose_en Renders a styled alert component for Single Sign-On (SSO) errors, displaying error messages based on the provided error code and optionally appending application details.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:2,sig:13xbixm
+ * @lastUpdated 2026-06-21T10:20:17.136Z
+ */
+
 import React from 'react';
 import { ShieldAlert } from "lucide-react";
 

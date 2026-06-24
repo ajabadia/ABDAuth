@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona la verificación y el retiro de reclamaciones de identidad industrial para proyectos satelitales.
+ * @purpose_en Handles the verification and retrieval of industrial identity claims for satellite projects.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:167xfha
+ * @lastUpdated 2026-06-23T22:39:03.344Z
+ */
+
 import { NextResponse } from 'next/server';
 import { getServerSession } from '@/lib/get-session';
 import type { IndustrialSession } from '@/types/auth';

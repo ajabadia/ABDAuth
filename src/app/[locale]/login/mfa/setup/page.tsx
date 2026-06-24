@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona la página de configuración de autenticación multifactor para los usuarios, maneja las redirectiones según el estado del MFA y recupera las traducciones necesarias.
+ * @purpose_en Renders the Multi-Factor Authentication setup page for users, handling redirections based on user MFA status and fetching necessary translations.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:8,sig:yxapm9
+ * @lastUpdated 2026-06-21T12:03:08.808Z
+ */
+
 import React from 'react';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { getServerSession } from '@/lib/get-session';

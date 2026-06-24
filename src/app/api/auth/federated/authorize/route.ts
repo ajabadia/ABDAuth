@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el flujo de autorización para solicitudes de autenticación federada, validando credenciales del cliente, URIs de redirección y permisos del usuario antes de emitir un código de autorización.
+ * @purpose_en Handles the authorization flow for federated authentication requests, validating client credentials, redirect URIs, and user permissions before issuing an authorization code.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:11,sig:1ytmr7i
+ * @lastUpdated 2026-06-21T10:12:16.494Z
+ */
+
 import { NextResponse } from 'next/server';
 import { getServerSession } from '@/lib/get-session';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';

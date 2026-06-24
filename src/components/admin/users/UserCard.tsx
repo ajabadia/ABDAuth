@@ -1,5 +1,15 @@
 "use client"
 
+/**
+ * @purpose Renderiza un componente tarjeta de usuario con detalles y acciones para gestionar usuarios, incluyendo resetear MFA.
+ * @purpose_en Renders a user card component with details and actions for managing users, including resetting MFA.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:6,sig:1ltu5l
+ * @lastUpdated 2026-06-21T10:36:36.522Z
+ */
+
 import * as React from "react"
 import { Shield, Edit3, Briefcase, RefreshCw, Loader2 } from 'lucide-react'
 import type { IndustrialUserDisplay, UserManagementTranslations } from "./types"

@@ -1,5 +1,15 @@
 "use client"
 
+/**
+ * @purpose Renderiza una forma para crear o actualizar información de inquilino, incluyendo campos para nombre, ID, industria, prefijo de base de datos, estrategia de aislamiento y estado activo.
+ * @purpose_en Renders a form for creating or updating tenant information, including fields for name, ID, industry, database prefix, isolation strategy, and active status.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:6,sig:tphiw6
+ * @lastUpdated 2026-06-21T10:33:20.842Z
+ */
+
 import * as React from "react"
 import { Globe, Database, Shield } from "lucide-react"
 import type { Tenant } from "@/lib/schemas/auth"

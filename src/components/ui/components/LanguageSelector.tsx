@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un componente selector de idioma que permite a los usuarios cambiar entre locales español e inglés.
+ * @purpose_en Renders a language selector component that allows users to switch between Spanish and English locales.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:1v6904l
+ * @lastUpdated 2026-06-21T12:05:10.385Z
+ */
+
 import React from "react";
 import { Languages, Check } from "lucide-react";
 import { cn } from "@/lib/utils/tailwind";

@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida y define la estructura de un token de reinicio de contraseña.
+ * @purpose_en Validates and defines the structure of a password reset token.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:2,imports:1,sig:1vbbart
+ * @lastUpdated 2026-06-23T22:43:07.266Z
+ */
+
 import { z } from 'zod';
 
 /**

@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona la autorización del usuario mediante validación de credenciales, verificación del estado de cuenta y creación de registros de auditoría.
+ * @purpose_en Handles user authorization by validating credentials, checking account status, and creating audit logs.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:9,sig:ovxvk7
+ * @lastUpdated 2026-06-21T12:09:30.209Z
+ */
+
 import * as argon2 from 'argon2';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { auditRepository } from '@/lib/repositories/AuditRepository';

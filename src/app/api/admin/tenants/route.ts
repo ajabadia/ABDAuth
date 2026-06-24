@@ -1,9 +1,21 @@
+/**
+ * @purpose Gestiona el manejo de la organización global, manejando solicitudes GET y POST para inquilinos, asegurando acceso autorizado y creando registros de auditoria.
+ * @purpose_en Manages global organization management by handling GET and POST requests for tenants, ensuring authorized access and creating audit logs.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:2,imports:6,sig:1c0crny
+ * @lastUpdated 2026-06-23T22:37:43.946Z
+ */
+
 import { NextResponse } from 'next/server';
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { checkApiSecurity } from '@/lib/utils/api-security';
 import { auditRepository } from '@/lib/repositories/AuditRepository';
 import { TenantSchema, type Tenant } from '@/lib/schemas/auth';
 import { validateSuperAdminSession, validateAdminSession } from '@/lib/utils/api-auth';
+
+export const dynamic = 'force-dynamic';
 
 /**
  * 🏢 Tenants Admin API

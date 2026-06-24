@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el proceso de solicitud y manejo de acciones de restablecimiento de contraseñas, incluyendo la generación de tokens, envío de correos electrónicos, auditoría de eventos y revocación de sesiones de usuario.
+ * @purpose_en Manages the process of requesting and handling password reset actions, including generating tokens, sending emails, auditing events, and revoking user sessions.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:2,imports:6,sig:1fv2zfu
+ * @lastUpdated 2026-06-23T23:00:18.692Z
+ */
+
 'use server';
 
 import { userRepository } from '@/lib/repositories/UserRepository';

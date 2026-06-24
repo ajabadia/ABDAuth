@@ -1,3 +1,13 @@
+/**
+ * @purpose Proporciona sesión de servidor.
+ * @purpose_en Retrieves the server-side session using the `auth` library.
+ * @refactorable false
+ * @classification Helper Utility
+ * @complexity Low
+ * @fingerprint exports:1,imports:2,sig:sgn6z0
+ * @lastUpdated 2026-06-23T22:41:15.283Z
+ */
+
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 

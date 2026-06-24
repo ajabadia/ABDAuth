@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza una página para verificación de autenticación multifactorial.
+ * @purpose_en Renders a page for Multi-Factor Authentication (MFA) verification.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:2,imports:2,sig:0e8wwb
+ * @lastUpdated 2026-06-21T10:26:01.543Z
+ */
+
 import { MfaVerificationForm } from '@/components/auth/MfaVerificationForm';
 import { getTranslations } from 'next-intl/server';
 

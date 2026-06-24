@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el manejo de entidad organizacional con normalización industrial.
+ * @purpose_en Manages organizational entity management with Industrial Normalization.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:6,sig:xe41i3
+ * @lastUpdated 2026-06-23T22:42:25.826Z
+ */
+
 import { TenantAwareRepository } from './TenantAwareRepository';
 import { type SafeFilter } from './BaseRepository';
 import type { Tenant } from '@/lib/schemas/auth';

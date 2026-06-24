@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Gestiona secciones para administrar membresías de usuarios, incluyendo agregar, eliminar y actualizar membresías.
+ * @purpose_en Renders a section for managing user memberships, including adding, removing, and updating memberships.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:4,sig:16rc04v
+ * @lastUpdated 2026-06-21T10:36:05.489Z
+ */
+
 import * as React from 'react';
 import { Plus } from 'lucide-react';
 import type { UserTenantMembershipDisplay, UserManagementTranslations } from '../types';

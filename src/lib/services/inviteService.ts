@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el envío de correos de activación para usuarios recientemente provisionados.
+ * @purpose_en Orchestrates sending activation emails for newly provisioned users.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:2,sig:pzc2fd
+ * @lastUpdated 2026-06-23T22:43:26.763Z
+ */
+
 import { ResendEmailService } from '@ajabadia/satellite-sdk';
 import { AppError } from '../errors';
 

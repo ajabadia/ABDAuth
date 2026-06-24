@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona y hasha códigos de respaldo alfanuméricos únicos de manera asíncrona.
+ * @purpose_en Generates and hashes unique alphanumeric backup codes asynchronously.
+ * @refactorable false
+ * @classification Helper Utility
+ * @complexity Low
+ * @fingerprint exports:2,imports:1,sig:kbu2ue
+ * @lastUpdated 2026-06-23T22:43:45.005Z
+ */
+
 import * as argon2 from 'argon2';
 
 /**

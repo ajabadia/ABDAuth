@@ -1,5 +1,15 @@
 "use client"
 
+/**
+ * @purpose Renderiza una ventana modal para gestionar información de inquilinos.
+ * @purpose_en Renders a modal dialog for managing tenant information.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:9,sig:1hdlie1
+ * @lastUpdated 2026-06-21T12:03:17.119Z
+ */
+
 import * as React from "react"
 import { useState, useRef, useEffect } from "react"
 import { Building2 } from "lucide-react"

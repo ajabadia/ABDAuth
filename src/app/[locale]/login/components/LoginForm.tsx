@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona el renderizado de un formulario de inicio de sesión con campos de correo electrónico y contraseña, junto con botones de inicio de sesión social y indicadores de carga.
+ * @purpose_en Manages the rendering of a login form with email and password fields, along with social login buttons and loading indicators.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:3,sig:auhr6q
+ * @lastUpdated 2026-06-21T10:24:34.129Z
+ */
+
 import React, { useState } from 'react';
 import { Lock, Mail, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
 import { SocialLoginButtons } from './SocialLoginButtons';

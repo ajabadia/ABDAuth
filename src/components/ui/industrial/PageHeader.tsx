@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un componente de encabezado para páginas industriales con título, subtítulo, breadcrumb, icono y botón de acción opcional.
+ * @purpose_en Renders a header component for industrial pages with a title, subtitle, breadcrumb, icon, and optional action button.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:vmoovh
+ * @lastUpdated 2026-06-21T12:05:19.671Z
+ */
+
 import * as React from "react"
 import { ArrowLeft, LucideIcon } from "lucide-react"
 import { Link } from "@/i18n/routing"

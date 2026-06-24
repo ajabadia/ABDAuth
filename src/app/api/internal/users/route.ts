@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona solicitudes de API internas para operaciones de gestión de usuarios, como recuperar usuarios por ID de inquilino y crear/actualizar usuarios.
+ * @purpose_en Handles internal API requests for user management operations such as retrieving users by tenant ID and creating/patching users.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:3,imports:5,sig:1ajouoc
+ * @lastUpdated 2026-06-21T10:17:35.993Z
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { checkApiSecurity } from '@/lib/utils/api-security';

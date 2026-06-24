@@ -1,5 +1,15 @@
 'use client';
 
+/**
+ * @purpose Renderiza una estructura de grid para tarjetas de usuario según la lista proporcionada, incluyendo la opción de editar cada usuario.
+ * @purpose_en Renders a grid layout of user cards based on the provided list of users, including an option to edit each user.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:2,sig:pwyhbl
+ * @lastUpdated 2026-06-23T22:40:23.392Z
+ */
+
 import { UserCard } from "./UserCard";
 import type { IndustrialUserDisplay, UserManagementTranslations } from "./types";
 

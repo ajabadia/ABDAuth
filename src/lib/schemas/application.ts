@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida y define la estructura de los datos de aplicación para su uso en ABDAuth.
+ * @purpose_en Validates and defines the structure of application data for use in ABDAuth.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:3,imports:1,sig:lndpm6
+ * @lastUpdated 2026-06-23T22:42:34.045Z
+ */
+
 import { z } from 'zod';
 
 /**

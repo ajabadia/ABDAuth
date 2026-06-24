@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona proveedores de identidad para la API administrativa, maneja operaciones de lista y creación.
+ * @purpose_en Manages identity providers for the admin API, handling list and create operations.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Low
+ * @fingerprint exports:2,imports:5,sig:1esdpx0
+ * @lastUpdated 2026-06-23T22:37:28.128Z
+ */
+
 import { NextResponse } from 'next/server';
 import { identityProviderRepository } from '@/lib/repositories/IdentityProviderRepository';
 import { IdentityProviderSchema } from '@/lib/schemas/identity-provider';
@@ -37,7 +47,7 @@ export async function POST(req: Request) {
     }
 
     const data = validation.data;
-    const id = await identityProviderRepository.create(data as any);
+    const id = await identityProviderRepository.create(data as unknown as Parameters<typeof identityProviderRepository.create>[0]);
 
     // Invalidate cache if OIDC provider
     if (data.providerType === 'OIDC' && data.issuerUrl) {

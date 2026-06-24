@@ -1,3 +1,13 @@
+/**
+ * @purpose Valida y define la estructura de datos de sesión del usuario.
+ * @purpose_en Validates and defines the structure of user session data.
+ * @refactorable false
+ * @classification Type Definition
+ * @complexity Low
+ * @fingerprint exports:2,imports:2,sig:140k35k
+ * @lastUpdated 2026-06-23T22:43:11.075Z
+ */
+
 import { z } from 'zod';
 import { TenantIdSchema } from './common';
 
