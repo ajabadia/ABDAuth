@@ -5,7 +5,7 @@
  * @classification UI Component
  * @complexity Low
  * @fingerprint exports:2,imports:7,sig:1a482mo
- * @lastUpdated 2026-06-23T22:40:18.318Z
+ * @lastUpdated 2026-06-25T10:16:51.619Z
  */
 
 import { Suspense } from 'react';

@@ -4,8 +4,8 @@
  * @refactorable false
  * @classification Business Service
  * @complexity Low
- * @fingerprint exports:2,imports:2,sig:pzc2fd
- * @lastUpdated 2026-06-23T22:43:26.763Z
+ * @fingerprint exports:2,imports:2,sig:12xsuzo
+ * @lastUpdated 2026-06-25T10:17:03.943Z
  */
 
 import { ResendEmailService } from '@ajabadia/satellite-sdk/utils';;

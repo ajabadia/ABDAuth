@@ -1,11 +1,11 @@
 /**
- * @purpose Gestiona el envío de varios tipos de correos electrónicos relacionados con la autenticación del usuario, incluyendo el reset de contraseña, verificación de cuenta y alertas de seguridad.
+ * @purpose Gestiona envío de varios tipos de correos electrónicos relacionados con autenticación del usuario, incluyendo reinicio de contraseña, verificación de cuenta y alertas de seguridad.
  * @purpose_en Manages sending various types of emails related to user authentication, including password reset, account verification, and security alerts.
  * @refactorable false
  * @classification Business Service
  * @complexity Low
- * @fingerprint exports:1,imports:2,sig:13hdhj7
- * @lastUpdated 2026-06-23T23:00:50.764Z
+ * @fingerprint exports:1,imports:2,sig:43zf3y
+ * @lastUpdated 2026-06-25T10:18:09.189Z
  */
 
 import { ResendEmailService } from '@ajabadia/satellite-sdk/utils';;

@@ -1,11 +1,11 @@
 /**
- * @purpose Gestiona el solicitud GET para listar proveedores de identidad activos para login federado, asegurando solo que se devuelvan campos seguros.
+ * @purpose Gestiona el solicitud GET para obtener una lista de proveedores de identidad activos para login federado, asegurando solo que se devuelvan campos seguros.
  * @purpose_en Manages the GET request to list active identity providers for federated login, ensuring only safe fields are returned.
  * @refactorable false
  * @classification Business Service
  * @complexity Low
- * @fingerprint exports:2,imports:3,sig:5el56h
- * @lastUpdated 2026-06-24T10:28:19.573Z
+ * @fingerprint exports:2,imports:4,sig:1ds0fmu
+ * @lastUpdated 2026-06-25T10:15:42.994Z
  */
 
 import { NextResponse } from 'next/server';

@@ -5,7 +5,7 @@
  * @classification Business Service
  * @complexity Medium
  * @fingerprint exports:1,imports:3,sig:0ebq3p
- * @lastUpdated 2026-06-23T16:26:35.282Z
+ * @lastUpdated 2026-06-25T10:17:11.706Z
  */
 
 import { withIndustrialAuth } from '@ajabadia/satellite-sdk/auth-middleware';

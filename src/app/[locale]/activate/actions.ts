@@ -1,11 +1,11 @@
 /**
- * @purpose Gestiona el activado de una cuenta de usuario mediante la validación del token, cifrado del password y actualización del estado del usuario.
+ * @purpose Gestiona el activado de una cuenta de usuario mediante la validación del token, cifrado de la contraseña y actualización del estado del usuario.
  * @purpose_en Handles the activation of a user account by validating the token, hashing the password, and updating the user's status.
  * @refactorable false
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:3,sig:1jojuk9
- * @lastUpdated 2026-06-24T10:29:04.472Z
+ * @fingerprint exports:1,imports:3,sig:16qauvo
+ * @lastUpdated 2026-06-25T10:16:31.330Z
  */
 
 'use server'

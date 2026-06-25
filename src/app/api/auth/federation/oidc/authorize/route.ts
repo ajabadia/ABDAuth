@@ -1,11 +1,11 @@
 /**
  * @purpose Gestiona el flujo de autorización OIDC redirigiendo a los usuarios a la URL de autorización del proveedor externo.
  * @purpose_en Handles the OIDC authorization flow by redirecting users to an external provider's authorization URL.
- * @refactorable false
+ * @refactorable true (contains too many state variables and UI parts)
  * @classification Business Service
  * @complexity Medium
  * @fingerprint exports:2,imports:5,sig:3wrr5p
- * @lastUpdated 2026-06-24T10:28:07.267Z
+ * @lastUpdated 2026-06-25T10:15:31.651Z
  */
 
 import { NextResponse } from 'next/server';

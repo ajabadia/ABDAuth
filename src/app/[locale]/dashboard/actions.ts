@@ -1,11 +1,11 @@
 /**
- * @purpose Gestiona el cambio de inquilinos para una sesión de usuario iniciada, incluyendo verificaciones de autorización, actualizaciones de preferencias del usuario, configuración de cookies y registro de eventos operativos.
+ * @purpose Gestiona el cambio de inquilinos para una sesión de usuario conectado, incluyendo verificaciones de autorización, actualizaciones de preferencias del usuario, configuración de cookies y registro de eventos operativos.
  * @purpose_en Manages the switching of tenants for a logged-in user session, including authorization checks, updating user preferences, setting cookies, and logging operational events.
  * @refactorable true (contains too many state variables and UI parts)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:6,sig:1c2l4bs
- * @lastUpdated 2026-06-24T10:29:11.756Z
+ * @fingerprint exports:1,imports:6,sig:12fz6f7
+ * @lastUpdated 2026-06-25T10:16:38.864Z
  */
 
 'use server';

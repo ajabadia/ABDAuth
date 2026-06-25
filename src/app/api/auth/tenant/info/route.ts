@@ -4,8 +4,8 @@
  * @refactorable false
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:4,sig:1p2jrgc
- * @lastUpdated 2026-06-24T10:28:53.747Z
+ * @fingerprint exports:1,imports:4,sig:102oxyv
+ * @lastUpdated 2026-06-25T10:16:13.986Z
  */
 
 import { tenantRepository } from '@/lib/repositories/TenantRepository';

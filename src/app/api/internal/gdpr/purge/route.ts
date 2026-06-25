@@ -1,3 +1,13 @@
+/**
+ * @purpose Gestiona la solicitud de purga para cumplir con la normativa GDPR eliminando datos del usuario, cerrando sesiones y eliminando cuentas.
+ * @purpose_en Handles the purge request for GDPR compliance by anonymizing user data, deleting sessions, and removing accounts.
+ * @refactorable false
+ * @classification Business Service
+ * @complexity Medium
+ * @fingerprint exports:1,imports:2,sig:188etpy
+ * @lastUpdated 2026-06-25T11:51:11.584Z
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 

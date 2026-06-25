@@ -1,11 +1,11 @@
 /**
- * @purpose Gestiona la autenticación del usuario mediante validación de credenciales, verificación del estado del cuenta y creación de registros de auditoria.
- * @purpose_en Handles user authorization by validating credentials, checking account status, and creating audit logs.
+ * @purpose Gestiona autorización del usuario mediante validación de credenciales, verificación del estado de cuenta y creación de registros de auditoría.
+ * @purpose_en Manages user authorization by validating credentials, checking account status, and creating audit logs.
  * @refactorable true (contains too many state variables and UI parts)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:10,sig:172zcwe
- * @lastUpdated 2026-06-24T10:29:30.132Z
+ * @fingerprint exports:1,imports:10,sig:gt4op5
+ * @lastUpdated 2026-06-25T10:17:21.061Z
  */
 
 import * as argon2 from 'argon2';

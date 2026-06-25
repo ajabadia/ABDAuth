@@ -22,6 +22,7 @@ import { PageHeader } from "@/components/ui/industrial/PageHeader";
 import { TokenPreview } from "./components/TokenPreview";
 import { StatsPanel } from "./components/StatsPanel";
 import { SsoErrorAlert } from "./components/SsoErrorAlert";
+import { StorageProviderBadge } from "@/components/dashboard/storage-provider-badge";
 import { getAppLauncherTranslations } from "./components/translations";
 import type { TenantId } from "@/lib/schemas/common";
 import type { Application } from "@/lib/schemas/auth";
@@ -101,6 +102,8 @@ export default async function DashboardPage({
           translations={getAppLauncherTranslations(locale)}
         />
       )}
+
+      <StorageProviderBadge />
 
       {/* 🗝️ Identity Token Preview */}
       <TokenPreview 

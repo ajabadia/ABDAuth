@@ -5,7 +5,7 @@
  * @classification Business Service
  * @complexity Medium
  * @fingerprint exports:1,imports:6,sig:cwvs2s
- * @lastUpdated 2026-06-24T10:28:33.284Z
+ * @lastUpdated 2026-06-25T10:15:54.669Z
  */
 
 import { NextResponse } from 'next/server';

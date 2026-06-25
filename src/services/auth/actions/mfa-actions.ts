@@ -1,11 +1,11 @@
 /**
- * @purpose Gestiona acciones de autenticación multifactor, incluyendo resetear MFA para usuarios y sincronizar el cumplimiento del MFA.
+ * @purpose Gestiona acciones de autenticación multifactor, incluyendo resetear MFA para usuarios y sincronizar el cumplimiento de MFA.
  * @purpose_en Manages Multi-Factor Authentication actions, including resetting MFA for users and synchronizing MFA enforcement.
  * @refactorable true (contains multiple distinct functions)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:3,imports:6,sig:4qn3mh
- * @lastUpdated 2026-06-24T10:29:36.401Z
+ * @fingerprint exports:3,imports:6,sig:1v9l2ms
+ * @lastUpdated 2026-06-25T10:17:29.941Z
  */
 
 "use server";

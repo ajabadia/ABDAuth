@@ -4,8 +4,8 @@
  * @refactorable false
  * @classification Helper Utility
  * @complexity Low
- * @fingerprint exports:2,imports:1,sig:16kv1vj
- * @lastUpdated 2026-06-21T14:25:46.814Z
+ * @fingerprint exports:2,imports:1,sig:1nb5g2d
+ * @lastUpdated 2026-06-25T10:18:16.385Z
  */
 
 import { vi } from 'vitest';

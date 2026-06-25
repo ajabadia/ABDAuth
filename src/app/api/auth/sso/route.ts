@@ -1,11 +1,11 @@
 /**
- * @purpose Gestiona el proceso de handshake de Single Sign-On, validando la autenticación del usuario y redirigiendo a la aplicación adecuada.
+ * @purpose Gestiona el proceso de handshake de Single Sign-On (SSO), validando la autenticación del usuario y redirigiendo a la aplicación correspondiente.
  * @purpose_en Handles the Single Sign-On (SSO) handshake process, verifying user authentication and redirecting to the appropriate application.
  * @refactorable true (contains too many state variables and UI parts)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:8,sig:thl7kq
- * @lastUpdated 2026-06-24T10:28:46.955Z
+ * @fingerprint exports:1,imports:8,sig:c6l0s5
+ * @lastUpdated 2026-06-25T10:16:06.864Z
  */
 
 import { NextResponse } from 'next/server';

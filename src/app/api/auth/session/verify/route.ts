@@ -1,11 +1,11 @@
 /**
- * @purpose Valida si la identidad federada del usuario está activa y saludable en vivo, apoyando SLO por canal de retroalimentación mediante autenticación con token de bearer.
+ * @purpose Valida si la identidad federada del usuario está activa y saludable en vivo, apoyando SLO por canal de retroalimentación mediante autenticación con token de portador.
  * @purpose_en Validates if a user's federated identity is active and healthy in vivo, supporting back-channel SLO via bearer token authentication.
  * @refactorable true (contains business logic and async operations)
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:1,imports:6,sig:1ko6py6
- * @lastUpdated 2026-06-24T10:28:40.341Z
+ * @fingerprint exports:1,imports:6,sig:xgehsp
+ * @lastUpdated 2026-06-25T10:16:00.966Z
  */
 
 import { NextResponse } from "next/server";
