@@ -9,7 +9,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { logger } from '@ajabadia/satellite-sdk';
+import { logger } from '@ajabadia/satellite-sdk/logger';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { inviteService } from '@/lib/services/inviteService';
 import { randomBytes } from 'crypto';

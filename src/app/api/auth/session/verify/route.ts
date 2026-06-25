@@ -10,7 +10,7 @@
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { logger } from '@ajabadia/satellite-sdk';
+import { logger } from '@ajabadia/satellite-sdk/logger';;
 import { userRepository } from "@/lib/repositories/UserRepository";
 import { applicationRepository } from "@/lib/repositories/ApplicationRepository";
 import { SessionService } from "@/services/auth/SessionService";

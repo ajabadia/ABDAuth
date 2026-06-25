@@ -15,7 +15,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
-import { configureLogger } from '@ajabadia/satellite-sdk';
+import { configureLogger } from '@ajabadia/satellite-sdk/logger';;
 
 configureLogger({
   endpoint: process.env.LOGS_SERVICE_URL || 'http://localhost:5003/api/logs',

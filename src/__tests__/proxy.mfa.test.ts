@@ -14,12 +14,27 @@ vi.mock('next-intl/middleware', () => ({
   default: vi.fn(() => vi.fn(() => ({ status: 200, intl: true }))),
 }));
 
-vi.mock('next/server', () => ({
-  NextResponse: {
-    redirect: vi.fn((url) => ({ status: 307, headers: { Location: url.toString() }, redirectUrl: url.toString() })),
-    next: vi.fn(() => ({ status: 200, next: true })),
-  },
-}));
+vi.mock('next/server', () => {
+  const mockCookies = {
+    set: vi.fn(),
+    get: vi.fn(),
+  };
+  return {
+    NextResponse: {
+      redirect: vi.fn((url) => ({
+        status: 307,
+        headers: { Location: url.toString() },
+        redirectUrl: url.toString(),
+        cookies: mockCookies,
+      })),
+      next: vi.fn(() => ({
+        status: 200,
+        next: true,
+        cookies: mockCookies,
+      })),
+    },
+  };
+});
 
 // ── Shared helpers ───────────────────────────────────────
 import { makeReq, mockIntlMiddlewareResult } from './proxy-test-setup';

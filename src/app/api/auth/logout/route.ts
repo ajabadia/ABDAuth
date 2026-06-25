@@ -10,7 +10,7 @@
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { logger } from '@ajabadia/satellite-sdk';
+import { logger } from '@ajabadia/satellite-sdk/logger';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
 import { wipeCookies, setNoCacheHeaders, COOKIES_TO_WIPE } from './cookie-wiper';
 import { generateSloPage } from './slo-html';

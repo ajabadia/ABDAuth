@@ -10,7 +10,7 @@
 
 "use server";
 
-import { logger } from '@ajabadia/satellite-sdk';
+import { logger } from '@ajabadia/satellite-sdk/logger';;
 import { getServerSession } from '@/lib/get-session';
 import { userRepository } from "@/lib/repositories/UserRepository";
 import { SessionService } from "../SessionService";

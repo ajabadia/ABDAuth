@@ -8,7 +8,7 @@
  * @lastUpdated 2026-06-23T22:43:26.763Z
  */
 
-import { ResendEmailService } from '@ajabadia/satellite-sdk';
+import { ResendEmailService } from '@ajabadia/satellite-sdk/utils';;
 import { AppError } from '../errors';
 
 /**

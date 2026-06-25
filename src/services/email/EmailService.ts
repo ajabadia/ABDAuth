@@ -8,7 +8,7 @@
  * @lastUpdated 2026-06-23T23:00:50.764Z
  */
 
-import { ResendEmailService } from '@ajabadia/satellite-sdk';
+import { ResendEmailService } from '@ajabadia/satellite-sdk/utils';;
 import {
   getPasswordResetHtml,
   getVerificationEmailHtml,

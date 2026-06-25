@@ -9,7 +9,8 @@
  */
 
 import { NextResponse } from 'next/server';
-import { connectDB, logger } from '@ajabadia/satellite-sdk';
+import { connectDB } from '@ajabadia/satellite-sdk/db';
+import { logger } from '@ajabadia/satellite-sdk/logger';
 import { identityProviderRepository } from '@/lib/repositories/IdentityProviderRepository';
 
 export const dynamic = 'force-dynamic';

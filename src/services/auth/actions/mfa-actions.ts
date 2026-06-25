@@ -11,7 +11,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { logger } from '@ajabadia/satellite-sdk';
+import { logger } from '@ajabadia/satellite-sdk/logger';;
 import { getServerSession } from "@/lib/get-session";
 import { userRepository } from "@/lib/repositories/UserRepository";
 import type { IndustrialUser } from "@/types/auth";

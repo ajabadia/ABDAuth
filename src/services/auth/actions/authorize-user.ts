@@ -9,7 +9,7 @@
  */
 
 import * as argon2 from 'argon2';
-import { logger } from '@ajabadia/satellite-sdk';
+import { logger } from '@ajabadia/satellite-sdk/logger';;
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { auditRepository } from '@/lib/repositories/AuditRepository';
 import { SessionService } from '@/services/auth/SessionService';

@@ -10,7 +10,7 @@
 
 import { tenantRepository } from '@/lib/repositories/TenantRepository';
 import { NextResponse } from 'next/server';
-import { logger } from '@ajabadia/satellite-sdk';
+import { logger } from '@ajabadia/satellite-sdk/logger';;
 import type { TenantId } from '@/lib/schemas/common';
 
 /**

@@ -10,7 +10,7 @@
 
 import { Suspense } from 'react';
 import { getTranslations } from 'next-intl/server';
-import { connectDB } from '@ajabadia/satellite-sdk';
+import { connectDB } from '@ajabadia/satellite-sdk/db';
 import { identityProviderRepository } from '@/lib/repositories/IdentityProviderRepository';
 import { FederatedProviderList } from './components/FederatedProviderList';
 import { Shield, Loader2, ArrowLeft } from 'lucide-react';

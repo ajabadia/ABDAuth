@@ -9,7 +9,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { logger } from '@ajabadia/satellite-sdk';
+import { logger } from '@ajabadia/satellite-sdk/logger';;
 import { getServerSession } from '@/lib/get-session';
 import { SsoService } from '@/services/auth/SsoService';
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';

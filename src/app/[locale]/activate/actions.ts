@@ -10,7 +10,7 @@
 
 'use server'
 
-import { logger } from '@ajabadia/satellite-sdk';
+import { logger } from '@ajabadia/satellite-sdk/logger';;
 import { userRepository } from "@/lib/repositories/UserRepository";
 import * as argon2 from "argon2";
 

@@ -13,7 +13,7 @@
 import { auth } from "@/lib/auth";
 import { APIError } from "better-auth";
 import { userRepository } from "@/lib/repositories/UserRepository";
-import { logger } from '@ajabadia/satellite-sdk';
+import { logger } from '@ajabadia/satellite-sdk/logger';;
 
 export async function loginAction(formData: FormData) {
   const email = formData.get('email') as string;

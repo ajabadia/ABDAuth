@@ -8,7 +8,7 @@
  * @lastUpdated 2026-06-23T22:41:25.256Z
  */
 
-import { logger, configureLogger } from '@ajabadia/satellite-sdk';
+import { logger, configureLogger } from '@ajabadia/satellite-sdk/logger';
 
 export interface LogPayload {
   tenantId: string;

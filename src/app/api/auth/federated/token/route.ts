@@ -9,7 +9,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { logger } from '@ajabadia/satellite-sdk';
+import { logger } from '@ajabadia/satellite-sdk/logger';;
 import { applicationRepository } from '@/lib/repositories/ApplicationRepository';
 import { federatedCodeRepository, type FederatedCode } from '@/lib/repositories/FederatedCodeRepository';
 import { type UserTenantMembership } from '@/lib/schemas/user';
