@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
+import { verifyMfaAction, verifyBackupCodeAction } from '@/app/[locale]/login/actions';
 
 /**
  * 🔐 MFA Verification Form
@@ -41,18 +42,16 @@ export function MfaVerificationForm() {
     setError(null);
 
     try {
+      let result;
       if (usingBackupCode) {
-        const { error: verifyError } = await authClient.twoFactor.verifyBackupCode({ code: token });
-        if (verifyError) {
-          setError(verifyError.message || t('error_invalid'));
-          return;
-        }
+        result = await verifyBackupCodeAction(token);
       } else {
-        const { error: verifyError } = await authClient.twoFactor.verifyTotp({ code: token });
-        if (verifyError) {
-          setError(verifyError.message || t('error_invalid'));
-          return;
-        }
+        result = await verifyMfaAction(token);
+      }
+
+      if (result?.error) {
+        setError(t('error_invalid'));
+        return;
       }
 
       // ✅ Successful verification — redirect to dashboard

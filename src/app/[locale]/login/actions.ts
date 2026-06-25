@@ -13,7 +13,10 @@
 import { auth } from "@/lib/auth";
 import { APIError } from "better-auth";
 import { userRepository } from "@/lib/repositories/UserRepository";
-import { logger } from '@ajabadia/satellite-sdk/logger';;
+import { logger } from '@ajabadia/satellite-sdk/logger';
+import { cookies, headers } from 'next/headers';
+import { SsoService } from '@/services/auth/SsoService';
+import type { SsoPayload } from '@/services/auth/types/sso-payload';
 
 export async function loginAction(formData: FormData) {
   const email = formData.get('email') as string;
@@ -46,8 +49,7 @@ export async function loginAction(formData: FormData) {
     }
 
     // 🔐 Authenticate via better-auth
-    // nextCookies() plugin handles session cookie automatically
-    await auth.api.signInEmail({
+    const signInResult = await auth.api.signInEmail({
       body: {
         email,
         password,
@@ -58,7 +60,30 @@ export async function loginAction(formData: FormData) {
       console.log("[LOGIN_ACTION_SUCCESS] Signed in successfully.");
     }
 
-    // Success — cookies are set by nextCookies plugin
+    // 🛡️ Generate abd_session JWT for satellite middleware
+    const user = signInResult.user;
+    const ssoPayload: SsoPayload = {
+      sub: user.id,
+      email: user.email,
+      name: user.name || '',
+      surname: (user as Record<string, unknown>).surname as string || '',
+      role: (user as Record<string, unknown>).role as string || 'USER',
+      tenantId: (user as Record<string, unknown>).tenantId as string || 'GLOBAL',
+      permissions: (user as Record<string, unknown>).permissions as string[] || [],
+      dbPrefix: (user as Record<string, unknown>).dbPrefix as string || '',
+      isolationStrategy: (user as Record<string, unknown>).isolationStrategy as string || 'COLLECTION_PREFIX',
+      allowedApps: (user as Record<string, unknown>).allowedApps as string[] || [],
+    };
+    const abdToken = await SsoService.generateToken(ssoPayload);
+    const cookieStore = await cookies();
+    cookieStore.set('abd_session', abdToken, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      maxAge: 60 * 60 * 2,
+    });
+
     return {};
   } catch (error) {
     const loginError = error instanceof Error ? error.message : 'Unknown error';
@@ -118,4 +143,89 @@ export async function loginAction(formData: FormData) {
 
     return { error: 'Something went wrong' };
   }
+}
+
+async function setAbdSessionCookie(user: { id: string; email: string; name?: string | null }) {
+  const ssoPayload: SsoPayload = {
+    sub: user.id,
+    email: user.email,
+    name: user.name || '',
+    surname: (user as Record<string, unknown>).surname as string || '',
+    role: (user as Record<string, unknown>).role as string || 'USER',
+    tenantId: (user as Record<string, unknown>).tenantId as string || 'GLOBAL',
+    permissions: (user as Record<string, unknown>).permissions as string[] || [],
+    dbPrefix: (user as Record<string, unknown>).dbPrefix as string || '',
+    isolationStrategy: (user as Record<string, unknown>).isolationStrategy as string || 'COLLECTION_PREFIX',
+    allowedApps: (user as Record<string, unknown>).allowedApps as string[] || [],
+  };
+  const abdToken = await SsoService.generateToken(ssoPayload);
+  const cookieStore = await cookies();
+  cookieStore.set('abd_session', abdToken, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+    maxAge: 60 * 60 * 2,
+  });
+}
+
+export async function verifyMfaAction(code: string) {
+  let user: { id: string; email: string; name?: string | null };
+
+  try {
+    const result = await auth.api.verifyTOTP({
+      body: { code },
+      headers: await headers(),
+    });
+    user = result.user;
+  } catch (error) {
+    if (error instanceof APIError) {
+      return { error: 'INVALID_CODE' };
+    }
+    if (error instanceof Error && (error.message === 'NEXT_REDIRECT' || (error as { digest?: string }).digest?.includes('NEXT_REDIRECT'))) {
+      throw error;
+    }
+    console.error("[VERIFY_MFA_ERROR]", error);
+    return { error: 'VERIFICATION_FAILED' };
+  }
+
+  try {
+    await setAbdSessionCookie(user);
+  } catch (cookieError) {
+    console.error("[VERIFY_MFA_COOKIE_ERROR]", cookieError);
+    return { error: 'SESSION_CREATION_FAILED' };
+  }
+
+  return { success: true };
+}
+
+export async function verifyBackupCodeAction(code: string) {
+  let user: { id: string; email: string; name?: string | null };
+
+  try {
+    const result = await auth.api.verifyBackupCode({
+      body: { code },
+      headers: await headers(),
+    });
+    if (!result.user) return { error: 'INVALID_CODE' };
+    user = result.user;
+  } catch (error) {
+    if (error instanceof APIError) {
+      return { error: 'INVALID_CODE' };
+    }
+    if (error instanceof Error && (error.message === 'NEXT_REDIRECT' || (error as { digest?: string }).digest?.includes('NEXT_REDIRECT'))) {
+      throw error;
+    }
+    console.error("[VERIFY_BACKUP_CODE_ERROR]", error);
+    return { error: 'VERIFICATION_FAILED' };
+  }
+
+  try {
+    await setAbdSessionCookie(user);
+  } catch (cookieError) {
+    console.error("[VERIFY_BACKUP_CODE_COOKIE_ERROR]", cookieError);
+    return { error: 'SESSION_CREATION_FAILED' };
+  }
+
+  return { success: true };
 }
