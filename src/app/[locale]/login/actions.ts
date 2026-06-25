@@ -5,7 +5,7 @@
  * @classification Business Service
  * @complexity Medium
  * @fingerprint exports:1,imports:4,sig:1lbclbf
- * @lastUpdated 2026-06-25T10:16:46.012Z
+ * @lastUpdated 2026-06-25T15:00:00.000Z
  */
 
 'use server'
@@ -17,6 +17,19 @@ import { logger } from '@ajabadia/satellite-sdk/logger';
 import { cookies, headers } from 'next/headers';
 import { SsoService } from '@/services/auth/SsoService';
 import type { SsoPayload } from '@/services/auth/types/sso-payload';
+
+interface SessionUser {
+  id: string;
+  email: string;
+  name?: string | null;
+  surname?: string | null;
+  role?: string | null;
+  tenantId?: string | null;
+  permissions?: string[] | null;
+  dbPrefix?: string | null;
+  isolationStrategy?: string | null;
+  allowedApps?: string[] | null;
+}
 
 export async function loginAction(formData: FormData) {
   const email = formData.get('email') as string;
@@ -60,29 +73,8 @@ export async function loginAction(formData: FormData) {
       console.log("[LOGIN_ACTION_SUCCESS] Signed in successfully.");
     }
 
-    // 🛡️ Generate abd_session JWT for satellite middleware
-    const user = signInResult.user;
-    const ssoPayload: SsoPayload = {
-      sub: user.id,
-      email: user.email,
-      name: user.name || '',
-      surname: (user as Record<string, unknown>).surname as string || '',
-      role: (user as Record<string, unknown>).role as string || 'USER',
-      tenantId: (user as Record<string, unknown>).tenantId as string || 'GLOBAL',
-      permissions: (user as Record<string, unknown>).permissions as string[] || [],
-      dbPrefix: (user as Record<string, unknown>).dbPrefix as string || '',
-      isolationStrategy: (user as Record<string, unknown>).isolationStrategy as string || 'COLLECTION_PREFIX',
-      allowedApps: (user as Record<string, unknown>).allowedApps as string[] || [],
-    };
-    const abdToken = await SsoService.generateToken(ssoPayload);
-    const cookieStore = await cookies();
-    cookieStore.set('abd_session', abdToken, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
-      maxAge: 60 * 60 * 2,
-    });
+    // 🛡️ Generate abd_session JWT for satellite middleware using helper
+    await setAbdSessionCookie(signInResult.user);
 
     return {};
   } catch (error) {
@@ -145,18 +137,18 @@ export async function loginAction(formData: FormData) {
   }
 }
 
-async function setAbdSessionCookie(user: { id: string; email: string; name?: string | null }) {
+async function setAbdSessionCookie(user: SessionUser) {
   const ssoPayload: SsoPayload = {
     sub: user.id,
     email: user.email,
     name: user.name || '',
-    surname: (user as Record<string, unknown>).surname as string || '',
-    role: (user as Record<string, unknown>).role as string || 'USER',
-    tenantId: (user as Record<string, unknown>).tenantId as string || 'GLOBAL',
-    permissions: (user as Record<string, unknown>).permissions as string[] || [],
-    dbPrefix: (user as Record<string, unknown>).dbPrefix as string || '',
-    isolationStrategy: (user as Record<string, unknown>).isolationStrategy as string || 'COLLECTION_PREFIX',
-    allowedApps: (user as Record<string, unknown>).allowedApps as string[] || [],
+    surname: user.surname || '',
+    role: user.role || 'USER',
+    tenantId: user.tenantId || 'GLOBAL',
+    permissions: user.permissions || [],
+    dbPrefix: user.dbPrefix || '',
+    isolationStrategy: user.isolationStrategy || 'COLLECTION_PREFIX',
+    allowedApps: user.allowedApps || [],
   };
   const abdToken = await SsoService.generateToken(ssoPayload);
   const cookieStore = await cookies();
@@ -170,7 +162,7 @@ async function setAbdSessionCookie(user: { id: string; email: string; name?: str
 }
 
 export async function verifyMfaAction(code: string) {
-  let user: { id: string; email: string; name?: string | null };
+  let user: SessionUser;
 
   try {
     const result = await auth.api.verifyTOTP({
@@ -200,7 +192,7 @@ export async function verifyMfaAction(code: string) {
 }
 
 export async function verifyBackupCodeAction(code: string) {
-  let user: { id: string; email: string; name?: string | null };
+  let user: SessionUser;
 
   try {
     const result = await auth.api.verifyBackupCode({

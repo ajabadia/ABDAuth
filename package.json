@@ -13,8 +13,8 @@
     "full-audit": "powershell -ExecutionPolicy Bypass -File scripts/abd-audit.ps1"
   },
   "dependencies": {
-    "@ajabadia/i18n": "^1.0.0",
     "@ajabadia/ecosystem-widgets": "^1.0.37",
+    "@ajabadia/i18n": "^1.0.0",
     "@ajabadia/satellite-sdk": "^1.0.80",
     "@ajabadia/styles": "latest",
     "@better-auth/mongo-adapter": "1.6.11",
@@ -31,6 +31,7 @@
     "fast-xml-parser": "^5.8.0",
     "framer-motion": "^12.38.0",
     "jose": "6.2.3",
+    "jszip": "^3.10.1",
     "lucide-react": "1.17.0",
     "mongodb": "7.2.0",
     "next": "16.2.6",
