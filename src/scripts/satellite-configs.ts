@@ -1,11 +1,11 @@
 /**
- * @purpose Proporciona y exporta una lista de objetos de configuración para diversas aplicaciones de satélites dentro de la aplicación ABDAuth.
- * @purpose_en Defines and exports an array of configuration objects for various satellite applications within the ABDAuth application.
+ * @purpose Gestiona y exporta objetos de configuración para diversas aplicaciones de satélites dentro de la aplicación ABDAuth.
+ * @purpose_en Manages and exports configuration objects for various satellite applications within the ABDAuth application.
  * @refactorable false
  * @classification Data/Constants
  * @complexity Low
- * @fingerprint exports:2,imports:0,sig:10mgm7z
- * @lastUpdated 2026-06-26T12:43:00.000Z
+ * @fingerprint exports:2,imports:0,sig:1ribzz
+ * @lastUpdated 2026-06-26T15:32:25.366Z
  */
 
 /* eslint-disable no-console */

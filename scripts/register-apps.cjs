@@ -1,8 +1,8 @@
 const { MongoClient } = require('mongodb');
 const crypto = require('crypto');
 
-const uri = "mongodb+srv://ajabadia03_db_user:Ajabafan1974@cluster0.xarmew0.mongodb.net/ABDElevators-Auth";
-const client = new MongoClient(uri);
+const uri = "mongodb://ajabadia03_db_user:Ajabafan1974@ac-qse2cs0-shard-00-00.xarmew0.mongodb.net:27017,ac-qse2cs0-shard-00-01.xarmew0.mongodb.net:27017,ac-qse2cs0-shard-00-02.xarmew0.mongodb.net:27017/ABDElevators-Auth?replicaSet=atlas-p1mu7m-shard-0&ssl=true&authSource=admin&retryWrites=true&w=majority";
+const client = new MongoClient(uri, { serverSelectionTimeoutMS: 15000 });
 
 const apps = [
   {
