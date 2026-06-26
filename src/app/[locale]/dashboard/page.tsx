@@ -1,11 +1,11 @@
 /**
- * @purpose Renderiza la página de dashboard para los usuarios, mostrando aplicaciones permitidas, promoción de autenticación multifactorial, previsualización del token y panel de estadísticas.
+ * @purpose Renderiza la página de dashboard para los usuarios, mostrando aplicaciones permitidas, promoción de MFA, previsualización de tokens y panel de estadísticas.
  * @purpose_en Renders the dashboard page for users, displaying allowed applications, MFA promotion, token preview, and stats panel.
  * @refactorable true (contains too many state variables and UI parts)
  * @classification UI Component
  * @complexity Medium
- * @fingerprint exports:1,imports:18,sig:ge8ezo
- * @lastUpdated 2026-06-21T10:22:03.681Z
+ * @fingerprint exports:1,imports:19,sig:1wq9o98
+ * @lastUpdated 2026-06-26T09:59:14.067Z
  */
 
 import { getServerSession } from "@/lib/get-session";
