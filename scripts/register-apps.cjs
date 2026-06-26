@@ -96,7 +96,11 @@ const apps = [
     clientSecret: "dev-landing-client-secret-" + crypto.randomBytes(16).toString('hex'),
     redirectUris: [
       "http://localhost:3000/api/auth/federated/callback",
-      "https://abdia.es/api/auth/federated/callback"
+      "http://localhost:3000/api/abd-auth/federated/callback",
+      "http://localhost:5000/api/abd-auth/federated/callback",
+      "https://abdia.es/api/auth/federated/callback",
+      "https://abdia.es/api/abd-auth/federated/callback",
+      "https://www.abdia.es/api/abd-auth/federated/callback"
     ],
     slug: "landing",
     active: true,
