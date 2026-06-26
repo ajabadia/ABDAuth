@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@ajabadia/ecosystem-widgets": "^1.0.37",
-    "@ajabadia/i18n": "^1.0.0",
+    "@ajabadia/i18n": "workspace:*",
     "@ajabadia/satellite-sdk": "^1.0.80",
     "@ajabadia/styles": "latest",
     "@better-auth/mongo-adapter": "1.6.11",
