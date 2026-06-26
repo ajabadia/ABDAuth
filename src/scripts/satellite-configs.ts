@@ -5,7 +5,7 @@
  * @classification Data/Constants
  * @complexity Low
  * @fingerprint exports:2,imports:0,sig:10mgm7z
- * @lastUpdated 2026-06-21T12:09:16.774Z
+ * @lastUpdated 2026-06-26T12:43:00.000Z
  */
 
 /* eslint-disable no-console */
@@ -27,6 +27,12 @@ export const SATELLITES: SatelliteAppConfig[] = [
     clientSecret: 'abdquiz-industrial-client-secret',
     slug: 'quiz',
     redirectUris: [
+      'https://abdia.es/quiz/api/abd-auth/federated/callback',
+      'https://abdia.es/quiz/api/auth/federated/callback',
+      'https://abdia.es/quiz',
+      'https://quiz.abdia.es/api/abd-auth/federated/callback',
+      'https://quiz.abdia.es/api/auth/federated/callback',
+      'https://quiz.abdia.es',
       'http://localhost:5200/api/auth/federated/callback',
       'http://localhost:5200',
       'http://localhost:5020/api/auth/federated/callback',
@@ -43,6 +49,12 @@ export const SATELLITES: SatelliteAppConfig[] = [
     clientSecret: 'dev-gobernanza-client-secret',
     slug: 'gobernanza',
     redirectUris: [
+      'https://abdia.es/gobernanza/api/abd-auth/federated/callback',
+      'https://abdia.es/gobernanza/api/auth/federated/callback',
+      'https://abdia.es/gobernanza',
+      'https://tenantgobernance.abdia.es/api/abd-auth/federated/callback',
+      'https://tenantgobernance.abdia.es/api/auth/federated/callback',
+      'https://tenantgobernance.abdia.es',
       'http://localhost:5002/api/auth/federated/callback',
       'http://localhost:5002',
       'https://abd-tenant-gobernance.vercel.app/api/auth/federated/callback',
@@ -56,6 +68,12 @@ export const SATELLITES: SatelliteAppConfig[] = [
     clientSecret: 'dev-logs-client-secret',
     slug: 'logs',
     redirectUris: [
+      'https://abdia.es/logs/api/abd-auth/federated/callback',
+      'https://abdia.es/logs/api/auth/federated/callback',
+      'https://abdia.es/logs',
+      'https://logs.abdia.es/api/abd-auth/federated/callback',
+      'https://logs.abdia.es/api/auth/federated/callback',
+      'https://logs.abdia.es',
       'http://localhost:5003/api/auth/federated/callback',
       'http://localhost:5003',
       'https://abd-logs.vercel.app/api/auth/federated/callback',
@@ -69,6 +87,12 @@ export const SATELLITES: SatelliteAppConfig[] = [
     clientSecret: 'dev-analytics-client-secret',
     slug: 'analytics',
     redirectUris: [
+      'https://abdia.es/analytics/api/abd-auth/federated/callback',
+      'https://abdia.es/analytics/api/auth/federated/callback',
+      'https://abdia.es/analytics',
+      'https://analytics.abdia.es/api/abd-auth/federated/callback',
+      'https://analytics.abdia.es/api/auth/federated/callback',
+      'https://analytics.abdia.es',
       'http://localhost:5004/api/auth/federated/callback',
       'http://localhost:5004',
       'https://abd-analytics.vercel.app/api/auth/federated/callback',
@@ -82,18 +106,18 @@ export const SATELLITES: SatelliteAppConfig[] = [
     clientSecret: 'dev-landing-client-secret',
     slug: 'landing',
     redirectUris: [
-      'http://localhost:5000/api/auth/federated/callback',
-      'http://localhost:5000/api/abd-auth/federated/callback',
-      'http://localhost:5000',
-      'https://abd-landing.vercel.app/api/auth/federated/callback',
-      'https://abd-landing.vercel.app/api/abd-auth/federated/callback',
-      'https://abd-landing.vercel.app',
-      'https://abdia.es/api/auth/federated/callback',
       'https://abdia.es/api/abd-auth/federated/callback',
+      'https://abdia.es/api/auth/federated/callback',
       'https://abdia.es',
-      'https://www.abdia.es/api/auth/federated/callback',
       'https://www.abdia.es/api/abd-auth/federated/callback',
+      'https://www.abdia.es/api/auth/federated/callback',
       'https://www.abdia.es',
+      'https://abd-landing.vercel.app/api/abd-auth/federated/callback',
+      'https://abd-landing.vercel.app/api/auth/federated/callback',
+      'https://abd-landing.vercel.app',
+      'http://localhost:5000/api/abd-auth/federated/callback',
+      'http://localhost:5000/api/auth/federated/callback',
+      'http://localhost:5000',
     ],
   },
   {
@@ -103,11 +127,15 @@ export const SATELLITES: SatelliteAppConfig[] = [
     clientSecret: 'dev-files-client-secret',
     slug: 'files',
     redirectUris: [
+      'https://abdia.es/files/api/abd-auth/federated/callback',
+      'https://abdia.es/files/api/auth/federated/callback',
+      'https://abdia.es/files',
+      'https://files.abdia.es/api/abd-auth/federated/callback',
+      'https://files.abdia.es/api/auth/federated/callback',
+      'https://files.abdia.es',
       'http://localhost:5005/api/auth/federated/callback',
       'http://localhost:5005',
       'https://abd-files.vercel.app/api/auth/federated/callback',
-      'https://files.abdia.es/api/auth/federated/callback',
-      'https://files.abdia.es',
     ],
   },
 ];
