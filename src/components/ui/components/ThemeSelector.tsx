@@ -1,16 +1,6 @@
-/**
- * @purpose Renderiza un componente selector de tema que permite a los usuarios cambiar entre temas de luz, oscuro y sistema.
- * @purpose_en Renders a theme selector component that allows users to switch between light, dark, and system themes.
- * @refactorable false
- * @classification UI Component
- * @complexity Low
- * @fingerprint exports:1,imports:3,sig:5m11qd
- * @lastUpdated 2026-06-21T12:05:14.630Z
- */
-
 import React from "react";
 import { Sun, Moon, Monitor, Check } from "lucide-react";
-import { cn } from "@/lib/utils/tailwind";
+import { Button } from "@ajabadia/ecosystem-widgets";
 
 interface ThemeSelectorProps {
   theme: string | undefined;
@@ -31,21 +21,18 @@ export function ThemeSelector({ theme, onSelect, t }: ThemeSelectorProps) {
           { id: 'dark', icon: Moon, label: t('theme_dark') },
           { id: 'system', icon: Monitor, label: t('theme_system') }
         ].map((item) => (
-          <button
+          <Button
             key={item.id}
-            aria-label={`${t('theme')}: ${item.label}`}
+            variant={theme === item.id ? "default" : "outline"}
+            size="xs"
             onClick={() => onSelect(item.id)}
-            className={cn(
-              "flex items-center justify-between px-3 py-2 rounded-none text-[10px] font-bold uppercase transition-all border",
-              theme === item.id 
-                ? "bg-primary/10 border-primary/30 text-primary" 
-                : "bg-card border-border hover:bg-muted text-muted-foreground"
-            )}
+            aria-label={`${t('theme')}: ${item.label}`}
+            className="justify-between w-full"
           >
             <item.icon size={12} />
             <span className="flex-1 text-left">{item.label}</span>
             {theme === item.id && <Check size={10} />}
-          </button>
+          </Button>
         ))}
       </div>
     </div>

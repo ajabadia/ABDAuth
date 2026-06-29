@@ -16,7 +16,7 @@
     "@ajabadia/ecosystem-widgets": "workspace:^",
     "@ajabadia/i18n": "workspace:^",
     "@ajabadia/satellite-sdk": "^1.0.80",
-    "@ajabadia/styles": "latest",
+    "@ajabadia/styles": "workspace:^",
     "@better-auth/mongo-adapter": "1.6.11",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.4",

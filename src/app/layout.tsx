@@ -10,10 +10,10 @@
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "@ajabadia/styles/dist/styles/industrial-core.css";
 import "./globals.css";
 import { getLocale } from 'next-intl/server';
-import { configureLogger } from '@ajabadia/satellite-sdk/logger';
+import { getIndustrialSession, BrandingStyles, configureLogger } from "@ajabadia/satellite-sdk";
+import { SessionProvider } from "@ajabadia/satellite-sdk/client";
 import { ThemeProvider } from "@ajabadia/ecosystem-widgets";
 
 configureLogger({
@@ -44,9 +44,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const locale = await getLocale();
+  const session = await getIndustrialSession();
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        <BrandingStyles />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased navbar-top-layout selection:bg-primary/30`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
@@ -54,7 +58,9 @@ export default async function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          {children}
+          <SessionProvider initialSession={session}>
+            {children}
+          </SessionProvider>
         </ThemeProvider>
       </body>
     </html>

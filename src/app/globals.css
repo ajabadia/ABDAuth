@@ -1,3 +1,6 @@
 @import "tailwindcss";
-@import "@ajabadia/styles/dist/styles/industrial-core.css";
+@import "tw-animate-css";
+@import "@ajabadia/styles/dist/styles/base.css";
+
+@source "npm:@ajabadia/ecosystem-widgets";
 
