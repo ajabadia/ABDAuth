@@ -1,3 +1,13 @@
+/**
+ * @purpose Rendiza la página de aterrizaje para la aplicación ABDAuth, manejando la autenticación del usuario y mostrando las capacidades del sistema.
+ * @purpose_en Renders the landing page for the ABDAuth application, handling user authentication and displaying system capabilities.
+ * @refactorable true (contains too many state variables and UI parts)
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:6,sig:1su6tmi
+ * @lastUpdated 2026-06-30T10:58:24.349Z
+ */
+
 import { getServerSession } from '@/lib/get-session';
 import { getTranslations } from 'next-intl/server';
 import { Zap, Shield, Lock } from 'lucide-react';

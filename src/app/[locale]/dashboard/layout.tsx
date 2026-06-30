@@ -13,7 +13,7 @@ import { redirect } from "@/i18n/routing";
 import { getTranslations } from 'next-intl/server';
 import { tenantRepository } from "@/lib/repositories/TenantRepository";
 import type { TenantId } from '@/lib/schemas/common';
-import { SidebarNavigation } from "@/components/SidebarNavigation";
+import { SidebarNavigation } from "@/components/layout/SidebarNavigation";
 import { SystemSettings } from "@/components/ui/SystemSettings";
 import { TenantSelector } from "@/components/ui/TenantSelector";
 import { AuthCommandPalette } from "@/components/AuthCommandPalette";

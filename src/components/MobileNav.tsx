@@ -8,4 +8,4 @@
  * @lastUpdated 2026-06-21T12:04:46.020Z
  */
 
-export { SidebarNavigation as MobileNav } from "./SidebarNavigation";
+export { SidebarNavigation as MobileNav } from "./layout/SidebarNavigation";

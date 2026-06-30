@@ -7,7 +7,7 @@
  * @classification UI Component
  * @complexity Medium
  * @fingerprint exports:1,imports:4,sig:1xwaras
- * @lastUpdated 2026-06-29T22:22:32.674Z
+ * @lastUpdated 2026-06-30T05:48:57.461Z
  */
 
 import { useTranslations, useLocale } from "next-intl";
