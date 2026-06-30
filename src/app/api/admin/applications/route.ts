@@ -1,11 +1,11 @@
 /**
- * @purpose Gestiona aplicaciones de satélite federadas mediante el manejo de solicitudes GET y POST para obtener y crear datos de aplicación.
+ * @purpose Gestiona aplicaciones satelitales federadas mediante manejo de solicitudes GET y POST para obtener y crear datos de aplicación.
  * @purpose_en Manages federated satellite applications by handling GET and POST requests to retrieve and create application data.
  * @refactorable false
  * @classification Business Service
  * @complexity Low
- * @fingerprint exports:3,imports:6,sig:l6j0yb
- * @lastUpdated 2026-06-24T10:27:42.113Z
+ * @fingerprint exports:3,imports:7,sig:1hjiz7a
+ * @lastUpdated 2026-06-30T14:20:20.090Z
  */
 
 import { NextResponse } from 'next/server';
@@ -13,6 +13,7 @@ import { applicationRepository } from '@/lib/repositories/ApplicationRepository'
 import { getServerSession } from '@/lib/get-session';
 import { ApplicationSchema } from '@/lib/schemas/auth';
 import { checkApiSecurity } from '@/lib/utils/api-security';
+import { assertAccess } from '@/lib/abac';
 import crypto from 'crypto';
 
 export const dynamic = 'force-dynamic';
@@ -27,6 +28,8 @@ export async function GET() {
   if (session?.user?.role !== 'SUPER_ADMIN') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  await assertAccess({ userId: session.user.id, tenantId: session.user.tenantId, resource: 'application', action: 'list' });
 
   try {
     const applications = await applicationRepository.list();
@@ -44,6 +47,8 @@ export async function POST(req: Request) {
   if (session?.user?.role !== 'SUPER_ADMIN') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  await assertAccess({ userId: session.user.id, tenantId: session.user.tenantId, resource: 'application', action: 'create' });
 
   try {
     const body = await req.json();

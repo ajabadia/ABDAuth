@@ -4,8 +4,8 @@
  * @refactorable false
  * @classification Business Service
  * @complexity Low
- * @fingerprint exports:3,imports:6,sig:qxb46v
- * @lastUpdated 2026-06-24T10:27:46.400Z
+ * @fingerprint exports:3,imports:7,sig:4ptl4q
+ * @lastUpdated 2026-06-30T14:20:21.300Z
  */
 
 import { NextResponse } from 'next/server';
@@ -13,6 +13,7 @@ import { applicationRepository } from '@/lib/repositories/ApplicationRepository'
 import { getServerSession } from '@/lib/get-session';
 import { ApplicationSchema } from '@/lib/schemas/auth';
 import { checkApiSecurity } from '@/lib/utils/api-security';
+import { assertAccess } from '@/lib/abac';
 import { ObjectId } from 'mongodb';
 
 export const dynamic = 'force-dynamic';
@@ -28,6 +29,8 @@ export async function PATCH(
   if (session?.user?.role !== 'SUPER_ADMIN') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  await assertAccess({ userId: session.user.id, tenantId: session.user.tenantId, resource: 'application', action: 'update' });
 
   try {
     const { id } = await params;
@@ -61,6 +64,8 @@ export async function DELETE(
   if (session?.user?.role !== 'SUPER_ADMIN') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  await assertAccess({ userId: session.user.id, tenantId: session.user.tenantId, resource: 'application', action: 'delete' });
 
   try {
     const { id } = await params;

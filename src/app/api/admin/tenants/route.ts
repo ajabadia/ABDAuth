@@ -1,11 +1,11 @@
 /**
- * @purpose Gestiona el manejo de la organización global, manejando solicitudes GET y POST para inquilinos, asegurando acceso autorizado y creando registros de auditoria.
+ * @purpose Gestiona el manejo de organización global, manejando solicitudes GET y POST para inquilinos, asegurando acceso autorizado y creando registros de auditoría.
  * @purpose_en Manages global organization management by handling GET and POST requests for tenants, ensuring authorized access and creating audit logs.
  * @refactorable false
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:3,imports:6,sig:156dswb
- * @lastUpdated 2026-06-24T10:27:55.188Z
+ * @fingerprint exports:3,imports:7,sig:z8s956
+ * @lastUpdated 2026-06-30T14:20:23.184Z
  */
 
 import { NextResponse } from 'next/server';
@@ -14,6 +14,7 @@ import { checkApiSecurity } from '@/lib/utils/api-security';
 import { auditRepository } from '@/lib/repositories/AuditRepository';
 import { TenantSchema, type Tenant } from '@/lib/schemas/auth';
 import { validateSuperAdminSession, validateAdminSession } from '@/lib/utils/api-auth';
+import { assertAccess } from '@/lib/abac';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,6 +26,8 @@ export async function GET() {
   const { authorized, user, response } = await validateAdminSession();
   if (!authorized) return response!;
 
+  await assertAccess({ userId: user!.id, tenantId: user!.tenantId, resource: 'tenant', action: 'list' });
+
   const tenants = await tenantRepository.listForCurrentSession(user!);
   return NextResponse.json(tenants);
 }
@@ -35,6 +38,8 @@ export async function POST(req: Request) {
 
   const { authorized, user, response } = await validateSuperAdminSession();
   if (!authorized) return response!;
+
+  await assertAccess({ userId: user!.id, tenantId: user!.tenantId, resource: 'tenant', action: 'create' });
 
   try {
     const body = await req.json();

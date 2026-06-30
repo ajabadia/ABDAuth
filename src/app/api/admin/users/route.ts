@@ -4,14 +4,15 @@
  * @refactorable false
  * @classification Business Service
  * @complexity Medium
- * @fingerprint exports:3,imports:6,sig:1lq8uvk
- * @lastUpdated 2026-06-23T22:37:55.310Z
+ * @fingerprint exports:3,imports:7,sig:1w2drg0
+ * @lastUpdated 2026-06-30T14:20:24.569Z
  */
 
 import { NextResponse } from 'next/server';
 import { userRepository } from '@/lib/repositories/UserRepository';
 import { IndustrialNormalizer } from '@/lib/utils/IndustrialNormalizer';
 import { validateAdminSession } from '@/lib/utils/api-auth';
+import { assertAccess } from '@/lib/abac';
 import { createUserHandler } from './create-user';
 import { updateUserHandler } from './update-user';
 
@@ -23,6 +24,8 @@ export async function GET() {
   try {
     const { authorized, user, response } = await validateAdminSession();
     if (!authorized) return response!;
+
+    await assertAccess({ userId: user!.id, tenantId: user!.tenantId, resource: 'user', action: 'list' });
 
     const users = await userRepository.listForSession(user!);
 
@@ -46,6 +49,8 @@ export async function POST(request: Request) {
     const { authorized, user, response } = await validateAdminSession();
     if (!authorized) return response!;
 
+    await assertAccess({ userId: user!.id, tenantId: user!.tenantId, resource: 'user', action: 'create' });
+
     const payload = await request.json();
     return await createUserHandler(payload, user!);
   } catch (err: unknown) {
@@ -61,6 +66,8 @@ export async function PUT(request: Request) {
   try {
     const { authorized, user, response } = await validateAdminSession();
     if (!authorized) return response!;
+
+    await assertAccess({ userId: user!.id, tenantId: user!.tenantId, resource: 'user', action: 'update' });
 
     const payload = await request.json();
     return await updateUserHandler(payload, user!);
