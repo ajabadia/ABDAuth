@@ -6,8 +6,8 @@
  * @refactorable false
  * @classification UI Component
  * @complexity Low
- * @fingerprint exports:1,imports:3,sig:1oy4tko
- * @lastUpdated 2026-06-23T22:40:50.680Z
+ * @fingerprint exports:1,imports:4,sig:k4nnnu
+ * @lastUpdated 2026-06-30T05:49:00.889Z
  */
 
 import { usePathname, useRouter } from "@/i18n/routing";

@@ -1,11 +1,11 @@
 /**
  * @purpose Renderiza un componente de diseño con soporte a la internacionalización, configuraciones específicas para el inquilino y elementos de navegación.
  * @purpose_en Renders a layout component with internationalization support, tenant-specific settings, and navigation elements.
- * @refactorable false
+ * @refactorable true (contains too many state variables and UI parts)
  * @classification UI Component
  * @complexity Low
- * @fingerprint exports:1,imports:7,sig:9ab8cp
- * @lastUpdated 2026-06-29T00:00:00.000Z
+ * @fingerprint exports:1,imports:13,sig:s84zt1
+ * @lastUpdated 2026-06-30T05:48:57.461Z
  */
 
 import { getMessages } from 'next-intl/server';
