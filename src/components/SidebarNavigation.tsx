@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * @purpose Renderiza un componente de navegación lateral basado en sesión del usuario y rol.
+ * @purpose_en Renders a sidebar navigation component based on user session and role.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Medium
+ * @fingerprint exports:1,imports:4,sig:1xwaras
+ * @lastUpdated 2026-06-29T22:22:32.674Z
+ */
+
 import { useTranslations, useLocale } from "next-intl";
 import { authClient } from "@/lib/auth-client";
 import { AppSidebarNavigation, type AppSidebarLink } from "@ajabadia/ecosystem-widgets";

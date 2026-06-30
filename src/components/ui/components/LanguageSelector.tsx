@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un componente selector de idioma que permite a los usuarios cambiar entre locales en español e inglés.
+ * @purpose_en Renders a language selector component that allows users to switch between Spanish and English locales.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:105b61v
+ * @lastUpdated 2026-06-29T22:22:39.641Z
+ */
+
 import React from "react";
 import { Languages, Check } from "lucide-react";
 import { Button } from "@ajabadia/ecosystem-widgets";

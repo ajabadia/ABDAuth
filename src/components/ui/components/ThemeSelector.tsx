@@ -1,3 +1,13 @@
+/**
+ * @purpose Renderiza un componente selector de tema con opciones para temas de luz, oscuro y sistema.
+ * @purpose_en Renders a theme selector component with options for light, dark, and system themes.
+ * @refactorable false
+ * @classification UI Component
+ * @complexity Low
+ * @fingerprint exports:1,imports:3,sig:1d3x2df
+ * @lastUpdated 2026-06-29T22:22:41.881Z
+ */
+
 import React from "react";
 import { Sun, Moon, Monitor, Check } from "lucide-react";
 import { Button } from "@ajabadia/ecosystem-widgets";
