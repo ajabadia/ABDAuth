@@ -38,54 +38,54 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Missing appId parameter' }, { status: 400 });
   }
 
-  // 1. Verify User Authentication Session
-  const session = await getServerSession();
-  if (!session?.user) {
-    let locale = 'es';
-    if (stateParam.startsWith('/en') || stateParam.startsWith('/en/')) {
-      locale = 'en';
-    }
-    const loginUrl = new URL(`/${locale}/login`, req.url);
-    loginUrl.searchParams.set('callbackUrl', req.url);
-    return NextResponse.redirect(loginUrl);
-  }
-
-  const user = session.user;
-
-  // 2. Prevent infinite SSO redirect loop
-  const ssoRetryCount = parseInt(searchParams.get('sso_retry') || '0', 10);
-  if (ssoRetryCount >= 3) {
-    console.error(`[SSO_LOOP_DETECTED] Infinite redirect loop detected for appId: ${appId}, tenantId: ${tenantParam || user.tenantId}`);
-    return NextResponse.redirect(new URL(`/dashboard?error=SSO_LOOP_DETECTED&appId=${appId}`, req.url));
-  }
-
-  // 3. Resolve Active Tenant ID
-  const tenantId = tenantParam || user.tenantId;
-  if (!tenantId || tenantId === 'GLOBAL') {
-    return NextResponse.redirect(new URL('/dashboard?error=SELECT_TENANT_REQUIRED', req.url));
-  }
-
-  // 4. Look up application registration to resolve redirect URI
-  const app = await applicationRepository.findOne({
-    $or: [{ slug: appId }, { name: appId }]
-  } as unknown as SafeFilter<Application>);
-
-  if (!app || !app.active || !app.redirectUris?.length) {
-    console.error(`[SSO_ROUTE] Application not found or has no redirect URIs: ${appId}`);
-    return NextResponse.redirect(new URL(`/dashboard?error=APPLICATION_INACTIVE&appId=${appId}`, req.url));
-  }
-
-  // 5. Resolve redirect URI: prefer override, validate against registered URIs
-  const redirectUri = overrideRedirectUri
-    ? (isRedirectUriValid(overrideRedirectUri, app.redirectUris) ? overrideRedirectUri : null)
-    : app.redirectUris[0];
-
-  if (!redirectUri) {
-    console.error(`[SSO_ROUTE] Invalid or mismatched redirect URI for app: ${appId}`);
-    return NextResponse.redirect(new URL(`/dashboard?error=INVALID_REDIRECT_URI&appId=${appId}`, req.url));
-  }
-
   try {
+    // 1. Verify User Authentication Session
+    const session = await getServerSession();
+    if (!session?.user) {
+      let locale = 'es';
+      if (stateParam.startsWith('/en') || stateParam.startsWith('/en/')) {
+        locale = 'en';
+      }
+      const loginUrl = new URL(`/${locale}/login`, req.url);
+      loginUrl.searchParams.set('callbackUrl', req.url);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    const user = session.user;
+
+    // 2. Prevent infinite SSO redirect loop
+    const ssoRetryCount = parseInt(searchParams.get('sso_retry') || '0', 10);
+    if (ssoRetryCount >= 3) {
+      console.error(`[SSO_LOOP_DETECTED] Infinite redirect loop detected for appId: ${appId}, tenantId: ${tenantParam || user.tenantId}`);
+      return NextResponse.redirect(new URL(`/dashboard?error=SSO_LOOP_DETECTED&appId=${appId}`, req.url));
+    }
+
+    // 3. Resolve Active Tenant ID
+    const tenantId = tenantParam || user.tenantId;
+    if (!tenantId || tenantId === 'GLOBAL') {
+      return NextResponse.redirect(new URL('/dashboard?error=SELECT_TENANT_REQUIRED', req.url));
+    }
+
+    // 4. Look up application registration to resolve redirect URI
+    const app = await applicationRepository.findOne({
+      $or: [{ slug: appId }, { name: appId }]
+    } as unknown as SafeFilter<Application>);
+
+    if (!app || !app.active || !app.redirectUris?.length) {
+      console.error(`[SSO_ROUTE] Application not found or has no redirect URIs: ${appId}`);
+      return NextResponse.redirect(new URL(`/dashboard?error=APPLICATION_INACTIVE&appId=${appId}`, req.url));
+    }
+
+    // 5. Resolve redirect URI: prefer override, validate against registered URIs
+    const redirectUri = overrideRedirectUri
+      ? (isRedirectUriValid(overrideRedirectUri, app.redirectUris) ? overrideRedirectUri : null)
+      : app.redirectUris[0];
+
+    if (!redirectUri) {
+      console.error(`[SSO_ROUTE] Invalid or mismatched redirect URI for app: ${appId}`);
+      return NextResponse.redirect(new URL(`/dashboard?error=INVALID_REDIRECT_URI&appId=${appId}`, req.url));
+    }
+
     const result = await SsoService.performSsoHandshake({
       appId,
       tenantId,
@@ -100,11 +100,9 @@ export async function GET(req: Request) {
 
     if (result.success && result.redirectUrl) {
       const targetUrl = new URL(result.redirectUrl);
-      // Propagate caller's state (redirect target) if provided
       if (stateParam !== '/') {
         targetUrl.searchParams.set('state', stateParam);
       }
-      // Propagate sso_retry counter to help satellite identify/mitigate loops
       targetUrl.searchParams.set('sso_retry', String(ssoRetryCount + 1));
       return NextResponse.redirect(targetUrl);
     } else {
@@ -112,16 +110,20 @@ export async function GET(req: Request) {
     }
   } catch (error) {
     const ssoError = error instanceof Error ? error.message : 'Unknown error';
-    await logger.audit({
-      tenantId: tenantId || 'unknown',
-      action: 'SSO_HANDSHAKE_ERROR',
-      entityType: 'SSO_SESSION',
-      entityId: appId,
-      userId: user?.id || 'system',
-      userEmail: user?.email || 'system@abd.com',
-      changedFields: { error: ssoError, appId, tenantId },
-    });
     console.error('[SSO_HANDSHAKE] Internal failure:', error);
+    try {
+      await logger.audit({
+        tenantId: tenantParam || 'unknown',
+        action: 'SSO_HANDSHAKE_ERROR',
+        entityType: 'SSO_SESSION',
+        entityId: appId,
+        userId: 'system',
+        userEmail: 'system@abd.com',
+        changedFields: { error: ssoError, appId, tenantId: tenantParam || 'unknown' },
+      });
+    } catch {
+      // audit failure must not break the redirect
+    }
     return NextResponse.redirect(new URL('/dashboard?error=INTERNAL_ERROR', req.url));
   }
 }
