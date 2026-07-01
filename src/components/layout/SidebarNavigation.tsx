@@ -3,15 +3,14 @@
 /**
  * @purpose Renderiza un componente de navegación lateral basado en sesión del usuario y rol.
  * @purpose_en Renders a sidebar navigation component based on user session and role.
- * @refactorable false
+ * @refactorable true (contains too many state variables and UI parts)
  * @classification UI Component
  * @complexity Medium
- * @fingerprint exports:1,imports:4,sig:1xwaras
- * @lastUpdated 2026-06-30T05:48:57.461Z
+ * @fingerprint exports:1,imports:3,sig:ynjgiq
+ * @lastUpdated 2026-07-01T05:17:12.335Z
  */
 
 import { useTranslations, useLocale } from "next-intl";
-import { authClient } from "@/lib/auth-client";
 import { AppSidebarNavigation, type AppSidebarLink } from "@ajabadia/ecosystem-widgets";
 import { LayoutDashboard, Users, Shield, ScrollText, Key, Globe } from "lucide-react";
 
@@ -79,7 +78,7 @@ export function SidebarNavigation({ session, logoUrl, logsAuditUrl, tenantSelect
       brandName={common("brand")}
       appBadge="AUTH"
       onLogin={() => { window.location.href = '/login'; }}
-      onLogout={async () => { await authClient.signOut(); window.location.href = '/'; }}
+      onLogout={() => { window.location.href = '/api/auth/logout?redirectUri=/login'; }}
       tenantSelectorSlot={tenantSelectorSlot}
       settingsSlot={settingsSlot}
     />
